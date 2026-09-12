@@ -13,12 +13,11 @@ import {
 import { PageData } from "./DocsCrawler";
 
 async function resolveChromium() {
-  const [{ default: puppeteer }, browsers, { PUPPETEER_REVISIONS }] =
-    await Promise.all([
-      import("puppeteer"),
-      import("@puppeteer/browsers"),
-      import("puppeteer-core/internal/revisions.js"),
-    ]);
+  const [{ default: puppeteer }, browsers] = await Promise.all([
+    import("puppeteer"),
+    import("@puppeteer/browsers"),
+  ]);
+
   const platform = browsers.detectBrowserPlatform();
 
   if (!platform) {
@@ -29,7 +28,8 @@ async function resolveChromium() {
     ChromiumInstaller.PCR_CONFIG.downloadPath ?? getContinueUtilsPath(),
     ".chromium-browser-snapshots",
   );
-  const unresolvedBuildId = PUPPETEER_REVISIONS.chrome;
+  // Use a stable recent Chromium version
+  const unresolvedBuildId = "131.0.6778.52";
   const buildId = await browsers.resolveBuildId(
     browsers.Browser.CHROME,
     platform,
