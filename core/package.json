@@ -4,14 +4,15 @@
   "description": "The Continue Core contains functionality that can be shared across web, VS Code, or Node.js",
   "scripts": {
     "test": "cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:providers": "cross-env IGNORE_API_KEY_TESTS=false NODE_OPTIONS=--experimental-vm-modules jest llm/llm.test.ts",
+    "test:providers": "cross-env IGNORE_API_KEY_TESTS=false NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath llm/llm.integration.test.ts",
     "vitest": "vitest run",
     "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage && open ./coverage/lcov-report/index.html",
     "tsc:check": "tsc -p ./ --noEmit",
     "build": "tsc -p ./tsconfig.npm.json",
     "build:npm": "npm run build",
     "lint": "eslint . --ext ts",
-    "lint:fix": "eslint . --ext ts --fix"
+    "lint:fix": "eslint . --ext ts --fix",
+    "test:providers:deletion-gate": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath llm/llm.test.ts"
   },
   "type": "module",
   "author": "Continue Dev, Inc",
