@@ -33,7 +33,7 @@ This document catalogs all build dependencies, secrets, and environment variable
 | Variable            | Purpose                                                                 | Referenced In                                                                                      |
 | ------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `CONTINUE_API_BASE` | Base URL for the Continue API (defaults to `https://api.continue.dev/`) | `extensions/cli/.env.example`                                                                      |
-| `CONTINUE_API_KEY`  | API key for Continue authentication                                     | `extensions/cli/.env.example`, `packages/continue-sdk/typescript/.env.example`, multiple workflows |
+| `CONTINUE_API_KEY`  | API key for Continue authentication                                     | `extensions/cli/.env.example`, multiple workflows |
 
 ---
 
@@ -102,4 +102,3 @@ Used for integration tests in PR checks and package releases.
 All workflow files are located under `.github/workflows/`. Environment example files are at:
 
 - `extensions/cli/.env.example`
-- `packages/continue-sdk/typescript/.env.example`
