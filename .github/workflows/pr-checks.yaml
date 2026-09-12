@@ -74,8 +74,13 @@ jobs:
           cd core
           npm test
           npm run vitest
+
+      - name: Run live provider tests
+        if: steps.llm-changes.outputs.ignore_api_tests != 'true'
+        run: |
+          cd core
+          npm run test:providers
         env:
-          IGNORE_API_KEY_TESTS: ${{ steps.llm-changes.outputs.ignore_api_tests }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

@@ -1,0 +1,210 @@
+{
+  "check": "phase0-runtime-boundary",
+  "status": "pass",
+  "command": "/home/wolfy/.nvm/versions/node/v20.20.2/bin/node --experimental-loader /home/wolfy/open-circuit/tests/characterization/runtime-boundary-loader.mjs dist/cn.js --version",
+  "workingDirectory": "extensions/cli",
+  "child": {
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "0.0.0-dev",
+    "stderr": ""
+  },
+  "moduleResolution": {
+    "check": "phase0-runtime-module-resolution",
+    "status": "pass",
+    "deniedFragments": [
+      "/extensions/vscode/",
+      "/gui/",
+      "/docs-site/",
+      "/binary/"
+    ],
+    "deniedPackages": [
+      "vscode",
+      "@vscode/",
+      "electron"
+    ],
+    "resolved": [
+      {
+        "parentURL": null,
+        "specifier": "file:///home/wolfy/open-circuit/extensions/cli/dist/cn.js",
+        "url": "file:///home/wolfy/open-circuit/extensions/cli/dist/cn.js"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/cn.js",
+        "specifier": "./index.js",
+        "url": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "module",
+        "url": "node:module"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "events",
+        "url": "node:events"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:process",
+        "url": "node:process"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:os",
+        "url": "node:os"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:tty",
+        "url": "node:tty"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "os",
+        "url": "node:os"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "path",
+        "url": "node:path"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "crypto",
+        "url": "node:crypto"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "fs",
+        "url": "node:fs"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "child_process",
+        "url": "node:child_process"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:fs",
+        "url": "node:fs"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:stream",
+        "url": "node:stream"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:util",
+        "url": "node:util"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:buffer",
+        "url": "node:buffer"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:http",
+        "url": "node:http"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:net",
+        "url": "node:net"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:url",
+        "url": "node:url"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:https",
+        "url": "node:https"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:zlib",
+        "url": "node:zlib"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "https",
+        "url": "node:https"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:tls",
+        "url": "node:tls"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:path",
+        "url": "node:path"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "fs/promises",
+        "url": "node:fs/promises"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:stream/promises",
+        "url": "node:stream/promises"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "url",
+        "url": "node:url"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "readline",
+        "url": "node:readline"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "util",
+        "url": "node:util"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "http",
+        "url": "node:http"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "zlib",
+        "url": "node:zlib"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "stream",
+        "url": "node:stream"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:child_process",
+        "url": "node:child_process"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:events",
+        "url": "node:events"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:fs/promises",
+        "url": "node:fs/promises"
+      },
+      {
+        "parentURL": "file:///home/wolfy/open-circuit/extensions/cli/dist/index.js",
+        "specifier": "node:timers/promises",
+        "url": "node:timers/promises"
+      }
+    ],
+    "violations": []
+  }
+}

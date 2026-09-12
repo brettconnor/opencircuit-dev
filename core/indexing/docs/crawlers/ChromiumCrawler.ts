@@ -1,11 +1,7 @@
 import * as fs from "fs";
 import { URL } from "node:url";
 
-import { Handler, HTTPResponse, Page } from "puppeteer";
-
-// @ts-ignore
-// @prettier-ignore
-import PCR from "puppeteer-chromium-resolver";
+import type { Handler, HTTPResponse, Page } from "puppeteer";
 
 import { ContinueConfig, IDE } from "../../..";
 import {
@@ -14,6 +10,13 @@ import {
   getContinueUtilsPath,
 } from "../../../util/paths";
 import { PageData } from "./DocsCrawler";
+
+async function resolveChromium() {
+  // The resolver has no type declarations and must stay out of Jest's module graph.
+  // @ts-ignore
+  const { default: PCR } = await import("puppeteer-chromium-resolver");
+  return PCR(ChromiumInstaller.PCR_CONFIG);
+}
 
 export class ChromiumCrawler {
   private readonly LINK_GROUP_SIZE = 2;
@@ -43,7 +46,7 @@ export class ChromiumCrawler {
       `[${(this.constructor as any).name}] Crawling site: ${this.startUrl}`,
     );
 
-    const stats = await PCR(ChromiumInstaller.PCR_CONFIG);
+    const stats = await resolveChromium();
     const browser = await stats.puppeteer.launch({
       args: [
         "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
@@ -242,7 +245,7 @@ export class ChromiumInstaller {
 
   async install() {
     try {
-      await PCR(ChromiumInstaller.PCR_CONFIG);
+      await resolveChromium();
 
       ChromiumCrawler.setUseChromiumForDocsCrawling(true);
 

@@ -1,0 +1,15 @@
+base-commit=766a00bd15dd2f021a9aa835aa9e4f0151e27b3e
+evidence-checkpoint=red-001-core-clean-install
+date=2026-09-12T16:27:40+00:00
+working-directory=packages/terminal-security
+node=v24.19.0
+npm=11.17.0
+registry=https://registry.npmjs.org/
+command=npm ci --ignore-scripts --no-audit --no-fund
+lifecycle-scripts=disabled
+lock-before=7fe7ed97dcc6fcc1ef707fb9d9659c1ef029117061935fa330bae4bbb8aeac7b
+
+
+added 56 packages in 2s
+
+lock-after=7fe7ed97dcc6fcc1ef707fb9d9659c1ef029117061935fa330bae4bbb8aeac7b
