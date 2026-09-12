@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "node:path";
 import { URL } from "node:url";
 
 import type { Handler, HTTPResponse, Page } from "puppeteer";
@@ -12,10 +13,52 @@ import {
 import { PageData } from "./DocsCrawler";
 
 async function resolveChromium() {
-  // The resolver has no type declarations and must stay out of Jest's module graph.
-  // @ts-ignore
-  const { default: PCR } = await import("puppeteer-chromium-resolver");
-  return PCR(ChromiumInstaller.PCR_CONFIG);
+  const [{ default: puppeteer }, browsers, { PUPPETEER_REVISIONS }] =
+    await Promise.all([
+      import("puppeteer"),
+      import("@puppeteer/browsers"),
+      import("puppeteer-core/internal/revisions.js"),
+    ]);
+  const platform = browsers.detectBrowserPlatform();
+
+  if (!platform) {
+    throw new Error("Unable to determine a supported Chromium platform");
+  }
+
+  const cacheDir = path.join(
+    ChromiumInstaller.PCR_CONFIG.downloadPath ?? getContinueUtilsPath(),
+    ".chromium-browser-snapshots",
+  );
+  const unresolvedBuildId = PUPPETEER_REVISIONS.chrome;
+  const buildId = await browsers.resolveBuildId(
+    browsers.Browser.CHROME,
+    platform,
+    unresolvedBuildId,
+  );
+
+  let executablePath = browsers.computeExecutablePath({
+    browser: browsers.Browser.CHROME,
+    buildId,
+    cacheDir,
+    platform,
+  });
+
+  if (!fs.existsSync(executablePath)) {
+    const installedBrowser = await browsers.install({
+      browser: browsers.Browser.CHROME,
+      buildId,
+      buildIdAlias:
+        buildId !== unresolvedBuildId ? unresolvedBuildId : undefined,
+      cacheDir,
+      platform,
+    });
+    executablePath = installedBrowser.executablePath;
+  }
+
+  return {
+    executablePath,
+    puppeteer,
+  };
 }
 
 export class ChromiumCrawler {
