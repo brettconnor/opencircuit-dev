@@ -1,6 +1,7 @@
 # Core TS2322 Remediation Plan v0
 
-**Status:** Planning only; no implementation authorized by this document  
+**Status:** Execution-ready validation plan; candidate implementation already
+exists in commit `5e2685e07`
 **Related phase:** Phase 5 CLI/Core validation  
 **Primary objective:** Resolve the deterministic Core `TS2322` failure caused by
 duplicate TypeScript declaration identities, then restore authoritative
@@ -71,8 +72,9 @@ profile.
 
 1. Make Core `npm run tsc:check` pass from a clean generated-output state.
 2. Preserve type safety and meaningful private-member encapsulation.
-3. Ensure each logical Core type has one stable declaration identity during
-   source, build, package, and CLI consumption.
+3. Ensure the `ToolExtras` boundary does not propagate a nominal
+   `CodebaseIndexer` identity across source, generated, package, and CLI
+   consumption.
 4. Preserve the existing Core and CLI runtime behavior.
 5. Restore the retained CLI/Core validation profile on Ubuntu1.
 6. Produce reproducible evidence, rollback points, and a clear closeout.
@@ -94,21 +96,48 @@ This plan does not authorize:
 - push, pull request creation, merge, force-push, or history rewriting by the
   phase executor.
 
+### Approved execution paths
+
+- directly involved Core source, declaration, TypeScript configuration, build,
+  and package metadata files;
+- `docs/reduction/artifacts/phase5/**`,
+  `docs/reduction/phase5-execution-ledger.md`, and
+  `docs/reduction/phase5-summary.md`;
+- `extensions/cli/**` and `tests/characterization/**` for read-only
+  validation, unless a focused regression fixture is explicitly justified;
+- the pinned systems-orchestration runner, its SDD contract, and its TDD
+  contract test only for an evidence-backed fixed-profile defect; no remote
+  payload or unrelated runner behavior may change;
+- temporary package-consumer fixtures outside the repository, such as
+  `/private/tmp`, with no fixture committed unless the allowlist is updated.
+
 ## 5. Entry conditions
 
-Before implementation begins, record all of the following:
+Before execution begins, record all of the following:
 
 - the approved starting checkpoint and branch;
-- the exact Core and CLI commits under test;
+- the exact Core and CLI commits under test, including the candidate fix
+  commit `5e2685e07` or a later atomic remediation commit;
 - Node.js `24.19.0` and npm `11.17.0` on Ubuntu1;
-- clean working trees and clean generated `core/dist`;
-- the fixed Phase 5 runner mode and contract version;
+- no uncommitted changes in the implementation, package, or validation paths;
+  unrelated pre-existing changes must be preserved and isolated with a clean
+  worktree rather than deleted;
+- clean generated `core/dist`;
+- the fixed Phase 5 runner revision and contract hashes. The currently pinned
+  runner is systems-orchestration commit `ba52121cca51b7ce951320fdbee4902ebaec7ea1`,
+  with script SHA-256
+  `cf19fe5655c804df019d142df7238b62393808d5e1b26735a1243cc1362467c3` and
+  contract SHA-256
+  `fea4e6797d308325b182890605d4035aefa0f980d11acdda16f3f7e12592f272`;
 - the current baseline failure and its artifact path;
 - the change budget and approved path allowlist;
 - a rollback commit or known-good starting checkpoint.
 
 The branch must be published by the Git integration agent before authoritative
-remote validation. Local validation alone cannot close this plan.
+remote validation. Immediately before publication, record the exact tested
+repository commit. The runner's reported `remote_commit` must equal that SHA;
+otherwise the result is invalid and must not close this plan. Local validation
+alone cannot close this plan.
 
 ## 6. Work plan
 
@@ -116,7 +145,8 @@ remote validation. Local validation alone cannot close this plan.
 
 1. Start from the approved checkpoint.
 2. Remove only ignored/generated Core output required for a clean test.
-3. Run the fixed diagnosis profile three times.
+3. Run the fixed diagnosis profile once; it performs three internal clean
+   repetitions.
 4. Capture:
    - exact diagnostic text and locations;
    - TypeScript version and compiler options;
@@ -127,8 +157,9 @@ remote validation. Local validation alone cannot close this plan.
 5. Confirm the failure remains `TS2322` and is not a new `TS5055`,
    dependency-install, or environment failure.
 
-**Exit criterion:** Three matching failures with sanitized evidence and a
-documented root-cause classification.
+**Exit criterion:** The fixed profile captures three matching failures with
+sanitized evidence and a documented root-cause classification. The three
+internal repetitions count as one diagnostic batch.
 
 ### Workstream B: Map the declaration identity boundary
 
@@ -149,6 +180,19 @@ program.
 **Exit criterion:** The failing edge and the minimum configuration or
 boundary responsible for it are identified.
 
+Before accepting the structural boundary change, record its compatibility
+impact: `ToolExtras` is an exported package contract, so changing
+`codeBaseIndexer` from `CodebaseIndexer` to a one-method capability narrows
+what downstream TypeScript consumers can call. Scan all repository consumers
+and compile a package-consumer fixture against the emitted `core/dist` types
+using the supported Core/CLI compiler posture. An additional
+`skipLibCheck: false` run may diagnose unrelated pre-existing declaration
+hygiene defects, but it is informational and cannot be used to waive a
+product-source error.
+If a supported consumer requires another `CodebaseIndexer` method, stop and
+return to package-resolution correction or add a compatible adapter; do not
+silently treat the narrowing as an internal-only change.
+
 ### Workstream C: Evaluate remediation options
 
 Evaluate options in this order, selecting the first one that removes the
@@ -165,20 +209,27 @@ duplicate identity without weakening types:
    metadata only if the first three options cannot produce one stable
    identity.
 
-Do not combine options speculatively. Each candidate must be tested as a
-separate atomic change with a clear hypothesis and rollback.
+The existing candidate combines declaration-input correction and boundary
+shaping in one atomic commit. Validate that combined, evidence-backed
+hypothesis first; do not add further speculative changes. If it fails, split
+the next experiment into declaration-input-only and boundary-only candidates,
+each with its own hypothesis, commit, and rollback.
 
 **Exit criterion:** One minimal remediation is selected with evidence that it
 addresses the identity split and remains within the approved budget.
 
-### Workstream D: Implement the narrow fix
+### Workstream D: Apply the remediation only if needed
 
-1. Modify only directly involved Core source/config/package files.
-2. Keep public contracts as narrow as possible.
-3. Do not expose private members or add suppressions.
-4. Confirm no lockfile or unrelated generated-file mutation occurs.
-5. Commit the change atomically with a message that states the identity
-   problem being corrected.
+1. Treat commit `5e2685e07` as the existing implementation and do not modify
+   code before its authoritative validation.
+2. If a follow-up is required, modify only directly involved Core
+   source/config/package files.
+3. Keep public contracts as narrow as possible; document any intentional
+   compatibility impact.
+4. Do not expose private members or add suppressions.
+5. Confirm no lockfile or unrelated generated-file mutation occurs.
+6. Commit each follow-up change atomically with a message that states the
+   identity problem being corrected.
 
 **Exit criterion:** The changed-file list is within budget and the diff
 contains no unrelated refactor or type-safety workaround.
@@ -187,13 +238,21 @@ contains no unrelated refactor or type-safety workaround.
 
 Run the existing targeted checks locally for fast feedback:
 
-- clean Core install with lockfile integrity;
+- the retained-closure install/build order from
+  `docs/reduction/artifacts/phase1/retained-closure-install-matrix.md`;
+- clean Core install with lockfile integrity after its local dependencies are
+  built;
 - Core build;
 - Core `tsc:check`;
-- CLI typecheck;
-- CLI build and build validation;
-- CLI smoke and focused characterization tests;
+- `extensions/cli` typecheck;
+- `extensions/cli` build and build validation;
+- the fixed-profile CLI smoke and selected characterization tests;
 - static and emitted boundary checks.
+
+The post-change boundary checks must verify that the emitted `core/dist`
+entrypoint exposes the structural capability without importing
+`CodebaseIndexer`, and that the original source-vs-dist `TS2322` cannot be
+reintroduced by the package-consumer fixture.
 
 Then publish the branch through the Git integration agent and run the fixed
 Ubuntu1 validation profile:
@@ -236,9 +295,9 @@ If any mandatory check fails:
 | Clean generated output | No stale `core/dist` contamination |
 | Core build | Pass |
 | Core `tsc:check` | Pass with no suppressions |
-| Declaration resolution | One stable `CodebaseIndexer` identity |
+| Declaration resolution | No nominal `CodebaseIndexer` identity crosses `ToolExtras`; source-vs-dist `TS2322` absent |
 | CLI typecheck/build | Pass |
-| CLI smoke/characterization | Pass |
+| CLI smoke/characterization | Pass for the fixed-profile selected checks |
 | Boundary checks | Pass for source and emitted/package paths |
 | Lockfile | Unchanged unless explicitly justified |
 | Ubuntu1 runtime | Node.js `24.19.0`, npm `11.17.0` |
@@ -247,7 +306,9 @@ If any mandatory check fails:
 
 ## 8. Change budget and stop conditions
 
-Use the Phase 5 limits unless a separately approved plan supersedes them:
+Use the Phase 5 limits unless a separately approved plan supersedes them.
+Only new work after this plan enters execution consumes the budget; the
+existing diagnosis and candidate commits are recorded baseline history.
 
 - maximum six diagnostic/fix batches;
 - maximum ten atomic commits;
@@ -258,11 +319,16 @@ Use the Phase 5 limits unless a separately approved plan supersedes them:
 - zero type-safety suppressions or exclusions;
 - zero unexpected lockfile mutations.
 
+A batch is one diagnostic or remediation hypothesis and its validation. The
+three internal diagnosis repetitions are one batch, not three batches. A
+publication failure is a blocker, not permission to create an alternate
+validation path.
+
 Stop immediately and document evidence if:
 
 - the fix requires an unapproved surface;
 - the failure changes from TS2322 to an unexplained error;
-- runtime, smoke, headless, bundle, or boundary checks fail;
+- runtime, smoke, bundle, or boundary checks fail;
 - the branch is not available to the fixed runner;
 - package metadata or lockfiles mutate unexpectedly;
 - the proposed remedy requires suppressing the type error;
@@ -296,9 +362,10 @@ The completed plan execution should produce:
 
 ## 11. Current recommendation
 
-Treat commit `5e2685e07` as the leading remediation candidate, not as a
-completed resolution. Publish the branch without rebasing and run the exact
+Treat commit `5e2685e07` as the selected remediation candidate pending
+authoritative validation, not as a completed resolution. Publish the exact
+tested commit without rebasing, using the pinned runner revision and the exact
 Ubuntu1 `--phase5-validate` profile. If it passes, retain the narrow
 declaration-input and structural-boundary changes and close the plan with
-evidence. If it fails, return to Workstream B and inspect the remaining
-source/package self-reference edge before considering any additional change.
+evidence. If it fails, preserve the artifacts, classify the failure, and split
+the next experiment into the isolated options described in Workstream C.
