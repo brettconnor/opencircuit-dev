@@ -9,7 +9,6 @@
 # Large directories - copied using Copy-on-Write (fast, space-efficient)
 cowCopyTargets:
   - node_modules
-  - app/node_modules
   - core/node_modules
   - core/dist
   - extensions/*/node_modules # Glob: all services
