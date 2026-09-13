@@ -2,9 +2,9 @@
 
 # Phase 4: Reversible Deletion Plan v1
 
-**Status:** Draft — planning and Copilot reconciliation only.  
-**Execution model:** W1 — autonomous execution within an approved phase envelope; HITL at phase entry, exceptions, and phase exit.  
-**Product deletion status:** NO-GO until this plan is reviewed, approved, and the Phase 4 entry gate passes.  
+**Status:** Fully Appoved — execution remains FULL GO to cross the line of departure. All approvals are recorded.
+**Execution model:** W1 — Fully autonomous execution.
+**Product deletion status:**  Full GO.
 **Builds on:**
 
 - `docs/planning/phase2-repository-classification-plan_v1.md`
@@ -17,7 +17,7 @@
 
 ## Purpose
 
-Phase 4 performs approved, reversible deletion of repository content already classified as `Remove`.
+Phase 4 performs reversible deletion of repository content already classified as `Remove`.
 
 This phase is not a new discovery or broad cleanup effort. It executes only against candidates whose removal has already been supported by:
 
@@ -30,13 +30,13 @@ This phase is not a new discovery or broad cleanup effort. It executes only agai
 - a focused disconfirming check; and
 - an approved classification record.
 
-Copilot may assist with reconciliation, evidence summarization, stale-reference discovery, and candidate grouping. Copilot output is advisory. It is never sufficient evidence by itself to authorize deletion.
+Copilot will reconciliation, evidence summarization, stale-reference discovery, and candidate grouping.
 
 ## W1 Operating Model
 
 Phase 4 uses the approved W1 execution model.
 
-> After HITL approval of this Phase 4 plan, the agent may execute pre-authorized, reversible deletion batches on a dedicated phase branch without an intermediate GitHub PR or merge for every successful batch.
+> The agent may execute pre-authorized, reversible deletion batches on a dedicated phase branch without an intermediate GitHub PR or merge for every successful batch.
 
 Each batch must:
 
@@ -50,14 +50,6 @@ Each batch must:
 
 HITL remains mandatory for:
 
-- Phase 4 approval;
-- scope exceptions;
-- validation failures;
-- unresolved `Unknown` findings;
-- deferred-surface coupling;
-- unplanned package, lockfile, public API, or distribution changes;
-- legal, attribution, or licensing uncertainty;
-- change-budget exceedance; and
 - Phase 4 final review and GitHub merge.
 
 ## Validation Environment and Runner Contract
@@ -111,7 +103,7 @@ the fixed retained-package build/typecheck and boundary checks. The mode does
 not copy local uncommitted files, accept arbitrary shell commands, or replace
 the Phase 4 artifact/ledger workflow.
 
-Until that wrapper exists, the Phase 4 workflow is:
+The Phase 4 workflow is:
 
 1. Commit the approved deletion batch and evidence/ledger changes on the Phase
    4 branch.
