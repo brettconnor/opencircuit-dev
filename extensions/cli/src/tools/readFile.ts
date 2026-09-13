@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
+import { throwIfFileIsSecurityConcern } from "core/security.js";
 import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import { parseEnvNumber } from "../util/truncateOutput.js";
