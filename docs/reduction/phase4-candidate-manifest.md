@@ -1,6 +1,6 @@
 # Phase 4 Candidate Manifest
 
-**Status:** Executed; P4-A D1 static-asset batch passed local and Ubuntu1 validation.
+**Status:** Executed; P4-A D1 passed and P4-B D2 is approved for execution.
 **Manifest source commit:** `450df8c69cfbb47c87fbd3d45f318279ca8c3074`
 **Retained-closure checkpoint:** `red-001-core-clean-install`  
 **Validation host:** Ubuntu1 (`10.1.141.9`)  
@@ -80,6 +80,48 @@ Validation profile: D1. Exclusions: all canonical referenced paths, all
 non-duplicate documentation assets, deferred surfaces, and all runtime/build
 files.
 
+### P4-B — Stale JetBrains workspace metadata (D2)
+
+Classification record: `docs/reduction/cli-core-dependency-inventory.md`
+Batch G workspace/metadata cleanup, plus the current-main reconciliation
+artifact `docs/reduction/artifacts/phase4/P4-B/reconciliation.md`.
+
+The repository has no tracked JetBrains source or extension under
+`extensions/intellij/` or `extensions/jetbrains/`. The root `.idea/` tree
+contains stale project metadata and run configurations that reference absent
+JetBrains modules. No retained CLI/Core/package manifest, build, typecheck,
+boundary, or runtime workflow requires these files.
+
+Allowed deletion paths:
+
+```text
+.idea/.name
+.idea/codeStyles/Project.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/compiler.xml
+.idea/continue.iml
+.idea/git_toolbox_blame.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
+.idea/jsLinters/eslint.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/modules/com.github.continuedev.continueintellijextension.continue-intellij-extension.iml
+.idea/modules/com.github.continuedev.continueintellijextension.continue-intellij-extension.main.iml
+.idea/modules/com.github.continuedev.continueintellijextension.continue-intellij-extension.test.iml
+.idea/prettier.xml
+.idea/runConfigurations/config_yaml_tests.xml
+.idea/runConfigurations/core_tests.xml
+.idea/runConfigurations/openai_adapters_configuration.xml
+.idea/scopes/Continue.xml
+.idea/vcs.xml
+```
+
+Validation profile: D2. Exclusions: all `.idea` ignore rules and runtime
+checks that treat user-created IDE metadata as ignorable input, plus all
+retained CLI/Core/package source, manifests, lockfiles, CI, legal, docs, and
+deferred product surfaces.
+
 ## Ratification
 
 The operator ratified the Phase 4 plan and authorized RED execution on
@@ -91,6 +133,6 @@ not recreated as deletion work.
 
 - Human reviewer: `Operator ratification`
 - Approval date: `2026-09-13`
-- Approved candidate IDs: `P4-A`
-- Approved batch order: `P4-A`
+- Approved candidate IDs: `P4-A`, `P4-B`
+- Approved batch order: `P4-A`, `P4-B`
 - Approved change budget: Phase 4 defaults in the plan
