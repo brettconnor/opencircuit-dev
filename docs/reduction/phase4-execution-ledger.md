@@ -1,6 +1,6 @@
 # Phase 4 Execution Ledger
 
-**Status:** P4-B D2 deletion completed; validation blocked.
+**Status:** Phase 4 complete at continuation gate under approved validation waiver.
 **Manifest:** `docs/reduction/phase4-candidate-manifest.md`  
 **Plan:** `docs/planning/phase4_reversible_deletion_v1.md`  
 **Starting checkpoint:** `red-001-core-clean-install`
@@ -27,8 +27,8 @@ excluded as already absent; deferred and unknown surfaces remain excluded.
 
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
-| P4-A | `1acd6b5aa` | `<pending>` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Pass — local and Ubuntu1 | Stop; no additional eligible candidates identified | None |
-| P4-B | `ceb6624f9` | `<pending>` | `P4-B` | 20 stale root `.idea` metadata files | D2 | Deletion pass; Ubuntu1 blocked | Stop — retained-Core baseline failure | `core npm run tsc:check` TS2322 |
+| P4-A | `1acd6b5aa` | `e5f6e6358` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Pass — local and Ubuntu1 | Complete | None |
+| P4-B | `ceb6624f9` | `d0636908f` | `P4-B` | 20 stale root `.idea` metadata files | D2 (workspace metadata; D4 by plan taxonomy) | Accepted under operator waiver | Stop — no additional eligible candidate | `core npm run tsc:check` TS2322 waived for this batch |
 
 ## RED execution result
 
@@ -53,8 +53,15 @@ The P4-B deletion itself is complete at `ceb6624f9`. Ubuntu1 D2 validation
 ran against all 20 paths on `10.1.141.9` with Node.js `24.19.0`, but 0/20
 passed because the retained matrix failed at Core `npm run tsc:check` with a
 pre-existing TS2322 nominal type-identity clash after a successful Core build.
-The failure reproduces from a fresh `core/dist` and is unrelated to `.idea`;
-the continuation gate therefore stops and does not authorize further batches.
+The failure reproduces from a fresh `core/dist` and is unrelated to `.idea`.
+The operator approved a validation waiver on 2026-09-13. The waiver applies
+only to accepting P4-B; it does not alter the runner, Core source, or
+candidate eligibility rules.
+
+The final bounded reconciliation is recorded in
+`docs/reduction/artifacts/phase4/reconciliation-final-2026-09-13.md`. It
+covers every required fat-cut category and finds no additional executable
+candidate. Phase 4 therefore stops at the continuation gate.
 
 ## Entry-gate evidence index
 
