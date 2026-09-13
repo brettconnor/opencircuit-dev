@@ -1,6 +1,6 @@
 # `docs/planning/phase4_reversible_deletion_v0.md`
 
-# Phase 4: Reversible Deletion Plan v1
+# Phase 4: Reversible Deletion Plan v0
 
 **Status:** Draft — planning and Copilot reconciliation only.  
 **Execution model:** W1 — autonomous execution within an approved phase envelope; HITL at phase entry, exceptions, and phase exit.  
@@ -9,11 +9,11 @@
 
 - `docs/planning/phase2-repository-classification-plan_v1.md`
 - Phase 2 and Phase 2a completed classification and experiment evidence
-- `docs/planning/phase3-core-boundary_v1.md`, if Core boundary work affects removal candidates
+- `docs/planning/phase3-core-boundary-plan_v0.md`, if Core boundary work affects removal candidates
 - `docs/reduction/cli-core-boundaries.md`
 - `docs/reduction/cli-core-entry-points.md`
 - Phase 0 retained-closure characterization and boundary artifacts
-- The named approved retained-closure clean-install checkpoint, including its tag, commit SHA, and artifact index
+- The approved clean-install checkpoint that succeeds Phase 0 retained-closure validation
 
 ## Purpose
 
@@ -98,51 +98,17 @@ Phase 4 does not authorize:
 
 Phase 4 may begin only when all conditions below are true.
 
-- [ ] The exact retained-closure clean-install checkpoint tag, commit SHA, and artifact index are recorded.
-- [ ] `RED-001-core-lockfile-integrity` is complete.
+- [ ] A clean-install checkpoint exists and is recorded.
 - [ ] The checkpoint passes the retained CLI/Core install, build, typecheck, smoke, headless workflow, and boundary checks.
-- [ ] The retained-closure install matrix passes for every retained package, Core, and CLI.
-- [ ] No accepted checkpoint failure affects a Phase 4 candidate or the retained CLI/Core closure.
 - [ ] Node.js, npm, operating system, architecture, registry, cache, lifecycle-script, and network policies are fixed and recorded.
 - [ ] Every Phase 4 candidate has an approved Phase 2/2a classification record with final classification `Remove`.
 - [ ] Each candidate has a documented removal hypothesis and disconfirming check.
-- [ ] Each candidate has been reconciled against the named `main` commit approved for Phase 4 planning; earlier evidence must not be assumed current.
+- [ ] Each candidate has been reconciled against current `main`; earlier evidence must not be assumed current.
 - [ ] The Phase 4 branch begins from the approved checkpoint.
-- [ ] Phase 3 status is recorded, and affected Core-boundary paths are either included in the checkpoint or excluded from the candidate manifest.
-- [ ] The candidate manifest and exact path allowlist are approved.
 - [ ] The Phase 4 path allowlist and change budget are approved.
 - [ ] All known `Unknown` or `Defer` records that intersect candidate paths are resolved or explicitly excluded.
 - [ ] License, attribution, package publication, and release ownership have been reviewed for all candidates.
 - [ ] The Phase 4 execution ledger exists.
-
-## Candidate Manifest and Path Allowlist
-
-Before Phase 4 approval, create:
-
-```text
-docs/reduction/phase4-candidate-manifest.md
-```
-
-The manifest is the executable scope for Phase 4. Category names such as
-"GUI," "demos," or "documentation" are not sufficient authorization.
-
-Each candidate entry must include:
-
-| Field | Requirement |
-|---|---|
-| Candidate ID | Stable identifier |
-| Exact paths | Repository-relative files/directories permitted for deletion |
-| Classification record | Approved `Remove` record |
-| Allowed related references | Exact stale references permitted for cleanup |
-| Product surface | One declared surface |
-| Validation profile | `D1`, `D2`, `D3`, or `D4` |
-| Batch | Planned `P4-*` batch |
-| Exclusions | Explicitly protected paths |
-| Source checkpoint | Tag and commit SHA |
-| Reviewer | Human approval and date |
-
-The phase executor may modify only paths listed in the manifest. Any additional
-path requires a scope exception and HITL approval.
 
 ## Phase Branch and Worktree Layout
 
@@ -312,9 +278,7 @@ The default Phase 4 budget is:
 | Files changed in one batch | 75 |
 | Directories deleted in one batch | 5 |
 | Workspace/package metadata files changed in one batch | 5 |
-| Unexpected lockfile mutations in D1-D3 | 0 |
-| Expected lockfile mutations in approved D4 batches | Only named lockfiles |
-| Unreviewed package-resolution changes | 0 |
+| Lockfiles changed without explicit approval | 0 |
 | New unresolved `Unknown` findings | 0 |
 | Deferred-surface exceptions | 0 |
 | Unexplained validation failures | 0 |
@@ -387,17 +351,7 @@ Required:
 
 ## Retained-Closure Regression Matrix
 
-Every D2, D3, and D4 batch must use the command IDs and matrix rows from the
-approved retained-closure clean-install checkpoint:
-
-```text
-docs/reduction/artifacts/phase1/retained-closure-install-matrix.md
-```
-
-The checkpoint artifact index and its recorded command matrix are authoritative.
-Root-level aggregate commands, remembered commands, or newly improvised
-equivalents may supplement the matrix but may not replace it. Each ledger row
-must record the exact matrix row IDs and command IDs executed.
+Every D2, D3, and D4 batch must use the current approved retained-closure commands. The exact command matrix must be recorded from the clean-install checkpoint.
 
 At minimum, the validation matrix includes:
 
@@ -424,45 +378,26 @@ At minimum, the validation matrix includes:
 
 No root-level aggregate command may substitute for the package-specific matrix unless it has been demonstrated to run the same commands and checks.
 
-An expected lockfile change is allowed only in an explicitly approved D4 batch.
-That batch must name the lockfile paths, the package/workspace change causing
-regeneration, the expected dependency graph difference, the clean-install
-validation command, and the pre-change and post-change hashes. Any lockfile
-mutation during D1-D3, or any unlisted D4 mutation, stops the phase.
-
-## Artifact Handling
-
-Phase 4 artifacts must be reproducible, reviewable, and safe to commit.
-
-- Store committed evidence only under `docs/reduction/artifacts/phase4/`.
-- Store temporary logs outside the repository or in a gitignored temporary directory.
-- Redact credentials, tokens, cookies, provider responses, user data, private hostnames, and sensitive absolute paths before committing artifacts.
-- Record the command, working directory, tool version, Node version, operating system, architecture, and timestamp for each validation result.
-- Do not commit `node_modules`, caches, generated bundles, package tarballs, core dumps, or unbounded debug logs unless the candidate record explicitly requires a small sanitized sample.
-- Artifact generation must not modify candidate paths or alter the approved path allowlist.
-- The ledger must identify any local-only evidence that cannot be committed.
-
 ## Phase 4 Execution Workflow
 
 For every approved candidate or grouped candidate set:
 
-1. Reconcile the candidate evidence against the named `main` commit approved for Phase 4 planning.
-2. Update the candidate classification record and candidate manifest.
-3. Create the Phase 4 branch from the approved retained-closure checkpoint.
-4. Do not rebase or silently move the Phase 4 branch if `main` advances. If `main` changes a candidate, the retained closure, a validation command, or a protected surface, stop for HITL review and establish a new checkpoint.
-5. Run the applicable pre-change validation profile.
-6. Store pre-change logs and reports under:
+1. Reconcile the candidate evidence against current `main`.
+2. Update the candidate classification record.
+3. Run the applicable pre-change validation profile.
+4. Store pre-change logs and reports under:
    ```text
    docs/reduction/artifacts/phase4/<candidate-id>/pre-change/
    ```
-7. Create one narrow deletion commit containing only the approved candidate paths and directly related proven stale references.
-8. Run the focused disconfirming check against that deletion commit.
-9. Run the required validation profile against that deletion commit.
-10. Store post-change logs and reports under:
+5. Create one narrow experiment commit.
+6. Delete only the approved candidate paths and directly related proven stale references.
+7. Run the focused disconfirming check.
+8. Run the required validation profile.
+9. Store post-change logs and reports under:
    ```text
    docs/reduction/artifacts/phase4/<candidate-id>/post-change/
    ```
-11. Compare:
+10. Compare:
     - lockfile hashes;
     - package/workspace metadata;
     - bundle metafile;
@@ -471,12 +406,10 @@ For every approved candidate or grouped candidate set:
     - file count;
     - repository size;
     - legal/attribution status.
-12. If validation passes, create a second commit updating the execution ledger, artifact index, and classification result. This evidence commit must not contain unrelated source changes.
-13. If validation fails, do not create the evidence commit; revert the deletion commit or pause for HITL review.
-14. Record both the deletion commit SHA and evidence commit SHA in the execution ledger.
-15. Evaluate the continuation gate.
-16. Continue automatically only if the gate passes.
-17. Stop for HITL if a stop condition occurs.
+11. Update the execution ledger.
+12. Evaluate the continuation gate.
+13. Continue automatically only if the gate passes.
+14. Stop for HITL if a stop condition occurs.
 
 ## Continuation Gate
 
@@ -526,7 +459,7 @@ Required fields:
 
 | Batch | Commit | Candidate IDs | Scope | Validation profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|
-| `P4-01` | `<deletion SHA>` / `<evidence SHA>` | `<IDs>` | `<paths>` | `D1/D2/D3/D4` | Pass/Fail/Blocked | Continue/Stop | `<none or IDs>` |
+| `P4-01` | `<SHA>` | `<IDs>` | `<paths>` | `D1/D2/D3/D4` | Pass/Fail/Blocked | Continue/Stop | `<none or IDs>` |
 
 Every ledger entry must include links or paths to:
 
@@ -537,9 +470,6 @@ Every ledger entry must include links or paths to:
 - validation command results;
 - rollback commit or parent checkpoint;
 - file-count and repository-size comparison.
-
-Each ledger row must also record the exact retained-closure matrix row IDs and
-command IDs executed.
 
 ## Initial Candidate Batch Order
 
@@ -581,14 +511,6 @@ The following remain out of Phase 4 deletion scope unless separately approved:
 - any candidate currently classified `Defer` or `Unknown`;
 - Core boundary remediation work governed by Phase 3.
 
-Phase 4 must use one of these approved Phase 3 states:
-
-- Phase 3 is merged and its final Core boundary is included in the Phase 4 starting checkpoint; or
-- Phase 3 is incomplete, and all Core-boundary paths, package metadata, exports, and affected CLI imports are excluded from the Phase 4 candidate manifest.
-
-Phase 4 may not delete or reclassify a path whose dependency evidence is being
-changed by Phase 3.
-
 ## Rollback
 
 All Phase 4 work must be reversible using ordinary Git operations.
@@ -596,21 +518,16 @@ All Phase 4 work must be reversible using ordinary Git operations.
 Rollback references:
 
 - Phase 4 starting checkpoint;
-- deletion commit SHA;
-- evidence/ledger commit SHA;
+- individual batch commit SHA;
 - Phase branch commit history.
 
-The primary rollback unit is the deletion commit:
+For an accepted batch:
 
 ```text
-git revert <deletion-commit-sha>
+git revert <batch-commit-sha>
 ```
 
-Use `git reset --hard` only in a disposable investigation or validation
-worktree that has first been verified clean and contains no unrelated changes.
-It must not be used on the shared Phase 4 worktree or any published branch.
-
-For a failed or invalid local experiment in a disposable worktree:
+For a failed or invalid local experiment before publication:
 
 ```text
 git reset --hard <pre-experiment-sha>
@@ -678,14 +595,7 @@ Phase 4 may execute only after HITL approves:
 
 After approval, successful batches may proceed autonomously within this plan’s W1 execution envelope.
 
-GitHub integration remains HITL:
+GitHub integration remains HILT:
 
-> The standard Phase 4 workflow creates one draft PR after the Phase 4 branch
-> is created, if repository CI benefits from an open PR. The PR remains draft
-> while autonomous batches execute and becomes ready for review only after the
-> Phase 4 exit criteria and final evidence package pass. Human review and merge
-> remain the single GitHub integration decision for the completed phase.
->
-> If early CI is not useful, PR creation may be deferred until Phase 4 exit.
-> The choice must be recorded at phase entry and must not change during
-> execution.
+> One Phase 4 PR is created after Phase 4 exit criteria are met.  
+> Human review and merge occur through the approved GitHub workflow.
