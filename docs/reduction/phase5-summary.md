@@ -50,6 +50,12 @@ Local targeted validation passed:
 - CLI config and model characterization tests (12 tests)
 - Static and emitted boundary checks
 
+The local runtime-boundary characterization was not used as an authority
+signal because the macOS checkout was running Node.js `v26.7.0` rather than
+the required `v24.19.0`; its child CLI and module-resolution checks completed,
+but the profile correctly reported the pinned-runtime mismatch. This is an
+environment limitation, not an unexplained fix failure.
+
 The fixed post-change Ubuntu1 invocation was attempted with
 `--phase5-validate --branch reduce/phase5-cli-core-validation` and was
 blocked before validation because GitHub has no published ref for that local
