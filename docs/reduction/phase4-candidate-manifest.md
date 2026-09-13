@@ -82,7 +82,7 @@ Validation profile: D1. Exclusions: all canonical referenced paths, all
 non-duplicate documentation assets, deferred surfaces, and all runtime/build
 files.
 
-### P4-B — Stale JetBrains workspace metadata (D2)
+### P4-B — Stale JetBrains workspace metadata (D4)
 
 Classification record: `docs/reduction/cli-core-dependency-inventory.md`
 Batch G workspace/metadata cleanup, plus the current-main reconciliation
@@ -119,10 +119,11 @@ Allowed deletion paths:
 .idea/vcs.xml
 ```
 
-Validation profile: D2. Exclusions: all `.idea` ignore rules and runtime
-checks that treat user-created IDE metadata as ignorable input, plus all
-retained CLI/Core/package source, manifests, lockfiles, CI, legal, docs, and
-deferred product surfaces.
+Validation profile: D4 — workspace/metadata cleanup, validated using the
+stricter D2 retained-closure matrix. Exclusions: all `.idea` ignore rules and
+runtime checks that treat user-created IDE metadata as ignorable input, plus
+all retained CLI/Core/package source, manifests, lockfiles, CI, legal, docs,
+and deferred product surfaces.
 
 ## Ratification
 

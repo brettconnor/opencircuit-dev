@@ -1,6 +1,7 @@
 # Phase 4 Execution Ledger
 
-**Status:** Phase 4 complete at continuation gate under approved validation waiver.
+**Status:** Phase 4 execution complete; ready for HITL exit review.
+P4-A is accepted. P4-B is conditionally accepted under a P4-B-only waiver.
 **Manifest:** `docs/reduction/phase4-candidate-manifest.md`  
 **Plan:** `docs/planning/phase4_reversible_deletion_v1.md`  
 **Starting checkpoint:** `red-001-core-clean-install`
@@ -12,7 +13,7 @@
 | Phase entry | **FULL GO — ratified** |
 | Source `main` commit | `450df8c69cfbb47c87fbd3d45f318279ca8c3074` |
 | Phase branch | `reduce/phase4-reversible-deletion` |
-| Candidate manifest | Ratified with P4-A D1 and P4-B D2 |
+| Candidate manifest | Ratified with P4-A D1 and P4-B D4 |
 | Path allowlist | 23 `docs/images` paths and 20 `.idea` paths |
 | Ubuntu1 validation mode | `--phase4-validate` available and tested |
 | RED-001 broader Core Jest limitation | Recorded limitation; no current candidate touches the affected closure |
@@ -28,7 +29,7 @@ excluded as already absent; deferred and unknown surfaces remain excluded.
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
 | P4-A | `1acd6b5aa` | `e5f6e6358` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Pass — local and Ubuntu1 | Complete | None |
-| P4-B | `ceb6624f9` | `d0636908f` | `P4-B` | 20 stale root `.idea` metadata files | D2 (workspace metadata; D4 by plan taxonomy) | Accepted under operator waiver | Stop — no additional eligible candidate | `core npm run tsc:check` TS2322 waived for this batch |
+| P4-B | `ceb6624f9` | `d0636908f` | `P4-B` | 20 stale root `.idea` metadata files | D4, validated with stricter D2 retained-closure checks | Conditionally accepted under batch-specific waiver | Stop — no additional eligible candidate | Baseline-equivalent Core `tsc:check` TS2322 waived for P4-B only |
 
 ## RED execution result
 
@@ -49,19 +50,36 @@ P4-B is the approved D2 batch for stale root JetBrains workspace metadata.
 Its exact allowlist and current-main reconciliation are recorded in
 `docs/reduction/artifacts/phase4/P4-B/reconciliation.md`.
 
-The P4-B deletion itself is complete at `ceb6624f9`. Ubuntu1 D2 validation
-ran against all 20 paths on `10.1.141.9` with Node.js `24.19.0`, but 0/20
-passed because the retained matrix failed at Core `npm run tsc:check` with a
-pre-existing TS2322 nominal type-identity clash after a successful Core build.
-The failure reproduces from a fresh `core/dist` and is unrelated to `.idea`.
-The operator approved a validation waiver on 2026-09-13. The waiver applies
-only to accepting P4-B; it does not alter the runner, Core source, or
-candidate eligibility rules.
+The P4-B deletion itself is complete at `ceb6624f9`. Ubuntu1 validation used
+the stricter D2 retained-closure matrix against all 20 paths on
+`10.1.141.9` with Node.js `24.19.0`. Candidate-specific absence, scope, and
+stale-reference checks passed, but retained closure stopped at Core
+`npm run tsc:check` with a baseline-equivalent TS2322 nominal type-identity
+clash after a successful Core build. This is a global retained-closure
+limitation, not 20 individual candidate failures.
+
+The operator approved a P4-B-only validation waiver on 2026-09-13. The
+waiver does not alter the runner, Core source, candidate eligibility rules,
+or acceptance criteria for later D2/D3/D4 batches.
 
 The final bounded reconciliation is recorded in
 `docs/reduction/artifacts/phase4/reconciliation-final-2026-09-13.md`. It
 covers every required fat-cut category and finds no additional executable
-candidate. Phase 4 therefore stops at the continuation gate.
+candidate. Phase 4 therefore stops at the continuation gate and is ready for HITL exit
+review. Waiver evidence is recorded at
+`docs/reduction/artifacts/phase4/P4-B/validation-waiver.md`.
+
+## Commit provenance
+
+| Item | Full SHA |
+|---|---|
+| Phase entry checkpoint | `450df8c69cfbb47c87fbd3d45f318279ca8c3074` |
+| P4-A deletion | `1acd6b5aa52c39c4c82b15da843e8089dbd82288` |
+| P4-A evidence | `e5f6e63583b61ad88653b12203bea2c605bbfb00` |
+| P4-A Ubuntu1 validation | `2bbb5ed533a55af091b8571334325ffdb7971353` |
+| P4-B deletion | `ceb6624f9dd44430bf38a474f47ec2617ce34adb` |
+| P4-B evidence | `d0636908f4619710b09aa4856ac5d0069a2a6c05` |
+| Phase branch before closeout evidence | `5abfec7bcf62f1154831b19632e5997055519054` |
 
 ## Entry-gate evidence index
 
