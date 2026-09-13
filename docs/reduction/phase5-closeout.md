@@ -160,5 +160,7 @@ known TS2322 failure and invalidate the restored retained-closure claim.
 
 Phase 5 requires no additional TS2322 remediation work. The repository is
 ready for the next approved phase or maintenance task. Any future reduction
-batch may rely on the restored retained-closure baseline, but must still use
-its own exact scope, evidence, fixed validation profile, and approval gate.
+batch may rely on the restored retained-closure baseline, but must still
+operate within its authorized phase envelope, use an exact scope and evidence
+record, and pass its applicable fixed validation profile and continuation
+checks.
