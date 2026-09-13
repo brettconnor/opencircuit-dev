@@ -2,7 +2,7 @@
 
 # Phase 4: Reversible Deletion Plan v1
 
-**Status:** Fully Appoved — execution remains FULL GO to cross the line of departure. All approvals are recorded.
+**Status:** Fully Approved — execution remains FULL GO to cross the line of departure. All approvals are recorded.
 **Execution model:** W1 — Fully autonomous execution.
 **Product deletion status:**  Full GO.
 **Builds on:**
@@ -19,7 +19,10 @@
 
 Phase 4 performs reversible deletion of repository content already classified as `Remove`.
 
-This phase is not a new discovery or broad cleanup effort. It executes only against candidates whose removal has already been supported by:
+This phase is not an unrestricted discovery or broad cleanup effort. It may
+perform bounded reconciliation of previously identified `Remove` and
+potentially removable surfaces against the current `main` tree. It executes
+deletion only against candidates whose removal is currently supported by:
 
 - manifest and workspace evidence;
 - static import and reference analysis;
@@ -30,7 +33,17 @@ This phase is not a new discovery or broad cleanup effort. It executes only agai
 - a focused disconfirming check; and
 - an approved classification record.
 
-Copilot will reconciliation, evidence summarization, stale-reference discovery, and candidate grouping.
+The reconciliation must cover the categories in
+`docs/planning/cut-the fat-plan0_v2.md`: documentation/assets,
+demos/examples, GUI/browser tooling, generated/vendored content,
+surface-specific tests/CI, and workspace/metadata cleanup. The explicit
+deferred and unknown exclusions remain in force. An empty manifest is a valid
+finding only when the reconciliation record proves that no eligible candidate
+remains; an empty-manifest no-op is not, by itself, completion of the fat-cut
+objective.
+
+Copilot may assist with reconciliation, evidence summarization,
+stale-reference discovery, and candidate grouping.
 
 ## W1 Operating Model
 
@@ -171,6 +184,9 @@ Phase 4 may begin only when all conditions below are true.
 - [ ] The Phase 4 branch begins from the approved checkpoint.
 - [ ] Phase 3 status is recorded, and affected Core-boundary paths are either included in the checkpoint or excluded from the candidate manifest.
 - [ ] The candidate manifest and exact path allowlist are approved.
+- [ ] The manifest records either at least one executable candidate or a
+      current-main reconciliation proving that every fat-cut category has no
+      remaining eligible candidate.
 - [ ] The Phase 4 path allowlist and change budget are approved.
 - [ ] All known `Unknown` or `Defer` records that intersect candidate paths are resolved or explicitly excluded.
 - [ ] License, attribution, package publication, and release ownership have been reviewed for all candidates.
@@ -204,6 +220,11 @@ Each candidate entry must include:
 
 The phase executor may modify only paths listed in the manifest. Any additional
 path requires a scope exception and HITL approval.
+
+An empty manifest authorizes no deletion. It closes the phase only when the
+ledger links a completed reconciliation across every fat-cut category and
+records remaining surfaces as retained, deferred, unknown, or already
+removed. Otherwise the phase remains open for candidate reconciliation.
 
 ## Phase Branch and Worktree Layout
 
