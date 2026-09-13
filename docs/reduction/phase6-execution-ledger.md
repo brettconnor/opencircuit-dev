@@ -23,7 +23,7 @@
 | P6-CORR-PUB001 | `f57330ae3` | CLI declaration entry-point generation (`P6-PUB-001`) | Pass | Clean build, typecheck, smoke tests, packed consumer fixture (`CONSUMER_TYPECHECK_EXIT=0`) | `phase6-corrections/cli-declaration-validation.md` |
 | P6-CORR-PUB002 | `5fa8d13ce` | Dedicated aggregate third-party attribution review (`P6-PUB-002`) | Pass | Audited 376 bundled packages from `dist/meta.json` (100% permissive; 0 copyleft); root `NOTICE` added | `NOTICE`, `phase6-corrections/third-party-attribution-review.md` |
 | P6-CORR-DOC001 | `d2a6ecb51` | Entry points inventory reconciliation (`P6-DOC-001`) | Pass | Reconciled Core types & CLI declaration documentation with package manifests | `cli-core-entry-points.md`, `phase6-corrections/entry-points-reconciliation.md` |
-| P6-CORR-FINAL | `f00bede7c` | Corrections ledger & readiness closeout | Publication ready with documented exceptions | Local full-closure build & test suite pass; lockfile integrity verified | `phase6-corrections/correction-ledger.md` |
+| P6-CORR-FINAL | `406b7d7e0` | Corrections ledger & readiness closeout | Publication ready with documented exceptions | Local full-closure build & test suite pass; lockfile integrity verified | `phase6-corrections/correction-ledger.md` |
 
 ## Stop conditions and exceptions
 

@@ -28,7 +28,7 @@ Starting from the Phase 6 evidence branch `reduce/phase6-final-review` at tip `9
 - `docs/reduction/cli-core-entry-points.md`
 - `docs/reduction/phase6-corrections/entry-points-reconciliation.md`
 
-### Commit 4: `f00bede7c` (`docs(phase6): record publication corrections ledger and readiness`)
+### Commit 4: `406b7d7e0` (`docs(phase6): record publication corrections ledger and readiness`)
 - `docs/reduction/artifacts/phase6/reconciliation/unresolved-items.md`
 - `docs/reduction/phase6-publication-readiness.md`
 - `docs/reduction/phase6-final-review.md`
