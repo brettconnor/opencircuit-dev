@@ -50,16 +50,18 @@
 
 The Phase 5 stale-reference expression originally used `(...)*core`, which
 matched approved bare package imports such as `from "core"`. The expression
-now requires one or more relative path segments: `(...)+core`.
+now requires one or more relative path segments: `(...)+core`. The validation
+profile also removes ignored `core/dist` before the Core install/build so
+stale generated declarations cannot trigger `TS5055`.
 
-- Runner commit: `ba52121cca51b7ce951320fdbee4902ebaec7ea1`
+- Runner commit: `f463d28e824b612d5eea762e7b106b22aca1308a`
 - Runner contract test: pass
 - New regression test: pass
 - Shell syntax check: pass
 - Runner script SHA-256:
-  `cf19fe5655c804df019d142df7238b62393808d5e1b26735a1243cc1362467c3`
+  `8c11c176761f58f7429915c5320232e6c3cc26cc72010c94a075456ee3a9042f`
 - Runner contract SHA-256:
-  `fea4e6797d308325b182890605d4035aefa0f980d11acdda16f3f7e12592f272`
+  `841801d0721f27dee9cf5e60608ce9993bed46c67bbd8bdd538d80334bcfd4c9`
 - CodeGuard review: no hardcoded credential material, unsafe `eval`/`sudo`
   seam, or unvalidated shell-input path was introduced; existing structured
   SSH arguments, strict allowlists, and fail-closed behavior remain intact.

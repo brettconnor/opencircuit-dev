@@ -124,11 +124,11 @@ Before execution begins, record all of the following:
   worktree rather than deleted;
 - clean generated `core/dist`;
 - the fixed Phase 5 runner revision and contract hashes. The currently pinned
-  runner is systems-orchestration commit `ba52121cca51b7ce951320fdbee4902ebaec7ea1`,
+  runner is systems-orchestration commit `f463d28e824b612d5eea762e7b106b22aca1308a`,
   with script SHA-256
-  `cf19fe5655c804df019d142df7238b62393808d5e1b26735a1243cc1362467c3` and
+  `8c11c176761f58f7429915c5320232e6c3cc26cc72010c94a075456ee3a9042f` and
   contract SHA-256
-  `fea4e6797d308325b182890605d4035aefa0f980d11acdda16f3f7e12592f272`;
+  `841801d0721f27dee9cf5e60608ce9993bed46c67bbd8bdd538d80334bcfd4c9`;
 - the current baseline failure and its artifact path;
 - the change budget and approved path allowlist;
 - a rollback commit or known-good starting checkpoint.

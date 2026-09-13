@@ -12,7 +12,7 @@
 - Host reachability: passed on Ubuntu1 (`10.1.141.9`)
 - Required runtime target: Node.js `24.19.0`
 - Fixed runner mode: `--phase5-validate`
-- Fixed runner revision: `ba52121cca51b7ce951320fdbee4902ebaec7ea1`
+- Fixed runner revision: `f463d28e824b612d5eea762e7b106b22aca1308a`
 - Result: blocked before validation
 - Runner exit: `1`
 

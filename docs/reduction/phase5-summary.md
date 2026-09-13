@@ -67,14 +67,15 @@ but the profile correctly reported the pinned-runtime mismatch. This is an
 environment limitation, not an unexplained fix failure.
 
 The Phase 5 validation harness required one evidence-backed correction:
-commit `ba52121cca51b7ce951320fdbee4902ebaec7ea1` changes the stale-reference
+commit `f463d28e824b612d5eea762e7b106b22aca1308a` changes the stale-reference
 matcher to require one or more relative path segments, so approved bare
-`core` package imports are not reported as stale filesystem references. Its
-SDD contract, TDD regression, shell syntax, and dry-run checks pass. The
-authoritative runner is pinned to that commit with script SHA-256
-`cf19fe5655c804df019d142df7238b62393808d5e1b26735a1243cc1362467c3` and
+`core` package imports are not reported as stale filesystem references, and
+cleans ignored `core/dist` before validation. Its SDD contract, TDD
+regressions, shell syntax, and dry-run checks pass. The authoritative runner
+is pinned to that commit with script SHA-256
+`8c11c176761f58f7429915c5320232e6c3cc26cc72010c94a075456ee3a9042f` and
 contract SHA-256
-`fea4e6797d308325b182890605d4035aefa0f980d11acdda16f3f7e12592f272`.
+`841801d0721f27dee9cf5e60608ce9993bed46c67bbd8bdd538d80334bcfd4c9`.
 
 The fixed post-change Ubuntu1 invocation has not completed because GitHub has
 no published ref for the local Phase 5 branch. Evidence is in
@@ -86,9 +87,9 @@ no published ref for the local Phase 5 branch. Evidence is in
   `git -C /Users/brettcon/git/systems-orchestration revert 6c3b95c`
 - Runner evidence output: `6d18794`, rollback:
   `git -C /Users/brettcon/git/systems-orchestration revert 6d18794`
-- Runner stale-reference correction: `ba52121cca51b7ce951320fdbee4902ebaec7ea1`,
+- Runner stale-reference and clean-output correction: `f463d28e824b612d5eea762e7b106b22aca1308a`,
   rollback:
-  `git -C /Users/brettcon/git/systems-orchestration revert ba52121cca51b7ce951320ebaec7ea1`
+  `git -C /Users/brettcon/git/systems-orchestration revert f463d28e824b612d5eea762e7b106b22aca1308a`
 - Diagnosis evidence: `b98a77a9e`, rollback:
   `git revert b98a77a9e`
 - Core fix: `5e2685e07`, rollback:
