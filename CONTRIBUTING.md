@@ -39,20 +39,10 @@ Changes affecting package boundaries, declaration output, workspace
 configuration, or runtime resolution require the fixed retained-closure
 validation profile.
 
-## Documentation
-
-Mintlify documentation lives in `docs/`:
-
-```bash
-cd docs
-npm install
-npm run dev
-```
-
 ## Scope and compatibility
 
-The retained product is CLI/Core and its shared packages. VS Code, binary, and
-other deferred surfaces require their own validation scope. Preserve historical
+The retained product is the CLI, VS Code extension/VSIX, Core, and their shared
+packages. Preserve historical
 `@continuedev/*` package names and `CONTINUE_*` environment variables when
 compatibility requires them.
 

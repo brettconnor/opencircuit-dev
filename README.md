@@ -46,21 +46,11 @@ cd extensions/cli
 npm start
 ```
 
-## Documentation
+## Repository scope
 
-The hosted documentation website is the Next.js app in `docs-site/`. It
-renders the MDX content and navigation configuration stored in `docs/`.
-
-Preview the hosted site locally:
-
-```bash
-cd docs-site
-npm install
-npm run dev
-```
-
-The `docs/` directory also contains a legacy Mintlify package and
-`docs/docs.json`; the current custom site consumes that content directly.
+This repository is intentionally limited to production code and its required
+build and release tooling: the `cn` CLI, the VS Code extension/VSIX, Core, and
+shared packages.
 
 ## Development checks
 

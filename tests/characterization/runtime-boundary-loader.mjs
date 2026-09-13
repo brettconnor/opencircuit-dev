@@ -4,7 +4,6 @@ const reportPath = process.env.PHASE0_RUNTIME_BOUNDARY_REPORT;
 const deniedFragments = [
   "/extensions/vscode/",
   "/gui/",
-  "/docs-site/",
   "/binary/",
 ];
 const deniedPackages = ["vscode", "@vscode/", "electron"];

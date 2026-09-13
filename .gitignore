@@ -15,7 +15,6 @@ downloads/
 eggs/
 .eggs/
 lib/
-!docs-site/lib/
 lib64/
 parts/
 sdist/
@@ -178,4 +177,3 @@ keys
 .users_cache.json
 .copy-status
 .copy-log
-
