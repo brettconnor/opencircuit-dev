@@ -1,0 +1,8 @@
+{
+  "reviewed_commit": "308c540b735b4860504dadf281311c329420612e",
+  "command": "node tests/characterization/runtime-boundary-check.mjs",
+  "result": "Pass",
+  "runner_marker": "phase5_validation_step:runtime-boundary:pass",
+  "prohibited_runtime_resolutions": [],
+  "sanitized": true
+}

@@ -1,0 +1,12 @@
+{
+  "reviewed_commit": "308c540b735b4860504dadf281311c329420612e",
+  "commands": [
+    "node tests/characterization/boundary-check.mjs",
+    "node tests/characterization/positive-boundary-check.mjs"
+  ],
+  "result": "Pass",
+  "runner_marker": "phase5_validation_step:emitted-boundary:pass",
+  "known_bundle_input_count": 4145,
+  "prohibited_inputs": [],
+  "sanitized": true
+}

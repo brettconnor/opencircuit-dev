@@ -1,0 +1,17 @@
+{
+  "authority": "Ubuntu1",
+  "host": "10.1.141.9",
+  "reviewed_branch": "main",
+  "reviewed_commit": "308c540b735b4860504dadf281311c329420612e",
+  "remote_directory": "open-circuit-dev-phase6-review",
+  "node_version": "v24.19.0",
+  "npm_version": "11.17.0",
+  "install_policy": "npm ci --ignore-scripts --no-audit --no-fund",
+  "provider_network_policy": "controlled loopback mock only for the headless workflow",
+  "runner_commit": "20f6e37ef80f10e56be9aee3aeb81aeebbc40408",
+  "runner_sha256": "a114781c75c7a4c078fa31e1476ca8c4e53799299d9ea0f4dfab86bcd8c81f81",
+  "runner_contract_sha256": "8b086bae224bd667f571161dc9dd50a5995eddfca51a43b7bba6de82f9e48603",
+  "runner_mode": "--phase6-final-review",
+  "exit_status": 0,
+  "sanitized": true
+}

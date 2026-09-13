@@ -1,0 +1,6 @@
+source=Ubuntu1 fixed Phase 6 profile
+reviewed_commit=308c540b735b4860504dadf281311c329420612e
+command=cd extensions/cli && npm run test:smoke
+result=Pass
+exit_status=0
+sanitized=true
