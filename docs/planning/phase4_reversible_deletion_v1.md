@@ -1,4 +1,4 @@
-# `docs/planning/phase4_reversible_deletion_v0.md`
+# `docs/planning/phase4_reversible_deletion_v1.md`
 
 # Phase 4: Reversible Deletion Plan v1
 
@@ -59,6 +59,75 @@ HITL remains mandatory for:
 - legal, attribution, or licensing uncertainty;
 - change-budget exceedance; and
 - Phase 4 final review and GitHub merge.
+
+## Validation Environment and Runner Contract
+
+The operator's local macOS checkout is the authoring and Git-control
+environment. It is **not** the authoritative Phase 4 test runtime.
+
+All retained-closure, clean-install, build, typecheck, smoke, headless,
+bundle, runtime-boundary, and deletion-validation commands must run on
+**ubuntu1** (`10.1.141.9`, SSH user `sysadmin`) under the pinned RED-001
+runtime: Node.js `24.19.0` and npm `11.17.0`, unless the Phase 4 entry
+approval records an explicit environment waiver.
+
+The canonical host values live in:
+
+```text
+/Users/brettcon/git/hosts/ubuntu1-hosts.sh
+/Users/brettcon/git/hosts/hosts.sh
+```
+
+Use the generic runner as the transport and environment-preparation layer:
+
+```bash
+/Users/brettcon/git/systems-orchestration/scripts/open-circuit-runner.sh \
+  --hosts-file /Users/brettcon/git/hosts/hosts.sh \
+  --phase1-ready-red
+
+/Users/brettcon/git/systems-orchestration/scripts/open-circuit-runner.sh \
+  --hosts-file /Users/brettcon/git/hosts/hosts.sh \
+  --phase1-red
+```
+
+The runner pulls the selected Git branch to ubuntu1, pins the per-user nvm
+runtime, and executes the RED-001 retained-closure install matrix. Its
+approved `--phase4-validate` mode now performs fixed, candidate-specific
+post-deletion checks without accepting arbitrary commands or local payloads:
+
+```bash
+/Users/brettcon/git/systems-orchestration/scripts/open-circuit-runner.sh \
+  --hosts-file /Users/brettcon/git/hosts/hosts.sh \
+  --branch <phase-branch> \
+  --phase4-validate \
+  --candidate-id P4-<id> \
+  --validation-profile D1 \
+  --candidate-path <repo-relative-deleted-path>
+```
+
+D1 verifies candidate absence, stale-reference absence outside approved
+reduction documentation, and `git diff --check`. D2-D4 additionally execute
+the fixed retained-package build/typecheck and boundary checks. The mode does
+not copy local uncommitted files, accept arbitrary shell commands, or replace
+the Phase 4 artifact/ledger workflow.
+
+Until that wrapper exists, the Phase 4 workflow is:
+
+1. Commit the approved deletion batch and evidence/ledger changes on the Phase
+   4 branch.
+2. Push the branch to GitHub.
+3. Use `open-circuit-runner.sh --branch <phase-branch> --phase4-validate` once
+   per candidate manifest entry to verify the branch on ubuntu1 under the
+   pinned baseline, selecting the matching D1/D2/D3/D4 profile.
+4. Record the runner's structured result, exact remote commit, runtime, host,
+   candidate ID, candidate path, and artifact paths in the execution ledger.
+5. Treat a local macOS run as advisory only; it may supplement evidence but
+   cannot satisfy the authoritative retained-runtime gate.
+
+Remote validation artifacts must be copied back or otherwise made available
+for review, sanitized, and committed only under
+`docs/reduction/artifacts/phase4/`. Do not copy credentials, tokens, cookies,
+provider responses, private hostnames, or unbounded logs into the repository.
 
 ## Phase Objective
 
