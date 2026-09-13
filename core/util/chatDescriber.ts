@@ -1,11 +1,11 @@
-import { ILLM, LLMFullCompletionOptions } from "..";
+import type { ILLM, LLMFullCompletionOptions } from "../index.js";
 
-import { removeCodeBlocksAndTrim, removeQuotesAndEscapes } from ".";
+import { removeCodeBlocksAndTrim, removeQuotesAndEscapes } from "./index.js";
 
 import type { FromCoreProtocol, ToCoreProtocol } from "../protocol";
 import type { IMessenger } from "../protocol/messenger";
-import { renderChatMessage } from "./messageContent";
-import { convertFromUnifiedHistory } from "./messageConversion";
+import { renderChatMessage } from "./messageContent.js";
+import { convertFromUnifiedHistory } from "./messageConversion.js";
 
 export class ChatDescriber {
   static maxTokens = 16; // Increased from 12 to meet GPT-5 minimum requirement
