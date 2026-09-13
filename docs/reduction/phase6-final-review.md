@@ -23,6 +23,7 @@ authorized correction work.
 | Approved plan | `docs/planning/phase6-final-review_v2.md` |
 | Approved documentation checkpoint | `3a53aa298ff5fca99531b7b8a0aa0cce25fbe2f6` |
 | Evidence branch entry commit | `778eda62c02ceab4a876f9ba73ba7b4ea6ea8e63` |
+| Evidence commits | `144305a2a65c9031f1289b831cdb479784e58488`, `0cc8660aa6cb0166b69a18bc4c7888d7975a192e` |
 | Reviewed merged product commit | `308c540b735b4860504dadf281311c329420612e` |
 | Runner commit | `20f6e37ef80f10e56be9aee3aeb81aeebbc40408` |
 | Runner SHA-256 | `a114781c75c7a4c078fa31e1476ca8c4e53799299d9ea0f4dfab86bcd8c81f81` |

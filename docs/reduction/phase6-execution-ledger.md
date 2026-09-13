@@ -23,7 +23,7 @@ commit and this ledger records that distinction.
 | P6-AUTH | `778eda62c` | Plan authorization only | Approved status recorded | `git diff --check` | Plan |
 | P6-RUNNER | `b5e09a2d`, `5b6ba839`, `20f6e37e` in systems-orchestration | Fixed Phase 6 runner, contract, tests | Completed; no caller commands accepted | Shell syntax and targeted runner suite passed | Runner contract/tests |
 | P6-AUTH-VALIDATE | N/A (evidence only) | Ubuntu1 final retained closure and review | Pass; runner exit `0` | Fixed Phase 5 baseline plus fixed Phase 6 checks | `artifacts/phase6/environment/` |
-| P6-RECONCILE | Pending evidence commit | Final inventories and readiness reconciliation | Not publication ready | Evidence/diff review | `artifacts/phase6/reconciliation/` |
+| P6-RECONCILE | `144305a2a`, `0cc8660aa` | Final inventories and readiness reconciliation | Not publication ready | Evidence/diff review | `artifacts/phase6/reconciliation/` |
 
 ## Stop conditions and exceptions
 
