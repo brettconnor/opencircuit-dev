@@ -142,6 +142,12 @@ npm i -g vite
 
 #### VS Code
 
+> **Note:** This fork no longer contains a local `gui/` source tree (see
+> `docs/reduction/cli-core-dependency-inventory.md`). The `gui`-specific
+> instructions below are inherited from upstream and are stale for this
+> repository until the VS Code/JetBrains packaging pipeline's `gui`
+> dependency is resolved in a dedicated experiment.
+
 1. Open the VS Code command pallet (`cmd/ctrl+shift+p`) and select `Tasks: Run Task` and then select
    `install-all-dependencies`
 

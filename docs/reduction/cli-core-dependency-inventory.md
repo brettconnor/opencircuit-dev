@@ -51,3 +51,31 @@ Disconfirming check:
 6. Revert RED-001 if dependency changes or validation results are not understood and approved.
 
 No product-surface deletion is authorized until RED-001 passes and a new immutable checkpoint is recorded. The GUI remains the first proposed deletion experiment after that checkpoint.
+
+## Batch G: workspace and metadata cleanup
+
+Experiment order item 7 (final item): workspace and metadata cleanup.
+
+Findings:
+
+- `CONTRIBUTING.md`'s "VS Code" contributing section (`Debugging`, `Theme
+  Colors`, `Adding Models`) contains multiple stale references to `gui/`
+  (e.g. `gui/src/styles/theme.ts`, `gui/src/pages/AddNewModel/...`) left over
+  from before `gui/` was removed from this checkout. Given the size and
+  narrative nature of this content (contributor-facing instructions spanning
+  several sections), a full rewrite was judged out of scope for a narrow,
+  reversible RED experiment. Instead, added a single explicit disclaimer at
+  the top of the VS Code section noting the local `gui/` source tree no
+  longer exists and that the `gui`-specific instructions are stale pending a
+  dedicated packaging-pipeline experiment (see the `gui` row's `Unknown`
+  packaging-pipeline note above). No content deleted.
+- `worktree-config.yaml`'s `cowCopyTargets` listed `app/node_modules`, but
+  `app/` has never existed anywhere in this repository's git history (`git
+  log --all -- app` returns no results) — confirmed template/boilerplate
+  cruft from whatever scaffold generated this file, not a real workspace
+  path. Removed the dead entry; the remaining `core/node_modules`,
+  `extensions/*/node_modules`, `packages/*/node_modules`, etc. entries all
+  correspond to real, still-existing paths.
+
+No CLI/Core source touched; both changes are documentation/tooling-metadata
+only.
