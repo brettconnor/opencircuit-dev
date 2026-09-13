@@ -1,10 +1,10 @@
-import {
+import type {
   ChatMessage,
   ContextItem,
   MessageContent,
   MessagePart,
   TextMessagePart,
-} from "../index";
+} from "../index.js";
 
 export function stripImages(messageContent: MessageContent): string {
   if (typeof messageContent === "string") {
