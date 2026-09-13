@@ -1,7 +1,7 @@
 import { ModelConfig } from "@continuedev/config-yaml";
 import { BaseLlmApi } from "@continuedev/openai-adapters";
 import type { ChatHistoryItem } from "core/index.js";
-import { convertToUnifiedHistory } from "core/util/messageConversion.js";
+import { convertToUnifiedHistory } from "core/messageConversion.js";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.mjs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

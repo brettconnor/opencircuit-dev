@@ -1,6 +1,6 @@
 import { ModelConfig } from "@continuedev/config-yaml";
 import { BaseLlmApi } from "@continuedev/openai-adapters";
-import { convertToUnifiedHistory } from "core/util/messageConversion.js";
+import { convertToUnifiedHistory } from "core/messageConversion.js";
 import { describe, expect, it, vi } from "vitest";
 
 import { compactChatHistory } from "./compaction.js";
