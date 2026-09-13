@@ -1,4 +1,4 @@
-# Contributing to Continue
+# Contributing to Open Circuit
 
 This fork focuses on the retained CLI, Core, shared packages, and their
 validation/documentation surfaces. Keep changes narrow, reproducible, and

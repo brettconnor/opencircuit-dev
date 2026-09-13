@@ -6,7 +6,7 @@ template instructions (`Use this template`, example navigation, and local
 navigation, or any build script.
 
 The template-only README was removed. The docs package description was updated
-from the starter-kit text to `Mintlify documentation site for Continue`.
+from the starter-kit text to `Mintlify documentation site for Open Circuit`.
 
 Retained:
 

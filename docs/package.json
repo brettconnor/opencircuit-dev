@@ -1,7 +1,7 @@
 {
   "name": "docs2",
   "version": "1.0.0",
-  "description": "Mintlify documentation site for Continue",
+  "description": "Mintlify documentation site for Open Circuit",
   "main": "index.js",
   "scripts": {
     "dev": "mintlify dev",
