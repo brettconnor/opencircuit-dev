@@ -1,11 +1,11 @@
 import z from "zod";
 
-import {
+import type {
   BrowserSerializedContinueConfig,
   Config,
   ContinueConfig,
   SerializedContinueConfig,
-} from "..";
+} from "../index.js";
 
 export const sharedConfigSchema = z
   .object({
