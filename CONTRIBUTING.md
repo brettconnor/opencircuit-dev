@@ -145,8 +145,8 @@ npm i -g vite
 > **Note:** This fork no longer contains a local `gui/` source tree (see
 > `docs/reduction/cli-core-dependency-inventory.md`). The `gui`-specific
 > instructions below are inherited from upstream and are stale for this
-> repository until the VS Code/JetBrains packaging pipeline's `gui`
-> dependency is resolved in a dedicated experiment.
+> repository until the VS Code packaging pipeline's `gui` dependency is
+> resolved in a dedicated experiment.
 
 1. Open the VS Code command pallet (`cmd/ctrl+shift+p`) and select `Tasks: Run Task` and then select
    `install-all-dependencies`
@@ -177,7 +177,9 @@ Code_ window with cmd/ctrl+shift+p "Reload Window".
 
 #### JetBrains
 
-See [`intellij/CONTRIBUTING.md`](./extensions/intellij/CONTRIBUTING.md) for the JetBrains extension.
+This fork no longer supports the JetBrains plugin (removed under
+`docs/planning/phase2a-cut-jetbrains.md`); see `git log` for the removal
+commits if you need the historical source.
 
 ### Our Git Workflow
 
@@ -218,7 +220,6 @@ Guidelines for using theme colors:
 Guidelines for adding/updating theme colors:
 
 - Choose sensible VS Code variables to add/update in [gui/src/styles/theme.ts](gui/src/styles/theme.ts) (see [here](https://code.visualstudio.com/api/references/theme-color) and [here](https://www.notion.so/1fa1d55165f78097b551e3bc296fcf76?pvs=25) for inspiration)
-- Choose sensible JetBrains named colors to add/update in `GetTheme.kt` (flagship LLMs can give you good suggestions to try)
 - Update `tailwind.config.js` if needed
 - Use the Theme Test Page to check colors. This can be accessed by going to `Settings` -> `Help` -> `Theme Test Page` in dev/debug mode.
 
