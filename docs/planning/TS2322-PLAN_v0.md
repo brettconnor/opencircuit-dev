@@ -1,7 +1,7 @@
 # Core TS2322 Remediation Plan v0
 
-**Status:** Execution-ready validation plan; candidate implementation already
-exists in commit `5e2685e07`
+**Status:** Completed; candidate implementation `5e2685e07` passed the
+authoritative Ubuntu1 validation profile
 **Related phase:** Phase 5 CLI/Core validation  
 **Primary objective:** Resolve the deterministic Core `TS2322` failure caused by
 duplicate TypeScript declaration identities, then restore authoritative
@@ -31,6 +31,7 @@ Authoritative evidence is recorded in:
 
 - `docs/reduction/artifacts/phase5/P5-DIAG/pre-change/diagnosis-evidence.md`
 - `docs/reduction/artifacts/phase5/P5-DIAG/post-change/validation-blocker.md`
+- `docs/reduction/artifacts/phase5/P5-FIX/post-change/authoritative-validation.md`
 - `docs/reduction/phase5-execution-ledger.md`
 - `docs/reduction/phase5-summary.md`
 
@@ -124,20 +125,20 @@ Before execution begins, record all of the following:
   worktree rather than deleted;
 - clean generated `core/dist`;
 - the fixed Phase 5 runner revision and contract hashes. The currently pinned
-  runner is systems-orchestration commit `f463d28e824b612d5eea762e7b106b22aca1308a`,
+  runner is systems-orchestration commit `dba6c7d`,
   with script SHA-256
-  `8c11c176761f58f7429915c5320232e6c3cc26cc72010c94a075456ee3a9042f` and
+  `04df7f2767f79f23769441b1738226e6472ce75ac78cdfc21a4dcca1490029ff` and
   contract SHA-256
-  `841801d0721f27dee9cf5e60608ce9993bed46c67bbd8bdd538d80334bcfd4c9`;
+  `8ef0776c69a13c29a919c706b71bef80b9c7c265ba272deb817550b6013e94db`;
 - the current baseline failure and its artifact path;
 - the change budget and approved path allowlist;
 - a rollback commit or known-good starting checkpoint.
 
-The branch must be published by the Git integration agent before authoritative
-remote validation. Immediately before publication, record the exact tested
-repository commit. The runner's reported `remote_commit` must equal that SHA;
-otherwise the result is invalid and must not close this plan. Local validation
-alone cannot close this plan.
+The branch was published before authoritative remote validation. The runner
+reported `remote_commit: 36c7bff60`, matching the tested branch tip. The
+validation used a fresh isolated remote directory,
+`open-circuit-dev-phase5-validation`, because the existing Ubuntu1 checkout
+contained unrelated untracked state that must not be removed by `git clean`.
 
 ## 6. Work plan
 
@@ -255,12 +256,14 @@ entrypoint exposes the structural capability without importing
 reintroduced by the package-consumer fixture.
 
 Then publish the branch through the Git integration agent and run the fixed
-Ubuntu1 validation profile:
+Ubuntu1 validation profile. The completed invocation used the isolated remote
+directory described above:
 
 ```text
 /Users/brettcon/git/systems-orchestration/scripts/open-circuit-runner.sh \
   --hosts-file /Users/brettcon/git/hosts/ubuntu1-hosts.sh \
   --branch reduce/phase5-cli-core-validation \
+  --remote-dir open-circuit-dev-phase5-validation \
   --phase5-validate
 ```
 
@@ -290,19 +293,19 @@ If any mandatory check fails:
 
 ## 7. Validation matrix
 
-| Area | Required result |
-|---|---|
-| Clean generated output | No stale `core/dist` contamination |
-| Core build | Pass |
-| Core `tsc:check` | Pass with no suppressions |
-| Declaration resolution | No nominal `CodebaseIndexer` identity crosses `ToolExtras`; source-vs-dist `TS2322` absent |
-| CLI typecheck/build | Pass |
-| CLI smoke/characterization | Pass for the fixed-profile selected checks |
-| Boundary checks | Pass for source and emitted/package paths |
-| Lockfile | Unchanged unless explicitly justified |
-| Ubuntu1 runtime | Node.js `24.19.0`, npm `11.17.0` |
-| Fixed runner | Pass with committed branch and recorded artifacts |
-| Phase 4 retained closure | Claim restored only after authoritative pass |
+| Area                       | Required result                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| Clean generated output     | No stale `core/dist` contamination                                                         |
+| Core build                 | Pass                                                                                       |
+| Core `tsc:check`           | Pass with no suppressions                                                                  |
+| Declaration resolution     | No nominal `CodebaseIndexer` identity crosses `ToolExtras`; source-vs-dist `TS2322` absent |
+| CLI typecheck/build        | Pass                                                                                       |
+| CLI smoke/characterization | Pass for the fixed-profile selected checks                                                 |
+| Boundary checks            | Pass for source and emitted/package paths                                                  |
+| Lockfile                   | Unchanged unless explicitly justified                                                      |
+| Ubuntu1 runtime            | Node.js `24.19.0`, npm `11.17.0`                                                           |
+| Fixed runner               | Pass with committed branch and recorded artifacts                                          |
+| Phase 4 retained closure   | Restored after the authoritative pass                                                      |
 
 ## 8. Change budget and stop conditions
 
@@ -360,12 +363,11 @@ The completed plan execution should produce:
 - a final statement on whether retained closure is restored;
 - a Git-agent handoff for PR preparation.
 
-## 11. Current recommendation
+## 11. Closeout
 
-Treat commit `5e2685e07` as the selected remediation candidate pending
-authoritative validation, not as a completed resolution. Publish the exact
-tested commit without rebasing, using the pinned runner revision and the exact
-Ubuntu1 `--phase5-validate` profile. If it passes, retain the narrow
-declaration-input and structural-boundary changes and close the plan with
-evidence. If it fails, preserve the artifacts, classify the failure, and split
-the next experiment into the isolated options described in Workstream C.
+Retain the narrow declaration-input and structural-boundary changes in
+`5e2685e07`. The published branch passed the pinned Ubuntu1 profile with no
+lockfile changes, suppressions, deferred-surface edits, or unexplained
+failures. Phase 4 retained-closure validation is restored. The corrected
+runner commit `dba6c7d` remains a Git-integration handoff item for publication
+in the systems-orchestration repository.

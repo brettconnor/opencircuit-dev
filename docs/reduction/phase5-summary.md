@@ -2,12 +2,11 @@
 
 ## Status
 
-**Blocked with evidence pending Git integration publication.** The original
-Core failure is fixed locally, but authoritative Ubuntu1 post-change
-validation cannot run until the durable branch is published. No push, PR, or
-merge was attempted by the phase executor.
+**Completed.** The original Core failure is fixed, and the published branch
+passed authoritative Ubuntu1 post-change validation. No push, PR, or merge
+was attempted by the phase executor.
 
-The final local tested branch tip is `68e40f598`.
+The final tested branch tip is `36c7bff60`.
 
 ## Failure and root cause
 
@@ -68,20 +67,34 @@ the required `v24.19.0`; its child CLI and module-resolution checks completed,
 but the profile correctly reported the pinned-runtime mismatch. This is an
 environment limitation, not an unexplained fix failure.
 
-The Phase 5 validation harness required one evidence-backed correction:
+The Phase 5 validation harness required three evidence-backed corrections:
 commit `f463d28e824b612d5eea762e7b106b22aca1308a` changes the stale-reference
 matcher to require one or more relative path segments, so approved bare
 `core` package imports are not reported as stale filesystem references, and
 cleans ignored `core/dist` before validation. Its SDD contract, TDD
-regressions, shell syntax, and dry-run checks pass. The authoritative runner
-is pinned to that commit with script SHA-256
-`8c11c176761f58f7429915c5320232e6c3cc26cc72010c94a075456ee3a9042f` and
+regressions, shell syntax, and dry-run checks pass. The follow-up commit
+`dba6c7d` installs the root workspace from its lockfile before `npm ls`, so the
+workspace scan validates the checkout rather than an uninstalled dependency
+tree. The final runner has script SHA-256
+`04df7f2767f79f23769441b1738226e6472ce75ac78cdfc21a4dcca1490029ff` and
 contract SHA-256
-`841801d0721f27dee9cf5e60608ce9993bed46c67bbd8bdd538d80334bcfd4c9`.
+`8ef0776c69a13c29a919c706b71bef80b9c7c265ba272deb817550b6013e94db`.
 
-The fixed post-change Ubuntu1 invocation has not completed because GitHub has
-no published ref for the local Phase 5 branch. Evidence is in
+## Authoritative validation
+
+Ubuntu1 (`10.1.141.9`) passed the fixed profile from an isolated remote
+checkout `~/open-circuit-dev-phase5-validation`:
+
+- remote commit: `36c7bff60`
+- runtime: Node.js `v24.19.0`, npm `11.17.0`
+- root workspace install, all retained package installs/builds/typechecks,
+  lockfile checks, CLI checks, characterization, static/emitted/runtime
+  boundaries, stale-reference scan, and workspace scan: pass
+- runner result: `phase5_result: pass`; blockers: none
+
+The earlier publication blocker is historical evidence in
 `docs/reduction/artifacts/phase5/P5-DIAG/post-change/validation-blocker.md`.
+Phase 4 retained-closure validation is restored after this authoritative pass.
 
 ## Commits and rollback
 
@@ -92,6 +105,8 @@ no published ref for the local Phase 5 branch. Evidence is in
 - Runner stale-reference and clean-output correction: `f463d28e824b612d5eea762e7b106b22aca1308a`,
   rollback:
   `git -C /Users/brettcon/git/systems-orchestration revert f463d28e824b612d5eea762e7b106b22aca1308a`
+- Runner workspace-install correction: `dba6c7d`, rollback:
+  `git -C /Users/brettcon/git/systems-orchestration revert dba6c7d`
 - Diagnosis evidence: `b98a77a9e`, rollback:
   `git revert b98a77a9e`
 - Core fix: `5e2685e07`, rollback:
@@ -99,16 +114,17 @@ no published ref for the local Phase 5 branch. Evidence is in
 
 ## Required handoff
 
-The Git integration agent should publish branch
-`reduce/phase5-cli-core-validation` without rebasing, then run the exact fixed
-Ubuntu1 command:
+The Git integration agent should retain the published branch
+`reduce/phase5-cli-core-validation` without rebasing and publish runner commit
+`dba6c7d` in systems-orchestration. The authoritative command that passed was:
 
 ```text
 /Users/brettcon/git/systems-orchestration/scripts/open-circuit-runner.sh \
   --hosts-file /Users/brettcon/git/hosts/ubuntu1-hosts.sh \
   --branch reduce/phase5-cli-core-validation \
+  --remote-dir open-circuit-dev-phase5-validation \
   --phase5-validate
 ```
 
-Phase 4 D2/D3/D4 retained-closure validation is not claimed restored until
-that command passes and its returned artifacts are recorded.
+The returned artifacts are recorded in
+`docs/reduction/artifacts/phase5/P5-FIX/post-change/authoritative-validation.md`.
