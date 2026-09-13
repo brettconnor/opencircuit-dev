@@ -1,4 +1,4 @@
-// Cookie Banner Implementation for Continue Documentation
+// Cookie Banner Implementation for Open Circuit Documentation
 // This script implements a cookie consent banner in offline mode
 
 (function () {

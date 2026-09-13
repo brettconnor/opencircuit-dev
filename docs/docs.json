@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Continue",
+  "name": "Open Circuit",
   "colors": {
     "primary": "#6b7280",
     "light": "#ffffff",
@@ -213,27 +213,14 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
-    "href": "https://docs.continue.dev"
+    "href": "/"
   },
   "background": {
     "color": {
       "dark": "#1a1a1a"
     }
   },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/continuedev/continue"
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://twitter.com/continuedev",
-      "github": "https://github.com/continuedev/continue",
-      "linkedin": "https://linkedin.com/company/continuedev",
-      "youtube": "https://www.youtube.com/@continuedev"
-    }
-  },
+  "footer": {},
   "contextual": {
     "options": ["copy", "view"]
   },
@@ -262,7 +249,7 @@
     },
     {
       "source": "/changelog",
-      "destination": "https://changelog.continue.dev"
+      "destination": "/"
     },
     {
       "source": "/customization",
@@ -874,7 +861,7 @@
     },
     {
       "source": "/about",
-      "destination": "https://continue.dev/about-us"
+      "destination": "/"
     },
     {
       "source": "/autocomplete/model-setup",

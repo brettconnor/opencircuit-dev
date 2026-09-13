@@ -24,9 +24,9 @@ Go to the [API keys page](https://router.tetrate.ai/api-keys) to get your key
 <img src="../assets/tetrate-get-api-key.png" alt="Tetrate get API key" style={{width: '250px', maxWidth: '100%'}} />
 </Step>
 
-<Step title="Configure Continue">
+<Step title="Configure Open Circuit">
 - Choose a configuration method below.
-- If you use the Continue VS Code extension, install version `>=1.2.3`.
+- If you use the Open Circuit VS Code extension, install version `>=1.2.3`.
 </Step>
 
 </Steps>
@@ -135,9 +135,9 @@ models:
     with:
       TETRATE_API_KEY: ${{ secrets.TETRATE_API_KEY }}
 context:
-  - uses: continuedev/diff-context
-  - uses: continuedev/terminal-context
-  - uses: continuedev/file-context
+  - uses: open-circuit-dev/diff-context
+  - uses: open-circuit-dev/terminal-context
+  - uses: open-circuit-dev/file-context
 ```
 
 <Tip>
@@ -162,7 +162,7 @@ Learn more about [model blocks](/reference#models).
     Check your network or try a less-loaded model. Contact Tetrate support if issues persist.
   </Card>
   <Card title="Configuration not loading" icon="file-lines" vertical>
-    Validate YAML syntax and review error messages in Continue.
+    Validate YAML syntax and review error messages in Open Circuit.
   </Card>
 </CardGroup>
 
