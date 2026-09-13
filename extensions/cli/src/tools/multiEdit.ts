@@ -1,7 +1,9 @@
 import * as fs from "fs";
 
-import { validateMultiEdit } from "core/edit/searchAndReplace/multiEditValidation.js";
-import { executeMultiFindAndReplace } from "core/edit/searchAndReplace/performReplace.js";
+import {
+  validateMultiEdit,
+  executeMultiFindAndReplace,
+} from "core/editing.js";
 import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";

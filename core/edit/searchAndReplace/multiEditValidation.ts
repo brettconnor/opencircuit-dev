@@ -1,6 +1,6 @@
-import { EditOperation } from "../../tools/definitions/multiEdit";
-import { ContinueError, ContinueErrorReason } from "../../util/errors";
-import { validateSingleEdit } from "./findAndReplaceUtils";
+import type { EditOperation } from "../../tools/definitions/multiEdit.js";
+import { ContinueError, ContinueErrorReason } from "../../util/errors.js";
+import { validateSingleEdit } from "./findAndReplaceUtils.js";
 
 /**
  * Validates multi-edit arguments and all edits in a single pass
