@@ -13,7 +13,7 @@
 | Source `main` commit | `450df8c69cfbb47c87fbd3d45f318279ca8c3074` |
 | Phase branch | `reduce/phase4-reversible-deletion` |
 | Candidate manifest | Ratified with P4-A D1 |
-| Path allowlist | 22 exact `docs/images` paths |
+| Path allowlist | 23 exact `docs/images` paths |
 | Ubuntu1 validation mode | `--phase4-validate` available and tested |
 | RED-001 broader Core Jest limitation | Recorded limitation; no current candidate touches the affected closure |
 | Reviewer | `Operator ratification` |
@@ -27,12 +27,17 @@ excluded as already absent; deferred and unknown surfaces remain excluded.
 
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
-| P4-A | `<pending>` | `<pending>` | `P4-A` | 22 duplicate/unreferenced `docs/images` assets | D1 | Pending | Stop until Ubuntu1 validation | None |
+| P4-A | `1acd6b5aa` | `<pending>` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Local pass; Ubuntu1 pending | Stop until Ubuntu1 validation | None |
 
 ## RED execution result
 
 RED was invoked on 2026-09-13. P4-A is limited to exact duplicate or
 unreferenced documentation assets; all canonical referenced assets remain.
+The deletion batch was committed as `1acd6b5aa`. Local D1 checks passed:
+`git diff --check`, exact-path stale-reference scan, canonical asset
+retention, and the 62-to-39 tracked `docs/images` reduction. Authoritative
+Ubuntu1 validation remains pending because the phase executor does not push
+branches; Git handoff is required before the fixed-profile runner can execute.
 
 ## Entry-gate evidence index
 

@@ -5,7 +5,7 @@
 Current `main` checkpoint: `450df8c69cfbb47c87fbd3d45f318279ca8c3074`.
 Candidate surface: `docs/images/`.
 
-The repository retains 62 documentation image files after the earlier orphan
+The repository contained 62 documentation image files after the earlier orphan
 cleanup. This batch removes only exact duplicate blobs where one canonical
 path is referenced by current documentation, plus the two identical
 `move-to-right-sidebar` files which have no tracked documentation reference.
@@ -40,4 +40,7 @@ path is referenced by current documentation, plus the two identical
 2. Each duplicate family retains at least one canonical path.
 3. The docs-site image-copy source tree remains buildable.
 4. The CLI/Core retained closure is unchanged.
-5. Ubuntu1 D1 runner validation passes on the committed batch.
+5. The committed deletion is `1acd6b5aa`; local D1 checks passed and reduced
+   tracked `docs/images` from 62 to 39 files.
+6. Ubuntu1 D1 runner validation is pending Git handoff because the phase
+   executor does not push branches.
