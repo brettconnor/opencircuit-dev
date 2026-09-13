@@ -1,6 +1,6 @@
 # Phase 4 Execution Ledger
 
-**Status:** P4-B D2 batch executing.
+**Status:** P4-B D2 deletion completed; validation blocked.
 **Manifest:** `docs/reduction/phase4-candidate-manifest.md`  
 **Plan:** `docs/planning/phase4_reversible_deletion_v1.md`  
 **Starting checkpoint:** `red-001-core-clean-install`
@@ -28,7 +28,7 @@ excluded as already absent; deferred and unknown surfaces remain excluded.
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
 | P4-A | `1acd6b5aa` | `<pending>` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Pass — local and Ubuntu1 | Stop; no additional eligible candidates identified | None |
-| P4-B | `<pending>` | `<pending>` | `P4-B` | 20 stale root `.idea` metadata files | D2 | Pending | Stop until Ubuntu1 validation | None |
+| P4-B | `ceb6624f9` | `<pending>` | `P4-B` | 20 stale root `.idea` metadata files | D2 | Deletion pass; Ubuntu1 blocked | Stop — retained-Core baseline failure | `core npm run tsc:check` TS2322 |
 
 ## RED execution result
 
@@ -48,6 +48,13 @@ The Git handoff pushed `reduce/phase4-reversible-deletion` to `origin` at
 P4-B is the approved D2 batch for stale root JetBrains workspace metadata.
 Its exact allowlist and current-main reconciliation are recorded in
 `docs/reduction/artifacts/phase4/P4-B/reconciliation.md`.
+
+The P4-B deletion itself is complete at `ceb6624f9`. Ubuntu1 D2 validation
+ran against all 20 paths on `10.1.141.9` with Node.js `24.19.0`, but 0/20
+passed because the retained matrix failed at Core `npm run tsc:check` with a
+pre-existing TS2322 nominal type-identity clash after a successful Core build.
+The failure reproduces from a fresh `core/dist` and is unrelated to `.idea`;
+the continuation gate therefore stops and does not authorize further batches.
 
 ## Entry-gate evidence index
 

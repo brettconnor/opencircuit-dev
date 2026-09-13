@@ -1,6 +1,8 @@
 # Phase 4 Candidate Manifest
 
-**Status:** Executed; P4-A D1 passed and P4-B D2 is approved for execution.
+**Status:** Executed; P4-A D1 passed and P4-B D2 deletion completed, but
+authoritative D2 validation is blocked by a pre-existing retained-Core
+typecheck failure.
 **Manifest source commit:** `450df8c69cfbb47c87fbd3d45f318279ca8c3074`
 **Retained-closure checkpoint:** `red-001-core-clean-install`  
 **Validation host:** Ubuntu1 (`10.1.141.9`)  

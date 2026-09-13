@@ -44,3 +44,22 @@ git revert <P4-B deletion commit>
 ```
 
 No source or dependency changes are part of this batch.
+
+## Validation result
+
+The deletion commit is `ceb6624f9`. Local scope and hygiene checks passed:
+all 20 allowlisted paths were deleted, no lockfile changed, no exact deleted
+path was referenced outside reduction evidence, and `git diff --check`
+passed.
+
+Authoritative Ubuntu1 D2 validation ran for all 20 paths on
+`10.1.141.9` with Node.js `24.19.0` at remote commit `ceb6624f9`.
+Result: **0/20 passed; 20/20 blocked** at the retained-closure matrix.
+The failure is Core `npm run tsc:check` reporting TS2322 duplicate nominal
+type identities after the Core build. It reproduces from a fresh `core/dist`
+and is independent of the `.idea` deletion. No boundary check ran because the
+fixed D2 runner correctly gates boundary checks on a passing matrix.
+
+This is recorded as a pre-existing retained-Core validation blocker, not a
+P4-B scope exception. Phase 4 continuation is stopped pending remediation or
+an explicit approved environment/validation waiver.
