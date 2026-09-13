@@ -1,4 +1,4 @@
-import { Usage } from "../..";
+import type { Usage } from "../../index.js";
 
 export interface CostBreakdown {
   cost: number;
