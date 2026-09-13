@@ -1,10 +1,10 @@
-# Individual Contributor License Agreement (v1.0, Continue)
+# Individual Contributor License Agreement (v1.0, Open Circuit)
 
 _Based on the Apache Software Foundation Individual CLA v 2.2._
 
 By commenting **“I have read the CLA Document and I hereby sign the CLA”**
 on a Pull Request, **you (“Contributor”) agree to the following terms** for any
-past and future “Contributions” submitted to **Continue (the “Project”)**.
+past and future “Contributions” submitted to **Open Circuit (the “Project”)**.
 
 ---
 
@@ -17,8 +17,8 @@ past and future “Contributions” submitted to **Continue (the “Project”)*
 
 ## 2. Copyright License
 
-You grant **Continue Dev, Inc.** and all recipients of software distributed by the
-Project a perpetual, worldwide, non‑exclusive, royalty‑free, irrevocable
+You grant **Continue Dev, Inc.** and all recipients of software distributed by
+the Project a perpetual, worldwide, non‑exclusive, royalty‑free, irrevocable
 license to reproduce, prepare derivative works of, publicly display, publicly
 perform, sublicense, and distribute Your Contributions and derivative works.
 
