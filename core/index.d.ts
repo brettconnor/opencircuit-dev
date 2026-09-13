@@ -8,7 +8,6 @@ import { ToolPolicy } from "@continuedev/terminal-security";
 import { McpUiResourceMeta } from "@modelcontextprotocol/ext-apps";
 import { TextResourceContents } from "@modelcontextprotocol/sdk/types.js";
 import Parser from "web-tree-sitter";
-import { CodebaseIndexer } from "./indexing/CodebaseIndexer";
 import { LLMConfigurationStatuses } from "./llm/constants";
 
 declare global {
@@ -1119,7 +1118,9 @@ export interface ToolExtras {
     contextItems: ContextItem[];
   }) => void;
   config: ContinueConfig;
-  codeBaseIndexer?: CodebaseIndexer;
+  codeBaseIndexer?: {
+    refreshCodebaseIndexFiles(files: string[]): Promise<void>;
+  };
 }
 
 export interface McpToolMeta {
