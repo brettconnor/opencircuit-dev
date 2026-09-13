@@ -21,9 +21,9 @@
 
 ## Budget
 
-- Diagnostic/fix batches used: `1 / 6`
-- Atomic commits in Phase 5 work: `1 / 10` (runner prerequisite)
-- Core source/config files changed per batch: `0 / 15`
+- Diagnostic/fix batches used: `2 / 6` (diagnosis, fix)
+- Atomic commits in Phase 5 work: `5 / 10` (including two runner-repository commits)
+- Core source/config files changed in the fix batch: `3 / 15`
 - CLI files changed per batch: `0 / 10`
 - Lockfiles changed without explicit approval: `0`
 - Broad dependency upgrades: `0`
