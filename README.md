@@ -1,57 +1,81 @@
-<h1 align="center">Continue</h1>
+# Open Circuit
 
-<p align="center">Pioneering open-source coding agent</p>
+Open Circuit is a focused coding-agent repository centered on a command-line
+interface backed by a reusable Core runtime.
 
-<div align="center">
+## Product scope
 
-<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" /></a>
-<a href="https://docs.continue.dev"><img src="https://img.shields.io/badge/Docs-docs.continue.dev-blue" /></a>
-<a href="https://github.com/continuedev/continue/releases"><img src="https://img.shields.io/badge/Changelog-GitHub_Releases-blue" /></a>
+The retained product includes:
 
-</div>
+- CLI (`cn`) in `extensions/cli/`;
+- Core runtime in `core/`;
+- shared packages for configuration, fetching, model information, provider
+  adapters, and terminal security;
+- focused build, test, documentation, and release tooling.
 
-<p align="center">
-  <img src="media/github-readme.png" alt="Banner" />
-</p>
+The VS Code extension and other repository surfaces remain maintained
+separately from the primary CLI/Core validation path.
 
-## What is Continue?
+## Requirements
 
-> _Note: The `continuedev/continue` repository is no longer actively maintained and is read-only for all users._
+- Node.js `24.19.0` (`.nvmrc` / `.node-version`);
+- npm;
+- Git.
 
-Continue is a coding agent available as a [CLI](#cli) and [VS Code extension](#vs-code).
+## Quick start
+
+Install dependencies for the package you are working on, then build the
+retained product in dependency order:
+
+```bash
+cd core
+npm install
+npm run build
+npm run tsc:check
+
+cd ../extensions/cli
+npm install
+npm run build
+npm run test:smoke
+```
+
+Run the CLI after building:
+
+```bash
+cd extensions/cli
+npm start
+```
 
 ## Documentation
 
-To learn how to configure Continue, how it works, and how to customize it, check out the [Continue Docs](https://docs.continue.dev).
+The Mintlify documentation site is in `docs/`. To preview it locally:
 
-## Final 2.0.0 Release
+```bash
+cd docs
+npm install
+npm run dev
+```
 
-We polished Continue and did a final 2.0.0 release of the VS Code extension, CLI, and JetBrains plugin.
+## Development checks
 
-This included removing anonymous telemetry, pulling out authentication, squashing bugs, and more.
+Run the smallest applicable package checks for each change. Changes that cross
+package boundaries, declaration output, workspace configuration, or runtime
+resolution should use the fixed retained-closure validation profile.
 
-### VS Code
+The contributor workflow is documented in
+[`CONTRIBUTING.md`](CONTRIBUTING.md). CI secrets and environment variables are
+listed in [`BUILD_DEPENDENCIES.md`](BUILD_DEPENDENCIES.md).
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=Continue.continue) [![OpenVSX Registry](https://img.shields.io/badge/OpenVSX_Registry-C160EF?logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/Continue/continue) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/vscode)
+## Project policies
 
-### CLI
+- [`CLA.md`](CLA.md) — contributor license agreement;
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — community standards;
+- [`SECURITY.md`](SECURITY.md) — vulnerability reporting;
+- [`LICENSE`](LICENSE) — Apache License 2.0;
+- [`NOTICE`](NOTICE) — third-party attribution notice.
 
-[![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/@continuedev/cli) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/cli)
+## Package compatibility
 
-## Contributors
-
-Thank you to the entire Continue community for helping us create a pioneering coding agent.
-
-What we built together pushed the boundaries of what AI developer tooling could be.
-
-We hope this codebase continues to serve as a foundation for others.
-
-## Code friends
-
-<a href="https://github.com/continuedev/continue/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=continuedev/continue&max=500" />
-</a>
-
-## License
-
-Apache 2.0 © 2023-2026 Continue Dev, Inc.
+Some package and environment-variable identifiers retain their historical
+`@continuedev/*` and `CONTINUE_*` names for compatibility. Those identifiers
+are implementation and distribution contracts, not the project branding.

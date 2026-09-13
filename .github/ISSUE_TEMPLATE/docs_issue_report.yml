@@ -12,7 +12,7 @@ body:
 
         ### Quick Contribution Tips:
         - Click "Edit this page" at the bottom of any page on [docs.continue.dev](https://docs.continue.dev) to contribute directly.
-        - For local development, see [CONTRIBUTING.md](https://github.com/continuedev/continue/blob/main/CONTRIBUTING.md#-updating--improving-documentation).
+        - For local development, see [CONTRIBUTING.md](https://github.com/continuedev/continue/blob/main/CONTRIBUTING.md#updating--improving-documentation).
 
   - type: dropdown
     id: doc-issue-category

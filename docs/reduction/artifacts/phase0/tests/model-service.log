@@ -1,9 +1,0 @@
-
- RUN  v3.2.4 /home/wolfy/open-circuit/extensions/cli
-
- ✓ src/services/ModelService.test.ts (21 tests) 49ms
-
- Test Files  1 passed (1)
-      Tests  21 passed (21)
-   Start at  15:00:38
-   Duration  1.40s (transform 447ms, setup 143ms, collect 621ms, tests 49ms, environment 0ms, prepare 284ms)
