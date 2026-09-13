@@ -27,7 +27,7 @@ added to the manifest.
 
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
-| P4-NOOP | — | `3a17a37cc` | — | Empty approved manifest | N/A | Pass / no-op | Stop | No executable candidate after current-main reconciliation |
+| P4-NOOP | — | `862e4e29e` | — | Empty approved manifest | N/A | Pass / no-op | Stop | No executable candidate after current-main reconciliation |
 
 ## RED execution result
 
