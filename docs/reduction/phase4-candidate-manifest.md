@@ -1,7 +1,7 @@
 # Phase 4 Candidate Manifest
 
-**Status:** Prepared for HITL review; no Phase 4 deletion batch is authorized.  
-**Manifest source commit:** `1d664cc87525aa17c3fe04c44406527f2e773068`  
+**Status:** Ratified empty manifest; no executable Phase 4 deletion candidate remains.
+**Manifest source commit:** `450df8c69cfbb47c87fbd3d45f318279ca8c3074`
 **Retained-closure checkpoint:** `red-001-core-clean-install`  
 **Validation host:** Ubuntu1 (`10.1.141.9`)  
 **Runtime:** Node.js `24.19.0`, npm `11.17.0`
@@ -46,11 +46,17 @@ reconciliation and classification decision:
 No deletion, stale-reference cleanup, package metadata change, lockfile change,
 or documentation cleanup is authorized by this manifest.
 
+## Ratification
+
+The operator ratified the Phase 4 plan and authorized RED preparation on
+2026-09-13. The current-main reconciliation remains authoritative: previously
+identified GUI and local SDK-generator candidates are already absent and are
+not recreated as deletion work.
+
 ## Required approval fields
 
-- Human reviewer: `<pending>`
-- Approval date: `<pending>`
-- Approved candidate IDs: `<none>`
-- Approved batch order: `<none>`
-- Approved change budget: Phase 4 defaults in the plan, unless explicitly changed
-
+- Human reviewer: `Operator ratification`
+- Approval date: `2026-09-13`
+- Approved candidate IDs: `<none — empty after current-main reconciliation>`
+- Approved batch order: `<none — no executable candidate remains>`
+- Approved change budget: Phase 4 defaults in the plan

@@ -2,7 +2,7 @@
 
 # Phase 4: Reversible Deletion Plan v1
 
-**Status:** Fully Appoved — execution remains FULL GO to cross the line of departure. All approvals are recorded.
+**Status:** Fully Approved — execution remains FULL GO to cross the line of departure. All approvals are recorded.
 **Execution model:** W1 — Fully autonomous execution.
 **Product deletion status:**  Full GO.
 **Builds on:**
