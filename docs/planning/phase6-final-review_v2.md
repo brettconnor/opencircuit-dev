@@ -1,6 +1,6 @@
 # Phase 6: Final CLI/Core Review and Publication Readiness
 
-**Status:** Draft; reconciled v2 plan, not execution approval  
+**Status:** Approved and authorized for Phase 6 execution
 **Supersedes for execution:** `docs/planning/phase6-final-review.md`  
 **Execution model:** W1 autonomous evidence collection and reconciliation
 within one authorized phase envelope, followed by one and only one Phase 6
