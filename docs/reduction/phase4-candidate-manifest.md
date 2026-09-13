@@ -1,6 +1,6 @@
 # Phase 4 Candidate Manifest
 
-**Status:** Ratified; P4-A D1 static-asset batch approved for execution.
+**Status:** Executed; P4-A D1 static-asset batch passed local and Ubuntu1 validation.
 **Manifest source commit:** `450df8c69cfbb47c87fbd3d45f318279ca8c3074`
 **Retained-closure checkpoint:** `red-001-core-clean-install`  
 **Validation host:** Ubuntu1 (`10.1.141.9`)  

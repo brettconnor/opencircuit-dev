@@ -42,5 +42,7 @@ path is referenced by current documentation, plus the two identical
 4. The CLI/Core retained closure is unchanged.
 5. The committed deletion is `1acd6b5aa`; local D1 checks passed and reduced
    tracked `docs/images` from 62 to 39 files.
-6. Ubuntu1 D1 runner validation is pending Git handoff because the phase
-   executor does not push branches.
+6. The phase executor did not push branches; Git handoff published commit
+   `2bbb5ed53`.
+7. The fixed D1 profile passed for
+   all 23 allowlisted paths on Ubuntu1 (`10.1.141.9`, Node.js `24.19.0`).

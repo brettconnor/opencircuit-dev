@@ -27,7 +27,7 @@ excluded as already absent; deferred and unknown surfaces remain excluded.
 
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
-| P4-A | `1acd6b5aa` | `<pending>` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Local pass; Ubuntu1 pending | Stop until Ubuntu1 validation | None |
+| P4-A | `1acd6b5aa` | `<pending>` | `P4-A` | 23 duplicate/unreferenced `docs/images` assets | D1 | Pass — local and Ubuntu1 | Stop; no additional eligible candidates identified | None |
 
 ## RED execution result
 
@@ -35,9 +35,14 @@ RED was invoked on 2026-09-13. P4-A is limited to exact duplicate or
 unreferenced documentation assets; all canonical referenced assets remain.
 The deletion batch was committed as `1acd6b5aa`. Local D1 checks passed:
 `git diff --check`, exact-path stale-reference scan, canonical asset
-retention, and the 62-to-39 tracked `docs/images` reduction. Authoritative
-Ubuntu1 validation remains pending because the phase executor does not push
-branches; Git handoff is required before the fixed-profile runner can execute.
+retention, and the 62-to-39 tracked `docs/images` reduction. The phase
+executor does not push branches, so the Git handoff was used for authoritative
+validation.
+
+The Git handoff pushed `reduce/phase4-reversible-deletion` to `origin` at
+`2bbb5ed53`. Ubuntu1 ran the fixed D1 profile for all 23 allowlisted paths:
+23/23 passed on Ubuntu1 (`10.1.141.9`, Node.js `24.19.0`, remote commit
+`2bbb5ed53`). No blockers or source-scope exceptions were reported.
 
 ## Entry-gate evidence index
 
