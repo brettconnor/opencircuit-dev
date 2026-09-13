@@ -394,7 +394,7 @@ export async function generateSessionTitle(
   }
 
   try {
-    const { ChatDescriber } = await import("core/util/chatDescriber.js");
+    const { ChatDescriber } = await import("core/chatDescriber.js");
     const generatedTitle = await ChatDescriber.describeWithBaseLlmApi(
       llmApi,
       model,

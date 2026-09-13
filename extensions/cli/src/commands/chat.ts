@@ -2,7 +2,7 @@ import { ModelConfig } from "@continuedev/config-yaml";
 import { BaseLlmApi } from "@continuedev/openai-adapters";
 import chalk from "chalk";
 import { ChatHistoryItem, Session } from "core";
-import { ChatDescriber } from "core/util/chatDescriber.js";
+import { ChatDescriber } from "core/chatDescriber.js";
 
 import { compactChatHistory, findCompactionIndex } from "../compaction.js";
 import { processCommandFlags } from "../flags/flagProcessor.js";
