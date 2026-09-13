@@ -2,7 +2,7 @@ import ignore from "ignore";
 
 import path from "path";
 import { fileURLToPath } from "url";
-import { ContinueError, ContinueErrorReason } from "../util/errors";
+import { ContinueError, ContinueErrorReason } from "../util/errors.js";
 
 // Security-focused ignore patterns - these should always be excluded for security reasons
 export const DEFAULT_SECURITY_IGNORE_FILETYPES = [

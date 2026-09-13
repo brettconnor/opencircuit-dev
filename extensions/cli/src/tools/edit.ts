@@ -5,7 +5,7 @@ import {
   validateSingleEdit,
   executeFindAndReplace,
 } from "core/editing.js";
-import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
+import { throwIfFileIsSecurityConcern } from "core/security.js";
 import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
