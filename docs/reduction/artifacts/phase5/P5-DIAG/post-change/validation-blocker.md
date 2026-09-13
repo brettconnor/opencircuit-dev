@@ -12,6 +12,7 @@
 - Host reachability: passed on Ubuntu1 (`10.1.141.9`)
 - Required runtime target: Node.js `24.19.0`
 - Fixed runner mode: `--phase5-validate`
+- Fixed runner revision: `ba52121cca51b7ce951320fdbee4902ebaec7ea1`
 - Result: blocked before validation
 - Runner exit: `1`
 
@@ -30,3 +31,8 @@ No remote validation result is claimed for the post-change branch. The phase
 executor did not push, create a PR, or substitute an arbitrary remote command.
 The Git integration agent must publish the committed branch, then rerun the
 same fixed `--phase5-validate` invocation on Ubuntu1.
+
+The corrected runner's Phase 5 stale-reference scan is covered by its SDD
+contract and TDD regression test. The correction requires one or more relative
+path segments before `core`, so approved bare `core` package imports do not
+block the profile.
