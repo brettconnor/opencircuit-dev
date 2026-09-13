@@ -48,13 +48,19 @@ npm start
 
 ## Documentation
 
-The Mintlify documentation site is in `docs/`. To preview it locally:
+The hosted documentation website is the Next.js app in `docs-site/`. It
+renders the MDX content and navigation configuration stored in `docs/`.
+
+Preview the hosted site locally:
 
 ```bash
-cd docs
+cd docs-site
 npm install
 npm run dev
 ```
+
+The `docs/` directory also contains a legacy Mintlify package and
+`docs/docs.json`; the current custom site consumes that content directly.
 
 ## Development checks
 
