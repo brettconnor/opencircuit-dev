@@ -1,6 +1,7 @@
-# Build Dependencies & Secrets
+# Build Dependencies and CI Secrets
 
-This document catalogs all build dependencies, secrets, and environment variables required by the continue-fork repository.
+This document catalogs the CI secrets and environment variables used by the
+retained CLI/Core repository and its deferred VS Code publication workflows.
 
 ---
 
