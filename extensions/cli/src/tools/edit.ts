@@ -1,8 +1,10 @@
 import * as fs from "fs";
 import path from "path";
 
-import { validateSingleEdit } from "core/edit/searchAndReplace/findAndReplaceUtils.js";
-import { executeFindAndReplace } from "core/edit/searchAndReplace/performReplace.js";
+import {
+  validateSingleEdit,
+  executeFindAndReplace,
+} from "core/editing.js";
 import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
 import { ContinueError, ContinueErrorReason } from "core/errors.js";
 

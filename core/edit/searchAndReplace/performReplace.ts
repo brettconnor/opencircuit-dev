@@ -1,6 +1,7 @@
-import { EditOperation } from "../../tools/definitions/multiEdit";
-import { ContinueError, ContinueErrorReason } from "../../util/errors";
-import { SearchMatchResult, findSearchMatches } from "./findSearchMatch";
+import type { EditOperation } from "../../tools/definitions/multiEdit.js";
+import { ContinueError, ContinueErrorReason } from "../../util/errors.js";
+import type { SearchMatchResult } from "./findSearchMatch.js";
+import { findSearchMatches } from "./findSearchMatch.js";
 
 /**
  * Get the leading whitespace of the first non-empty line in a string.
