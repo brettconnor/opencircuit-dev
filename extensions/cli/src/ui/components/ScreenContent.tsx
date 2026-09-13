@@ -1,8 +1,8 @@
+import type { ChatHistoryItem } from "core";
 import React from "react";
 
 import { UpdateServiceState } from "src/services/types.js";
 
-import type { ChatHistoryItem } from "../../../../../core/index.js";
 import { ConfigSelector } from "../ConfigSelector.js";
 import type { NavigationScreen } from "../context/NavigationContext.js";
 import { DiffViewer } from "../DiffViewer.js";
