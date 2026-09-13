@@ -7,6 +7,8 @@ Core failure is fixed locally, but authoritative Ubuntu1 post-change
 validation cannot run until the durable branch is published. No push, PR, or
 merge was attempted by the phase executor.
 
+The final local tested branch tip is `68e40f598`.
+
 ## Failure and root cause
 
 On Ubuntu1 (`10.1.141.9`, Node.js `v24.19.0`, npm `11.17.0`), fixed runner

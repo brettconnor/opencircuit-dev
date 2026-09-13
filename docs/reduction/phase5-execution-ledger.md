@@ -4,6 +4,7 @@
 
 - Plan: `docs/planning/TS2322-PLAN_v0.md`
 - Phase branch: `reduce/phase5-cli-core-validation`
+- Final local tested branch tip: `68e40f598`
 - Starting checkpoint: `8a6a2ebd1` (`docs(phase5): define single HITL entry gate`)
 - Legacy plan preserved untouched: `docs/planning/phase5-cli-core-validation.md`
 - Runner commits: `6c3b95c` (`feat(phase5): add fixed CLI core validation modes`),
