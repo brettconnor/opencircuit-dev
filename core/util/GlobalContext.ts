@@ -6,14 +6,14 @@ import {
   OAuthTokens,
 } from "@modelcontextprotocol/sdk/shared/auth.js";
 
-import { SiteIndexingConfig } from "..";
+import type { SiteIndexingConfig } from "../index.js";
 import {
   salvageSharedConfig,
   sharedConfigSchema,
-  SharedConfigSchema,
-} from "../config/sharedConfig";
+} from "../config/sharedConfig.js";
+import type { SharedConfigSchema } from "../config/sharedConfig.js";
 
-import { getGlobalContextFilePath } from "./paths";
+import { getGlobalContextFilePath } from "./paths.js";
 
 export type GlobalContextModelSelections = Partial<
   Record<ModelRole, string | null>

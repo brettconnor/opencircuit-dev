@@ -8,9 +8,9 @@ import { ConfigYaml, DevEventName } from "@continuedev/config-yaml";
 import * as JSONC from "comment-json";
 import dotenv from "dotenv";
 
-import { IdeType, SerializedContinueConfig } from "../";
-import { defaultConfig } from "../config/default";
-import Types from "../config/types";
+import type { IdeType, SerializedContinueConfig } from "../index.js";
+import { defaultConfig } from "../config/default.js";
+import Types from "../config/types.js";
 
 dotenv.config();
 
