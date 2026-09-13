@@ -1,4 +1,4 @@
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import { loadMarkdownSkills } from "../util/loadMarkdownSkills.js";
 import { logger } from "../util/logger.js";

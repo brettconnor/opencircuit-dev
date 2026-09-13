@@ -2,7 +2,7 @@ import * as child_process from "child_process";
 import * as fs from "fs";
 import * as util from "util";
 
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 import { findUp } from "find-up";
 
 import { parseEnvNumber } from "../util/truncateOutput.js";

@@ -2,7 +2,7 @@ import * as fs from "fs";
 
 import { validateMultiEdit } from "core/edit/searchAndReplace/multiEditValidation.js";
 import { executeMultiFindAndReplace } from "core/edit/searchAndReplace/performReplace.js";
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
 import {
