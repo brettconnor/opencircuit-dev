@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 import { createTwoFilesPatch } from "diff";
 
 import { telemetryService } from "../telemetry/telemetryService.js";

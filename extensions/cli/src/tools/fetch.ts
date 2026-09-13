@@ -1,6 +1,6 @@
 import type { ContextItem } from "core/index.js";
 import { fetchUrlContentImpl } from "core/tools/implementations/fetchUrlContent.js";
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 
 import {
   parseEnvNumber,

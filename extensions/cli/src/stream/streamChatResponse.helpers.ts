@@ -3,7 +3,7 @@
 
 import type { ToolStatus, Usage } from "core/index.js";
 import { calculateRequestCost } from "core/llm/utils/calculateRequestCost.js";
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
 
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";

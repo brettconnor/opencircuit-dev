@@ -1,4 +1,4 @@
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
+import { ContinueError, ContinueErrorReason } from "core/errors.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Skill } from "../util/loadMarkdownSkills.js";
