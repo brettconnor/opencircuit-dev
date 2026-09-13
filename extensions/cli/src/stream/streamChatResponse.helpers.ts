@@ -2,7 +2,7 @@
 /* eslint-disable max-lines */
 
 import type { ToolStatus, Usage } from "core/index.js";
-import { calculateRequestCost } from "core/llm/utils/calculateRequestCost.js";
+import { calculateRequestCost } from "core/llm/calculateRequestCost.js";
 import { ContinueError, ContinueErrorReason } from "core/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
 
