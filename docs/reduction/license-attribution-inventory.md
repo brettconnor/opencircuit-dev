@@ -39,9 +39,11 @@ These files belong to deferred or proposed-removal surfaces. They must be remove
 
 ## Attribution State
 
-No root `NOTICE`, third-party-attribution, or equivalent aggregate notice file was found. The retained CLI bundle includes third-party dependencies, so publication work must verify whether their licenses require notices or redistribution text beyond package metadata and the repository license.
-
-Phase 0 records the existing state; it does not assert that the current publication artifact has complete third-party attribution.
+Root `NOTICE` is established documenting the root Apache-2.0 license and third-party software attribution. The publication-time third-party attribution review audited all 376 bundled dependencies extracted from build metadata (`dist/meta.json`):
+- 100% of bundled packages are permissively licensed (234 MIT, 100 Apache-2.0, 15 BSD-3-Clause, 14 ISC, 11 BSD-2-Clause, 1 0BSD, 1 MIT-0).
+- 0 copyleft or reciprocal licenses are bundled.
+- 0 custom upstream NOTICE requirements are triggered.
+See `docs/reduction/phase6-corrections/third-party-attribution-review.md` for complete evidence.
 
 ## Reduction Requirements
 
@@ -49,5 +51,5 @@ Phase 0 records the existing state; it does not assert that the current publicat
 2. Preserve each retained package's `license` field.
 3. Preserve vendored license files with retained vendored code or assets.
 4. Remove a surface-specific license only with the corresponding removed surface.
-5. Re-evaluate bundled third-party notice requirements before publication.
+5. Retain root `NOTICE` and verify bundled third-party notice requirements before publication.
 6. Compare this inventory against the Phase 6 retained tree and package artifact.

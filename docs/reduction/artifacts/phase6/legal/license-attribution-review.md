@@ -5,7 +5,8 @@
 | Root Apache-2.0 license | Pass | `LICENSE` present; fixed legal check passed |
 | Retained package license fields | Pass | `docs/reduction/license-attribution-inventory.md` |
 | Retained vendored Transformers license | Pass | Fixed legal check verified its license file |
-| Aggregate third-party publication notices | Blocked | Existing inventory records no aggregate notice and requires redistribution review |
+| Aggregate third-party publication notices | Pass | Root `NOTICE` present; 376 bundled dependencies audited (100% permissive; 0 copyleft); `docs/reduction/phase6-corrections/third-party-attribution-review.md` |
 
-No legal or package file was changed. The unresolved aggregate-attribution
-assessment prevents a publication-ready conclusion.
+The aggregate third-party attribution review is complete and verified. Root
+`NOTICE` documents the repository license and third-party software attribution.
+All bundled dependencies are permissively licensed.
