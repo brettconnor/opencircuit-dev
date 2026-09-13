@@ -1,5 +1,5 @@
 import type { ChatHistoryItem, ToolStatus } from "core/index.js";
-import { createHistoryItem } from "core/util/messageConversion.js";
+import { createHistoryItem } from "core/messageConversion.js";
 
 import { loadSessionById, updateSessionHistory } from "../session.js";
 import { logger } from "../util/logger.js";

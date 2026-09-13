@@ -1,5 +1,5 @@
 import type { ChatHistoryItem } from "core/index.js";
-import { convertToUnifiedHistory } from "core/util/messageConversion.js";
+import { convertToUnifiedHistory } from "core/messageConversion.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { handleAutoCompaction } from "./streamChatResponse.autoCompaction.js";

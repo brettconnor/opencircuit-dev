@@ -1,6 +1,6 @@
 import type { ChatHistoryItem, ToolStatus } from "core/index.js";
 import { stripImages } from "core/util/messageContent.js";
-import { createHistoryItem } from "core/util/messageConversion.js";
+import { createHistoryItem } from "core/messageConversion.js";
 
 import { checkToolPermission } from "src/permissions/permissionChecker.js";
 

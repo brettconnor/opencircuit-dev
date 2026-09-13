@@ -1,7 +1,7 @@
 import { ModelConfig } from "@continuedev/config-yaml";
 import { BaseLlmApi } from "@continuedev/openai-adapters";
 import type { ChatHistoryItem } from "core/index.js";
-import { convertFromUnifiedHistoryWithSystemMessage } from "core/util/messageConversion.js";
+import { convertFromUnifiedHistoryWithSystemMessage } from "core/messageConversion.js";
 import * as dotenv from "dotenv";
 import type {
   ChatCompletionMessageParam,
