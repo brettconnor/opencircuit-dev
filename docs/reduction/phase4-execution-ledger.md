@@ -1,6 +1,6 @@
 # Phase 4 Execution Ledger
 
-**Status:** Initialized for ratified RED preparation; no executable batch remains.
+**Status:** RED executed as a controlled no-op; no executable batch remained.
 **Manifest:** `docs/reduction/phase4-candidate-manifest.md`  
 **Plan:** `docs/planning/phase4_reversible_deletion_v1.md`  
 **Starting checkpoint:** `red-001-core-clean-install`
@@ -9,7 +9,7 @@
 
 | Field | Value |
 |---|---|
-| Phase entry | **FULL GO — ratified; ready when an executable candidate exists** |
+| Phase entry | **FULL GO — ratified** |
 | Source `main` commit | `450df8c69cfbb47c87fbd3d45f318279ca8c3074` |
 | Phase branch | `reduce/phase4-reversible-deletion` |
 | Candidate manifest | Ratified empty; no executable candidate remains |
@@ -27,7 +27,15 @@ added to the manifest.
 
 | Batch | Deletion commit | Evidence commit | Candidate IDs | Scope | Profile | Result | Continuation | Exceptions |
 |---|---|---|---|---|---|---|---|---|
-| — | — | — | — | — | — | Ready / no candidate | Stop | Empty ratified manifest |
+| P4-NOOP | — | `3a17a37cc` | — | Empty approved manifest | N/A | Pass / no-op | Stop | No executable candidate after current-main reconciliation |
+
+## RED execution result
+
+RED was invoked on 2026-09-13. The approved manifest contained no executable
+candidate: `gui/` and `packages/continue-sdk/` were already absent from the
+starting `main` checkpoint, while deferred and unknown surfaces remain
+excluded. Therefore no deletion commit was created, no path outside the
+allowlist was touched, and the phase stopped at the continuation gate.
 
 ## Entry-gate evidence index
 
