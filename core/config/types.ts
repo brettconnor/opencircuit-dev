@@ -727,7 +727,11 @@ declare global {
   
     getSearchResults(query: string, maxResults?: number): Promise<string>;
   
-    subprocess(command: string, cwd?: string): Promise<[string, string]>;
+    subprocess(
+      command: string,
+      cwd?: string,
+      args?: string[],
+    ): Promise<[string, string]>;
   
     getProblems(filepath?: string | undefined): Promise<Problem[]>;
   

@@ -10,7 +10,7 @@ This repository provides a GitHub Action for automated PR reviews:
 
 Provides high-level PR assessment with overall feedback and recommendations.
 
-- **Path:** `continuedev/continue/actions/general-review@main`
+- **Path:** `brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351`
 - **Trigger:** `@continue-review`
 - **Output:** Summary comment with strengths, issues, and recommendations
 
@@ -36,22 +36,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: continuedev/continue/actions/general-review@main
+      - uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351
         with:
           continue-api-key: ${{ secrets.CONTINUE_API_KEY }}
           continue-org: "your-org-name"
-          continue-config: "your-org-name/review-bot"
+          continue-agent: "your-org-name/review-bot"
 ```
 
 ## Inputs
 
 The action accepts the following inputs:
 
-| Input              | Description                            | Required |
-| ------------------ | -------------------------------------- | -------- |
-| `continue-api-key` | API key for Continue service           | Yes      |
-| `continue-org`     | Organization for Continue config       | Yes      |
-| `continue-config`  | Config path (e.g., "myorg/review-bot") | Yes      |
+| Input              | Description                           | Required |
+| ------------------ | ------------------------------------- | -------- |
+| `continue-api-key` | API key for Continue service          | Yes      |
+| `continue-org`     | Organization for Continue config      | Yes      |
+| `continue-agent`   | Agent path (e.g., "myorg/review-bot") | Yes      |
 
 ## Setup Requirements
 
@@ -115,14 +115,12 @@ The general review provides a structured comment that includes:
 
 ## Versioning
 
-We recommend using the main branch:
-
-- `@main` - Uses the latest code from the main branch
+Pin the action to a reviewed commit, as shown below, so updates are explicit:
 
 Example:
 
 ```yaml
-uses: continuedev/continue/actions/general-review@main
+uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351
 ```
 
 ## Troubleshooting

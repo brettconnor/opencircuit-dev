@@ -13,6 +13,7 @@
     "test:watch": "vitest watch",
     "test:ui": "vitest --ui",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "test:runtime-boundary": "node ../../tests/characterization/runtime-boundary-check.mjs",
     "test:smoke": "node smoke-test.mjs",
     "test:smoke-api": "vitest run --config vitest.smoke-api.config.ts",
     "build:tsc": "tsc -p tsconfig.build.json",

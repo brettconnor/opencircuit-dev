@@ -336,7 +336,7 @@ export class VsCodeMessenger {
       return ide.getFileResults(msg.data.pattern, msg.data.maxResults);
     });
     this.onWebviewOrCore("subprocess", async (msg) => {
-      return ide.subprocess(msg.data.command, msg.data.cwd);
+      return ide.subprocess(msg.data.command, msg.data.cwd, msg.data.args);
     });
     this.onWebviewOrCore("getProblems", async (msg) => {
       return ide.getProblems(msg.data.filepath);

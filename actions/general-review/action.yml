@@ -17,11 +17,11 @@ runs:
   using: "composite"
   steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
 
     - name: Check Authorization
       id: auth-check
-      uses: actions/github-script@v7
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
       with:
         script: |
           let shouldRun = false;
@@ -106,14 +106,14 @@ runs:
 
     - name: Setup Node.js
       if: env.SHOULD_RUN == 'true'
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
       with:
         node-version: 24.19.0
 
     - name: Install Continue CLI
       if: env.SHOULD_RUN == 'true'
       shell: bash
-      run: npm install -g @continuedev/cli@latest
+      run: npm install -g @continuedev/cli@1.5.47
 
     - name: Setup Action Scripts
       if: env.SHOULD_RUN == 'true'
@@ -132,11 +132,11 @@ runs:
           
           # Download scripts from Continue repo
           echo "Downloading buildPrompt.js..."
-          curl -sSL https://raw.githubusercontent.com/continuedev/continue/main/actions/general-review/scripts/buildPrompt.js \
+          curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/actions/general-review/scripts/buildPrompt.js \
             -o .continue-action-scripts/buildPrompt.js
           
           echo "Downloading writeMarkdown.js..."
-          curl -sSL https://raw.githubusercontent.com/continuedev/continue/main/actions/general-review/scripts/writeMarkdown.js \
+          curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/actions/general-review/scripts/writeMarkdown.js \
             -o .continue-action-scripts/writeMarkdown.js
         fi
 
@@ -157,7 +157,7 @@ runs:
     - name: Post Initial Comment
       if: env.SHOULD_RUN == 'true'
       id: initial-comment
-      uses: actions/github-script@v7
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
       with:
         script: |
           const marker = '<!-- continue-agent-review -->';
@@ -244,7 +244,7 @@ runs:
       if: env.SHOULD_RUN == 'true'
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         # Get PR number based on event type
         if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -267,7 +267,6 @@ runs:
         CONTINUE_API_KEY: ${{ inputs.continue-api-key }}
         CONTINUE_ORG: ${{ inputs.continue-org }}
         CONTINUE_AGENT: ${{ inputs.continue-agent }}
-        GITHUB_TOKEN: ${{ github.token }}
       run: |
         echo "Running Continue CLI with prompt:"
         echo "=================================="
@@ -321,9 +320,9 @@ runs:
           echo "Prompt length: $(wc -c < "$PROMPT_FILE") characters"
           
           # Use timeout to prevent hanging (360 seconds = 6 minutes)
-          echo "Executing command: cn --agent $CONTINUE_ORG/$CONTINUE_AGENT -p @$PROMPT_FILE --allow Bash"
+          echo "Executing command: cn --agent $CONTINUE_ORG/$CONTINUE_AGENT -p @$PROMPT_FILE"
           
-          if timeout 360 cn --agent "$CONTINUE_ORG/$CONTINUE_AGENT" -p "@$PROMPT_FILE" --allow Bash > code_review_raw.md 2>cli_error.log; then
+          if timeout 360 cn --agent "$CONTINUE_ORG/$CONTINUE_AGENT" -p "@$PROMPT_FILE" > code_review_raw.md 2>cli_error.log; then
             echo "Continue CLI completed successfully"
             echo "Raw output length: $(wc -c < code_review_raw.md) characters"
             
@@ -365,7 +364,7 @@ runs:
 
     - name: Upload Review Results
       if: env.SHOULD_RUN == 'true' && always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: code-review-results
         path: |
@@ -376,7 +375,7 @@ runs:
 
     - name: Update Comment with Review
       if: env.SHOULD_RUN == 'true' && always()
-      uses: actions/github-script@v7
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
       with:
         script: |
           const fs = require('fs');

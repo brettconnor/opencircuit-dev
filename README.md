@@ -49,8 +49,9 @@ npm start
 ## Repository scope
 
 This repository is intentionally limited to production code and its required
-build and release tooling: the `cn` CLI, the VS Code extension/VSIX, Core, and
-shared packages.
+build and release tooling: the `cn` CLI, Core, and shared packages. The VS Code
+extension and other deferred surfaces are maintained separately from the
+primary CLI/Core validation path.
 
 ## Development checks
 
@@ -64,11 +65,9 @@ listed in [`BUILD_DEPENDENCIES.md`](BUILD_DEPENDENCIES.md).
 
 ## Project policies
 
-- [`CLA.md`](CLA.md) — contributor license agreement;
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — community standards;
 - [`SECURITY.md`](SECURITY.md) — vulnerability reporting;
 - [`LICENSE`](LICENSE) — Apache License 2.0;
-- [`NOTICE`](NOTICE) — third-party attribution notice.
 
 ## Package compatibility
 

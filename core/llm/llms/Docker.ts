@@ -110,7 +110,7 @@ class Docker extends OpenAI implements ModelInstaller {
     signal?: AbortSignal,
   ): Promise<{ stdout: string; stderr: string }> {
     return new Promise((resolve, reject) => {
-      const proc = spawn("docker", args, { shell: true });
+      const proc = spawn("docker", args);
 
       let stdout = "";
       let stderr = "";

@@ -22,6 +22,7 @@ $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 
 $script:RequiredNodeVersion = [version]"24.19.0"
 $script:PackageName = "@continuedev/cli"
+$script:PackageVersion = "1.5.47"
 $script:CliCommand = "cn"
 $script:FnmInstalled = $false
 $script:FnmPath = "$env:LOCALAPPDATA\fnm"
@@ -257,7 +258,7 @@ function Add-ToProfile {
 }
 
 function Install-Cli {
-    Write-Info "Installing $PackageName..."
+    Write-Info "Installing $PackageName@$PackageVersion..."
 
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
         Write-Err "npm not found. Please restart PowerShell and try again."
@@ -289,7 +290,7 @@ function Install-Cli {
         }
     }
 
-    $npmOutput = npm install -g $PackageName 2>&1
+    $npmOutput = npm install -g "$PackageName@$PackageVersion" 2>&1
     $npmExitCode = $LASTEXITCODE
 
     if ($npmExitCode -ne 0) {

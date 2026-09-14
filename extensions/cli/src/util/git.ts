@@ -1,8 +1,8 @@
-import { exec, execSync } from "child_process";
+import { execFile, execFileSync } from "child_process";
 import { promisify } from "util";
 
-const execAsync = promisify(exec);
 const LARGE_STDIO_BUFFER_BYTES = 10 * 1024 * 1024; // bump buffer for large git output
+const execAsync = promisify(execFile);
 
 /**
  * Get the git remote URL for the current repository
@@ -11,7 +11,7 @@ const LARGE_STDIO_BUFFER_BYTES = 10 * 1024 * 1024; // bump buffer for large git 
  */
 export function getGitRemoteUrl(remote: string = "origin"): string | null {
   try {
-    const result = execSync(`git remote get-url ${remote}`, {
+    const result = execFileSync("git", ["remote", "get-url", remote], {
       encoding: "utf-8",
       cwd: process.cwd(),
       stdio: "pipe",
@@ -28,7 +28,7 @@ export function getGitRemoteUrl(remote: string = "origin"): string | null {
  */
 export function getGitBranch(): string | null {
   try {
-    const result = execSync("git branch --show-current", {
+    const result = execFileSync("git", ["branch", "--show-current"], {
       encoding: "utf-8",
       cwd: process.cwd(),
       stdio: "pipe",
@@ -44,7 +44,7 @@ export function getGitBranch(): string | null {
  */
 export function isGitRepo(): boolean {
   try {
-    execSync("git rev-parse --is-inside-work-tree", {
+    execFileSync("git", ["rev-parse", "--is-inside-work-tree"], {
       stdio: "ignore",
       cwd: process.cwd(),
     });
@@ -132,7 +132,7 @@ function isExecError(
 
 export async function getGitDiffSnapshot(): Promise<GitDiffSnapshot> {
   try {
-    await execAsync("git rev-parse --git-dir", {
+    await execAsync("git", ["rev-parse", "--git-dir"], {
       maxBuffer: LARGE_STDIO_BUFFER_BYTES,
     });
   } catch (error) {
@@ -143,7 +143,7 @@ export async function getGitDiffSnapshot(): Promise<GitDiffSnapshot> {
   }
 
   try {
-    const { stdout } = await execAsync("git diff main", {
+    const { stdout } = await execAsync("git", ["diff", "main"], {
       maxBuffer: LARGE_STDIO_BUFFER_BYTES,
     });
     return { diff: stdout, repoFound: true };

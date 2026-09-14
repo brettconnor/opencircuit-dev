@@ -1,5 +1,4 @@
 import * as child_process from "node:child_process";
-import { exec } from "node:child_process";
 
 import { Range } from "core";
 import { EXTENSION_NAME } from "core/util/constants";
@@ -650,15 +649,24 @@ class VsCodeIde implements IDE {
     });
   }
 
-  async subprocess(command: string, cwd?: string): Promise<[string, string]> {
+  async subprocess(
+    command: string,
+    cwd?: string,
+    args: string[] = [],
+  ): Promise<[string, string]> {
     return new Promise((resolve, reject) => {
-      exec(command, { cwd }, (error, stdout, stderr) => {
-        if (error) {
-          console.warn(error);
-          reject(stderr);
-        }
-        resolve([stdout, stderr]);
-      });
+      child_process.execFile(
+        command,
+        args,
+        { cwd },
+        (error, stdout, stderr) => {
+          if (error) {
+            console.warn(error);
+            reject(stderr);
+          }
+          resolve([stdout, stderr]);
+        },
+      );
     });
   }
 

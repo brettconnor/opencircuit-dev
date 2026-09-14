@@ -1,4 +1,4 @@
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
 
 const PLATFORMS = [
   "win32-x64",
@@ -14,14 +14,23 @@ const isPreRelease = args.includes("--pre-release");
 void (async () => {
   for (const i in PLATFORMS) {
     const platform = PLATFORMS[i];
-    const pkgCommand = isPreRelease
-      ? "node scripts/package.js --pre-release --target " + platform // --yarn"
-      : "node scripts/package.js --target " + platform; // --yarn";
-
-    execSync("node scripts/prepackage-cross-platform.js --target " + platform, {
-      stdio: "inherit",
-    });
-    execSync(pkgCommand, { stdio: "inherit" });
+    execFileSync(
+      "node",
+      ["scripts/prepackage-cross-platform.js", "--target", platform],
+      {
+        stdio: "inherit",
+      },
+    );
+    execFileSync(
+      "node",
+      [
+        "scripts/package.js",
+        ...(isPreRelease ? ["--pre-release"] : []),
+        "--target",
+        platform,
+      ],
+      { stdio: "inherit" },
+    );
   }
   process.exit(0);
 })();

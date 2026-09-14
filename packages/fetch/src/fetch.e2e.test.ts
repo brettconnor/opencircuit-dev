@@ -15,9 +15,13 @@ const HTTPS_PORT = 3002;
 const serversToCleanup: Array<http.Server | https.Server> = [];
 const tempDirsToCleanup: string[] = [];
 
-afterEach(() => {
+afterEach(async () => {
   // Clean up all servers
-  serversToCleanup.forEach((server) => server.close());
+  await Promise.all(
+    serversToCleanup.map(
+      (server) => new Promise<void>((resolve) => server.close(() => resolve())),
+    ),
+  );
   serversToCleanup.length = 0;
 
   // Clean up temp directories

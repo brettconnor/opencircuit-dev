@@ -896,7 +896,11 @@ export interface IDE {
 
   getFileResults(pattern: string, maxResults?: number): Promise<string[]>;
 
-  subprocess(command: string, cwd?: string): Promise<[string, string]>;
+  subprocess(
+    command: string,
+    cwd?: string,
+    args?: string[],
+  ): Promise<[string, string]>;
 
   getProblems(fileUri?: string | undefined): Promise<Problem[]>;
 

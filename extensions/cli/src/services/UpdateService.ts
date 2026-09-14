@@ -1,4 +1,4 @@
-import { exec, spawn } from "child_process";
+import { execFile, spawn } from "child_process";
 import { promisify } from "util";
 
 import { GlobalContext } from "core/globalContext.js";
@@ -10,7 +10,7 @@ import { compareVersions, getLatestVersion, getVersion } from "../version.js";
 import { BaseService } from "./BaseService.js";
 import { serviceContainer } from "./ServiceContainer.js";
 import { UpdateServiceState, UpdateStatus } from "./types.js";
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 /**
  * Service for checking and performing CLI updates
@@ -145,7 +145,11 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       });
 
       // Install the update
-      const { stdout, stderr } = await execAsync("npm i -g @continuedev/cli");
+      const { stdout, stderr } = await execFileAsync("npm", [
+        "i",
+        "-g",
+        `@continuedev/cli@${this.currentState.latestVersion}`,
+      ]);
       logger.debug("Update output:", { stdout, stderr });
 
       if (stderr) {
