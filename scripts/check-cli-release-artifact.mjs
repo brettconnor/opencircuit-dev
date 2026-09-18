@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
 
 const packagePath = path.resolve(process.cwd(), "package.json");
 const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
@@ -39,7 +39,7 @@ const files = (packReport[0]?.files ?? []).map((entry) => entry.path);
 const requiredFiles = [
   "package.json",
   "README.md",
-  "dist/cn.js",
+  "dist/oc.js",
   "dist/index.js",
   "dist/meta.json",
 ];
@@ -57,8 +57,8 @@ const errors = [];
 if (packageJson.name !== "@opencircuit/cli") {
   errors.push(`unexpected package name: ${packageJson.name}`);
 }
-if (packageJson.bin?.cn !== "dist/cn.js") {
-  errors.push("cn binary must point to dist/cn.js");
+if (packageJson.bin?.oc !== "dist/oc.js") {
+  errors.push("oc binary must point to dist/oc.js");
 }
 if (packageJson.main !== "dist/index.js") {
   errors.push("main must point to dist/index.js");

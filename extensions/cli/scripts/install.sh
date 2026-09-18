@@ -7,7 +7,7 @@ set -euo pipefail
 REQUIRED_NODE_VERSION="24.19.0"
 PACKAGE_NAME="@opencircuit/cli"
 PACKAGE_VERSION="1.0.0"
-CLI_COMMAND="cn"
+CLI_COMMAND="oc"
 NETWORK_TIMEOUT=60
 FNM_INSTALL_DIR="$HOME/.local/share/fnm"
 

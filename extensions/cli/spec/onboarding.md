@@ -1,6 +1,6 @@
 # Onboarding
 
-When a user first runs `cn` in interactive mode, they will be taken through "onboarding". After they have completed onboarding once, they will follow a normal config loading flow.
+When a user first runs `oc` in interactive mode, they will be taken through "onboarding". After they have completed onboarding once, they will follow a normal config loading flow.
 
 ## Onboarding flow
 
@@ -34,7 +34,7 @@ Users can bypass the interactive onboarding menu by setting the `OCIRCUIT_USE_BE
 
 ```bash
 export OCIRCUIT_USE_BEDROCK=1
-cn <command>
+oc <command>
 ```
 
 This will:

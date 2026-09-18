@@ -12,7 +12,7 @@
     "scripts"
   ],
   "bin": {
-    "cn": "dist/cn.js"
+    "oc": "dist/oc.js"
   },
   "scripts": {
     "test": "vitest run",
@@ -30,7 +30,7 @@
     "build": "npm run build:validate && npm run build:bundle && npm run build:tsc",
     "check:install-scripts": "node ../../scripts/check-npm-install-scripts.mjs",
     "check:dependency-policy": "node ../../scripts/check-dependency-policy.mjs",
-    "start": "node dist/cn.js",
+    "start": "node dist/oc.js",
     "dev": "tsx src/index.ts",
     "repomix:sdk": "npx repomix node_modules/@opencircuit/sdk --ignore **/api,cli-repomix.xml -o sdk-repomix.xml",
     "repomix:cli": "npx repomix --ignore sdk-repomix.xml -o cli-repomix.xml",
@@ -39,7 +39,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "watch:logs": "touch ~/.ocircuit/logs/cn.log && tail -f ~/.ocircuit/logs/cn.log",
+    "watch:logs": "touch ~/.ocircuit/logs/oc.log && tail -f ~/.ocircuit/logs/oc.log",
     "prepare": "npm run build",
     "semantic-release": "semantic-release",
     "semantic-release:dry-run": "semantic-release --dry-run"

@@ -14,7 +14,7 @@ const execAsync = promisify(execFile);
  */
 export async function createWorktree(index: number): Promise<string> {
   const tmpDir = os.tmpdir();
-  const worktreePath = path.join(tmpDir, `cn-review-${Date.now()}-${index}`);
+  const worktreePath = path.join(tmpDir, `oc-review-${Date.now()}-${index}`);
 
   // Create the worktree at HEAD (detached)
   await execAsync("git", ["worktree", "add", worktreePath, "HEAD", "--detach"]);
@@ -74,7 +74,7 @@ export async function createWorktree(index: number): Promise<string> {
     worktreePath,
     "commit",
     "-m",
-    "cn-review: user working tree state (staged + unstaged + untracked)",
+    "oc-review: user working tree state (staged + unstaged + untracked)",
     "--allow-empty",
     "--no-verify",
   ]);

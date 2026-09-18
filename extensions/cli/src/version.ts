@@ -39,7 +39,7 @@ export async function getLatestVersion(
     try {
       const id = getEventUserId();
       const response = await fetch(
-        `https://api.ocircuit.dev/cn/info?id=${encodeURIComponent(id)}`,
+        `https://api.ocircuit.dev/oc/info?id=${encodeURIComponent(id)}`,
         { signal },
       );
       if (!response.ok) {

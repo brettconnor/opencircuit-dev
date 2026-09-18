@@ -23,7 +23,7 @@ $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 $script:RequiredNodeVersion = [version]"24.19.0"
 $script:PackageName = "@opencircuit/cli"
 $script:PackageVersion = "1.0.0"
-$script:CliCommand = "cn"
+$script:CliCommand = "oc"
 $script:FnmInstalled = $false
 $script:FnmPath = "$env:LOCALAPPDATA\fnm"
 

@@ -56,7 +56,7 @@ export const uploadArtifactTool: Tool = {
       if (!agentId) {
         throw new OCircuitError(
           OCircuitErrorReason.Unspecified,
-          "Agent ID is required. This tool only works with 'cn serve --id <agentId>'.",
+          "Agent ID is required. This tool only works with 'oc serve --id <agentId>'.",
         );
       }
 

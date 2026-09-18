@@ -52,7 +52,7 @@ export const reportFailureTool: Tool = {
       const agentId = getAgentIdFromArgs();
       if (!agentId) {
         const errorMessage =
-          "Agent ID is required. Please use the --id flag with cn serve.";
+          "Agent ID is required. Please use the --id flag with oc serve.";
         logger.error(errorMessage);
         throw new OCircuitError(OCircuitErrorReason.Unspecified, errorMessage);
       }

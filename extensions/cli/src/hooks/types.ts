@@ -2,7 +2,7 @@
  * Claude Code-compatible hooks system for Open Circuit CLI.
  *
  * These types match the exact schemas from Claude Code so that any hook
- * written for `claude` works with `cn` out of the box.
+ * written for `claude` works with `oc` out of the box.
  */
 
 // ---------------------------------------------------------------------------

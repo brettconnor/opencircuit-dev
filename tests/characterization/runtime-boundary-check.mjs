@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
+import { spawn } from "node:child_process";
 import fs from "node:fs";
 import http from "node:http";
 import os from "node:os";
 import path from "node:path";
-import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -85,7 +85,7 @@ const childResult = await new Promise((resolve) => {
       "--no-warnings",
       "--experimental-loader",
       loaderPath,
-      "dist/cn.js",
+      "dist/oc.js",
       "-p",
       "--config",
       configPath,
@@ -178,7 +178,7 @@ const requestSummary = requests[0]
 const report = {
   check: "retained-closure-cli-core-runtime",
   status: passed ? "pass" : "fail",
-  command: `${process.execPath} --experimental-loader ${loaderPath} dist/cn.js -p --config <temporary-config> Hi`,
+  command: `${process.execPath} --experimental-loader ${loaderPath} dist/oc.js -p --config <temporary-config> Hi`,
   workingDirectory: path.relative(repoRoot, cliDirectory),
   runtime: {
     actualNodeVersion: process.version,

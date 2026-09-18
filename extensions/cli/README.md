@@ -1,6 +1,6 @@
 # Open Circuit CLI
 
-The Open Circuit CLI (`cn`) is a customizable command line coding agent.
+The Open Circuit CLI (`oc`) is a customizable command line coding agent.
 
 ![Open Circuit CLI Demo](./media/demo.gif)
 
@@ -39,7 +39,7 @@ npm install --global .\opencircuit-cli-1.0.0.tgz
 ## Usage
 
 ```bash
-cn
+oc
 ```
 
 ### Headless Mode
@@ -54,16 +54,16 @@ Headless mode (`-p` flag) runs without an interactive terminal UI, making it per
 
 ```bash
 # Basic usage
-cn -p "Generate a conventional commit name for the current git changes."
+oc -p "Generate a conventional commit name for the current git changes."
 
 # With piped input
-echo "Review this code" | cn -p
+echo "Review this code" | oc -p
 
 # JSON output for scripting
-cn -p "Analyze the code" --format json
+oc -p "Analyze the code" --format json
 
 # Silent mode (strips thinking tags)
-cn -p "Write a README" --silent
+oc -p "Write a README" --silent
 ```
 
 **TTY-less Environments**: Headless mode is designed to work in environments without a terminal (TTY), such as when called from VSCode/IntelliJ extensions using terminal commands. The CLI will not attempt to read stdin or initialize the interactive UI when running in headless mode with a supplied prompt.
@@ -74,13 +74,13 @@ The CLI automatically saves your chat history for each terminal session. You can
 
 ```bash
 # Resume the last session in this terminal
-cn --resume
+oc --resume
 
 # List recent sessions and choose one to resume
-cn ls
+oc ls
 
 # List sessions in JSON format (for scripting)
-cn ls --json
+oc ls --json
 ```
 
 ## Command Line Options
@@ -97,14 +97,14 @@ cn ls --json
 
 ## Commands
 
-- `cn`: Start an interactive chat session
-- `cn ls`: List recent sessions with TUI selector to choose one to resume
-- `cn login`: Authenticate with Open Circuit
-- `cn logout`: Sign out of current session
-- `cn remote`: Launch a remote instance
-- `cn serve`: Start HTTP server mode
+- `oc`: Start an interactive chat session
+- `oc ls`: List recent sessions with TUI selector to choose one to resume
+- `oc login`: Authenticate with Open Circuit
+- `oc logout`: Sign out of current session
+- `oc remote`: Launch a remote instance
+- `oc serve`: Start HTTP server mode
 
-### Session Listing (`cn ls`)
+### Session Listing (`oc ls`)
 
 Shows recent sessions, limited by screen height to ensure it fits on your terminal.
 
@@ -116,13 +116,13 @@ The CLI fully supports running in environments without a TTY (terminal):
 
 ```bash
 # From Docker without TTY allocation
-docker run --rm my-image cn -p "Generate docs"
+docker run --rm my-image oc -p "Generate docs"
 
 # From CI/CD pipeline
-cn -p "Review changes" --format json
+oc -p "Review changes" --format json
 
 # From VSCode/IntelliJ extension terminal tool
-cn -p "Analyze code" --silent
+oc -p "Analyze code" --silent
 ```
 
 The CLI automatically detects TTY-less environments and adjusts its behavior:

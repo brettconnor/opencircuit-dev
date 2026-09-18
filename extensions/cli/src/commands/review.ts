@@ -304,7 +304,7 @@ export async function review(options: ReviewOptions = {}): Promise<void> {
           "  1. Create .ocircuit/agents/my-review.md with agent instructions\n",
         ) +
         chalk.dim(
-          "  2. Or specify an agent: cn review --review-agents org/agent-name\n",
+          "  2. Or specify an agent: oc review --review-agents org/agent-name\n",
         ) +
         chalk.dim("  3. Or configure reviews on /\n"),
     );

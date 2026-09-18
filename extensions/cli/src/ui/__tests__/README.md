@@ -4,13 +4,13 @@ This directory contains a comprehensive testing framework for the Open Circuit C
 
 ## Overview
 
-The testing framework ensures that the TUI behaves consistently whether running locally or connected to a remote `cn serve` instance. Most tests run in both modes automatically, verifying feature parity between local and remote operation.
+The testing framework ensures that the TUI behaves consistently whether running locally or connected to a remote `oc serve` instance. Most tests run in both modes automatically, verifying feature parity between local and remote operation.
 
 ## Key Components
 
 ### 1. Mock Remote Server (`mockRemoteServer.ts`)
 
-A mock Express server that simulates the `cn serve` endpoints:
+A mock Express server that simulates the `oc serve` endpoints:
 
 - `GET /state` - Returns current chat state
 - `POST /message` - Receives user messages and can simulate responses
