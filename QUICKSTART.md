@@ -165,7 +165,7 @@ schema: v1
 models:
 	- name: Anthropic model
 		provider: anthropic
-		model: claude-3-5-sonnet-20241022
+		model: claude-sonnet-4-6
 		apiKey: ${{ secrets.ANTHROPIC_API_KEY }}
 		roles:
 			- chat
