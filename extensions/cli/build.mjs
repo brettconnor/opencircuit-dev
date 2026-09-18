@@ -59,10 +59,6 @@ try {
         __dirname,
         "../../packages/openai-adapters/dist/index.js",
       ),
-      "@continuedev/config-types": resolve(
-        __dirname,
-        "../../packages/config-types/dist/index.js",
-      ),
       core: resolve(__dirname, "../../core"),
       "@continuedev/fetch": resolve(
         __dirname,

@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import lance from "vectordb";
+import * as lance from "@lancedb/lancedb";
 
 import { testConfigHandler, testIde } from "../test/fixtures";
 import { getLanceDbPath } from "../util/paths";

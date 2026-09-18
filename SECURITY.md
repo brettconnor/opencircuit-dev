@@ -27,22 +27,28 @@ publication when appropriate.
 
 ## Approved npm install scripts
 
-Core and CLI use npm 11's version-pinned `allowScripts` policy. Only the exact
-package versions listed in the respective `package.json` files may run install
-or prepare hooks. A dependency upgrade must add a new exact-version approval
-only after reviewing the new hook; name-only and wildcard approvals are not
-permitted.
+Core, CLI, and their retained shared packages use npm 11's version-pinned
+`allowScripts` policy. Only the exact package versions listed in the respective
+`package.json` files may run install or prepare hooks. A dependency upgrade
+must add a new exact-version approval only after reviewing the new hook;
+name-only and wildcard approvals are not permitted.
 
 The current approvals are limited to the retained build/runtime closure:
 
 - `@biomejs/biome`: installs the reviewed formatter binary used by Core tooling.
-- `esbuild`: installs the reviewed platform bundler binary used by Core/CLI builds.
+- `esbuild`: installs the reviewed platform bundler binaries used by Core/CLI builds.
 - `onnxruntime-node`: installs the reviewed native ONNX Runtime binary required by Core.
 - `protobufjs`: performs its reviewed generated-runtime setup.
+- `macos-export-certificate-and-key`: builds the reviewed platform certificate helper used by `system-ca`.
 - `puppeteer` and `puppeteer-chromium-resolver`: install the reviewed browser/runtime assets used by Core tooling.
 - `sqlite3`: downloads a reviewed N-API binary or builds the reviewed native fallback.
+- `unrs-resolver`: installs its reviewed native resolver binaries used by the shared package and ESLint toolchains.
 - `win-ca`: performs its reviewed platform certificate-module setup.
-- `unrs-resolver`: installs its reviewed native resolver binary used by the CLI toolchain.
+
+The same package may appear at multiple exact versions because Core includes
+local shared packages with their own lockfiles. Each listed version was
+reviewed as an install hook; adding a new version still requires a separate
+review.
 
 These approvals authorize install-time code execution; they do not suppress
 `npm audit`. Reviewers must re-run the pending-script check after dependency

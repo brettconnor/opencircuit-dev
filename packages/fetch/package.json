@@ -11,6 +11,9 @@
   },
   "author": "Nate Sesti and Ty Dunn",
   "license": "Apache-2.0",
+  "allowScripts": {
+    "esbuild@0.25.5": true
+  },
   "dependencies": {
     "@continuedev/config-types": "^1.0.14",
     "follow-redirects": "^1.15.6",

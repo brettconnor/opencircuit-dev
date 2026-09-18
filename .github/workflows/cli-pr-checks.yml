@@ -46,6 +46,7 @@ jobs:
         run: |
           cd extensions/cli
           npm ci --include=optional
+          npm run check:install-scripts
 
       - name: Run linting
         run: |
@@ -94,6 +95,7 @@ jobs:
         run: |
           cd extensions/cli
           npm ci --include=optional
+          npm run check:install-scripts
 
       - name: Build
         run: |
@@ -155,6 +157,7 @@ jobs:
         run: |
           cd extensions/cli
           npm ci --include=optional
+          npm run check:install-scripts
 
       - name: Build
         run: |

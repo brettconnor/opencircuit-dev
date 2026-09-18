@@ -23,7 +23,7 @@ import {
   RefreshIndexResults,
 } from "./types";
 
-import type * as LanceType from "vectordb";
+import type * as LanceType from "@lancedb/lancedb";
 import { tagToString } from "./utils";
 
 interface LanceDbRow {
@@ -64,7 +64,7 @@ export class LanceDbIndex implements CodebaseIndex {
     }
 
     try {
-      this.lance = await import("vectordb");
+      this.lance = await import("@lancedb/lancedb");
       return new LanceDbIndex(embeddingsProvider, readFile);
     } catch (err) {
       console.error("Failed to load LanceDB:", err);
@@ -265,7 +265,7 @@ export class LanceDbIndex implements CodebaseIndex {
     const lanceDb = await lance.connect(getLanceDbPath());
     const existingLanceTables = await lanceDb.tableNames();
 
-    let lanceTable: LanceType.Table<number[]> | undefined = undefined;
+    let lanceTable: LanceType.Table | undefined = undefined;
     let needToCreateLanceTable = !existingLanceTables.includes(lanceTableName);
 
     const addComputedLanceDbRows = async (
@@ -423,7 +423,7 @@ export class LanceDbIndex implements CodebaseIndex {
     } else {
       query = query.limit(n);
     }
-    const results = await query.execute();
+    const results = await query.toArray();
     return results.slice(0, n) as any;
   }
 

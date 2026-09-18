@@ -28,5 +28,5 @@
     "sourceRoot": "/"
   },
   "include": ["./**/*.ts", "./**/*.js"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "eslint.config.js"]
 }

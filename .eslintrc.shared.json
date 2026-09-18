@@ -4,7 +4,7 @@
     "ecmaVersion": 6,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "import-x"],
   "rules": {
     "no-negated-condition": "warn",
     "@typescript-eslint/naming-convention": "off",
@@ -15,7 +15,7 @@
     "eqeqeq": "warn",
     "no-throw-literal": "warn",
     "semi": "off",
-    "import/order": [
+    "import-x/order": [
       "warn",
       {
         "groups": [

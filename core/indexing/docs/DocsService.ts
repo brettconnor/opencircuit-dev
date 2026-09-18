@@ -35,7 +35,7 @@ import DocsCrawler, { DocsCrawlerType, PageData } from "./crawlers/DocsCrawler";
 import { startUrlFilter } from "./lanceFilter";
 import { runLanceMigrations, runSqliteMigrations } from "./migrations";
 
-import type * as LanceType from "vectordb";
+import type * as LanceType from "@lancedb/lancedb";
 import { LLMError } from "../../llm";
 
 // Purposefully lowercase because lancedb converts
@@ -204,7 +204,7 @@ export default class DocsService {
 
     try {
       if (!DocsService.lance) {
-        DocsService.lance = await import("vectordb");
+        DocsService.lance = await import("@lancedb/lancedb");
       }
       return DocsService.lance;
     } catch (err) {
@@ -806,9 +806,10 @@ export default class DocsService {
         startUrl,
       });
       const rows = (await table
-        .filter(startUrlFilter(startUrl))
+        .query()
+        .where(startUrlFilter(startUrl))
         .limit(1000)
-        .execute()) as LanceDbDocsRow[];
+        .toArray()) as LanceDbDocsRow[];
 
       return {
         startUrl,
@@ -846,7 +847,7 @@ export default class DocsService {
         .search(vector)
         .limit(nRetrieve)
         .where(startUrlFilter(startUrl))
-        .execute();
+        .toArray();
     } catch (e: any) {
       console.warn("Error retrieving chunks from LanceDB", e);
     }
@@ -862,10 +863,11 @@ export default class DocsService {
       });
 
       const rows = (await table
-        .filter(startUrlFilter(startUrl))
+        .query()
+        .where(startUrlFilter(startUrl))
         .select(["path"]) // Only select path to minimize data transfer
         .limit(99999999) // Default is 10, we want to show all
-        .execute()) as { path: string }[];
+        .toArray()) as { path: string }[];
 
       // Get unique paths (pages)
       return new Set(rows.map((row) => row.path));
