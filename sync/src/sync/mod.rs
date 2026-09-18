@@ -53,15 +53,12 @@ fn path_for_tag(tag: &Tag) -> PathBuf {
 
 /// Stored in ~/.continue/index/.last_sync
 fn get_last_sync_time(tag: &Tag) -> u64 {
-    // TODO: Error handle here
     let path = path_for_tag(tag).join(".last_sync");
-
-//     let mut file = File::open(path).unwrap();
-//     let mut contents = String::new();
-//     file.read_to_string(&mut contents).unwrap();
-
-//     contents.parse::<u64>().unwrap()
-// }
+    fs::read_to_string(path)
+        .ok()
+        .and_then(|contents| contents.parse::<u64>().ok())
+        .unwrap_or(0)
+}
 
 fn write_sync_time(tag: &Tag) {
     let path = path_for_tag(tag).join(".last_sync");
@@ -73,7 +70,6 @@ fn write_sync_time(tag: &Tag) {
         .as_secs();
     file.write_all(now.to_string().as_bytes()).unwrap();
 }
-
 
 /// Use stat to find files since last sync time
 // pub fn get_modified_files(tag: &Tag) -> Vec<PathBuf> {
@@ -267,14 +263,14 @@ impl<'a> IndexCache<'a> {
         self.tag_cache.add(&item.hash);
 
         // Add to rev_tags
-        let mut rev_tags = Self::read_rev_tags(item.hash);
+        let mut rev_tags = self.read_rev_tags(item.hash);
         let tag_str = self.tag_str();
         let hash_str = hash_string(item.hash);
         if !rev_tags.contains_key(hash_str.as_str()) {
             rev_tags.insert(hash_str.clone(), Vec::new());
         }
         rev_tags.get_mut(hash_str.as_str()).unwrap().push(tag_str);
-        Self::write_rev_tags(item.hash, &rev_tags);
+        self.write_rev_tags(item.hash, rev_tags);
     }
 
     fn global_remove(&mut self, item: &ObjDescription) {
@@ -282,19 +278,19 @@ impl<'a> IndexCache<'a> {
         self.tag_cache.remove(&item.hash);
 
         // Remove from rev_tags
-        let mut rev_tags = Self::read_rev_tags(item.hash);
+        let mut rev_tags = self.read_rev_tags(item.hash);
         let hash_str = hash_string(item.hash);
         if rev_tags.contains_key(hash_str.as_str()) {
             rev_tags.remove(hash_str.as_str());
         }
-        Self::write_rev_tags(item.hash, &rev_tags);
+        self.write_rev_tags(item.hash, rev_tags);
     }
 
     fn local_remove(&mut self, item: &ObjDescription) {
         self.tag_cache.remove(&item.hash);
 
         // Remove from rev_tags
-        let mut rev_tags = Self::read_rev_tags(item.hash);
+        let mut rev_tags = self.read_rev_tags(item.hash);
         let tag_str = self.tag_str();
         let hash_str = hash_string(item.hash);
         if rev_tags.contains_key(hash_str.as_str()) {
@@ -305,7 +301,7 @@ impl<'a> IndexCache<'a> {
                 rev_tags.remove(hash_str.as_str());
             }
         }
-        Self::write_rev_tags(item.hash, &rev_tags);
+        self.write_rev_tags(item.hash, rev_tags);
     }
 
     fn global_contains(&mut self, hash: &[u8; ITEM_SIZE]) -> bool {
@@ -316,8 +312,8 @@ impl<'a> IndexCache<'a> {
     //     self.tag_cache.contains(hash)
     // }
 
-    fn get_rev_tags(hash: &[u8; ITEM_SIZE]) -> Vec<String> {
-        let mut rev_tags = Self::read_rev_tags(*hash);
+    fn get_rev_tags(&self, hash: &[u8; ITEM_SIZE]) -> Vec<String> {
+        let mut rev_tags = self.read_rev_tags(*hash);
         let hash_str = hash_string(*hash);
         if rev_tags.contains_key(hash_str.as_str()) {
             rev_tags.remove(hash_str.as_str()).unwrap()
@@ -400,7 +396,7 @@ pub fn sync(
             continue;
         }
         if index_cache.global_contains(&item.hash) {
-            if IndexCache::get_rev_tags(&item.hash).len() <= 1 {
+            if index_cache.get_rev_tags(&item.hash).len() <= 1 {
                 // If it's cached only for this tag, remove it from the global cache as well
                 index_cache.global_remove(&item);
                 let hash = hash_string(item.hash);
@@ -480,14 +476,14 @@ mod tests {
             branch: "nate/pyO3",
             provider_id: "default",
         };
-        let results = sync(&tag);
+        let _results = sync(&tag);
         println!("Sync took {:?}", ti.elapsed());
         // Vast majority (90+%) of this time is spent in compute_tree_for_dir
     }
 
     #[test]
     fn test_on_vscode_extension() {
-        let results = sync(&Tag {
+        let _results = sync(&Tag {
             dir: Path::new("../extensions/vscode"),
             branch: "nate/pyO3",
             provider_id: "default",
@@ -497,21 +493,22 @@ mod tests {
     #[test]
     fn test_double_sync() {
         let ti = std::time::Instant::now();
+        let provider_id = format!("cargo-test-double-sync-{}", std::process::id());
         let results = sync(&Tag {
             dir: Path::new("../"),
             branch: "nate/pyO3",
-            provider_id: "default",
+            provider_id: provider_id.as_str(),
         })
         .expect("Sync failed.");
         println!("First sync took {:?}", ti.elapsed());
         assert!(!results.0.is_empty());
-        assert!(!results.1.is_empty());
+        assert!(results.1.is_empty());
 
         let ti = std::time::Instant::now();
         let results = sync(&Tag {
             dir: Path::new("../"),
             branch: "nate/pyO3",
-            provider_id: "default",
+            provider_id: provider_id.as_str(),
         })
         .expect("Sync failed");
         println!("Second sync took {:?}", ti.elapsed());
@@ -522,6 +519,7 @@ mod tests {
     #[test]
     fn test_sync_v3() {
         // Create temp directory
+        let provider_id = format!("cargo-test-sync-v3-{}", std::process::id());
         let temp_dir = TempDirBuilder::new()
             .add("dir1/file1.txt", "File 1")
             .add("dir1/file2.txt", "File 2")
@@ -533,7 +531,7 @@ mod tests {
         let tag = &Tag {
             dir: temp_dir.path(),
             branch: "BRANCH",
-            provider_id: "default",
+            provider_id: provider_id.as_str(),
         };
         // Sync once
         sync(&tag).expect("Sync failed.");
@@ -558,7 +556,7 @@ mod tests {
         let tag2 = &Tag {
             dir: temp_dir.path(),
             branch: "BRANCH2",
-            provider_id: "default",
+            provider_id: provider_id.as_str(),
         };
         // Sync again
         let results = sync(tag2).expect("Sync failed.");
