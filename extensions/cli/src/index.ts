@@ -173,7 +173,7 @@ const program = new Command();
 program
   .name("cn")
   .description(
-    "Continue CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
+    "Open Circuit CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
   )
   .version(getVersion(), "-v, --version", "Display version number");
 
@@ -319,7 +319,7 @@ program
   .option("--port <port>", "Port to run the server on (default: 8000)", "8000")
   .option(
     "--id <storageId>",
-    "Upload session snapshots to Continue-managed storage using the provided identifier",
+    "Upload session snapshots to Open Circuit-managed storage using the provided identifier",
   )
   .option(
     "--beta-upload-artifact-tool",

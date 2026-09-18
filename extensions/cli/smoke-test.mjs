@@ -2,7 +2,7 @@
 
 import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
-import { resolve, dirname } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -86,7 +86,7 @@ runTest("Version command", () => {
 // Test 4: Help command works
 runTest("Help command", () => {
   const output = execCommand(getCLICommand("--help"));
-  if (!output.includes("Continue CLI") || !output.includes("--version")) {
+  if (!output.includes("Open Circuit CLI") || !output.includes("--version")) {
     throw new Error("Help output missing expected content");
   }
 });

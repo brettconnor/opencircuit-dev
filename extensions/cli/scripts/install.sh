@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Continue CLI Installer - Unix (macOS, Linux, WSL, Git Bash)
+## Open Circuit CLI installer - Unix (macOS, Linux, WSL, Git Bash)
 # curl -fsSL //install.sh | bash
 
 REQUIRED_NODE_VERSION="24.19.0"
 PACKAGE_NAME="@opencircuit/cli"
-PACKAGE_VERSION="1.5.47"
+PACKAGE_VERSION="1.0.0"
 CLI_COMMAND="cn"
 NETWORK_TIMEOUT=60
 FNM_INSTALL_DIR="$HOME/.local/share/fnm"
@@ -295,7 +295,7 @@ install_cli() {
 finalize() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    success "Continue CLI installation complete!"
+    success "Open Circuit CLI installation complete!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 
@@ -311,7 +311,7 @@ finalize() {
 main() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    printf "${BOLD}           Continue CLI Installer${NC}\n"
+    printf "${BOLD}           Open Circuit CLI Installer${NC}\n"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 

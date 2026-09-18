@@ -1,27 +1,39 @@
-# Continue CLI
+# Open Circuit CLI
 
-The Continue CLI (`cn`) is a customizable command line coding agent.
+The Open Circuit CLI (`cn`) is a customizable command line coding agent.
 
-![Continue CLI Demo](./media/demo.gif)
+![Open Circuit CLI Demo](./media/demo.gif)
 
 ## Installation
 
-**macOS / Linux:**
+### macOS and Linux
+
+After the package is published:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/extensions/cli/scripts/install.sh | bash
+npm install --global @opencircuit/cli@1.0.0
 ```
 
-**Windows (PowerShell):**
+Before npm publication, install the locally validated package artifact:
+
+```bash
+npm install --global ./opencircuit-cli-1.0.0.tgz
+```
+
+The Unix installer script is available from the release repository once its canonical public URL is confirmed.
+
+### Windows PowerShell
+
+After the package is published:
 
 ```powershell
-irm https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/extensions/cli/scripts/install.ps1 | iex
+npm install --global @opencircuit/cli@1.0.0
 ```
 
-Or install with npm if you have Node.js 20+:
+For local validation, copy `opencircuit-cli-1.0.0.tgz` to the Windows machine and run:
 
-```bash
-npm i -g @opencircuit/cli@1.5.47
+```powershell
+npm install --global .\opencircuit-cli-1.0.0.tgz
 ```
 
 ## Usage
@@ -80,14 +92,14 @@ cn ls --json
 
 ## Environment Variables
 
-- `OCIRCUIT_CLI_DISABLE_COMMIT_SIGNATURE`: Disable adding the Continue commit signature to generated commit messages
+- `OCIRCUIT_CLI_DISABLE_COMMIT_SIGNATURE`: Disable adding the Open Circuit commit signature to generated commit messages
 - `FORCE_NO_TTY`: Force TTY-less mode, prevents stdin reading (useful for testing and automation)
 
 ## Commands
 
 - `cn`: Start an interactive chat session
 - `cn ls`: List recent sessions with TUI selector to choose one to resume
-- `cn login`: Authenticate with Continue
+- `cn login`: Authenticate with Open Circuit
 - `cn logout`: Sign out of current session
 - `cn remote`: Launch a remote instance
 - `cn serve`: Start HTTP server mode

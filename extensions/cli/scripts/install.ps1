@@ -1,9 +1,9 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Continue CLI Installer for Windows
+    Open Circuit CLI Installer for Windows
 .DESCRIPTION
-    Installs Node.js (if needed) and the Continue CLI globally
+    Installs Node.js (if needed) and the Open Circuit CLI globally
 .EXAMPLE
     irm https://raw.githubusercontent.com/open-circuit-dev/open-circuit/main/extensions/cli/scripts/install.ps1 | iex
 .NOTES
@@ -22,7 +22,7 @@ $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 
 $script:RequiredNodeVersion = [version]"24.19.0"
 $script:PackageName = "@opencircuit/cli"
-$script:PackageVersion = "1.5.47"
+$script:PackageVersion = "1.0.0"
 $script:CliCommand = "cn"
 $script:FnmInstalled = $false
 $script:FnmPath = "$env:LOCALAPPDATA\fnm"
@@ -311,7 +311,7 @@ function Install-Cli {
 function Show-Complete {
     Write-Host ""
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-    Write-Success "Continue CLI installation complete!"
+    Write-Success "Open Circuit CLI installation complete!"
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
     Write-Host ""
 
@@ -328,7 +328,7 @@ function Show-Complete {
 function Main {
     Write-Host ""
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-    Write-Host "           Continue CLI Installer" -ForegroundColor White
+    Write-Host "           Open Circuit CLI Installer" -ForegroundColor White
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
     Write-Host ""
 

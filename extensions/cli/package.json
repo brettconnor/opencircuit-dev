@@ -1,10 +1,16 @@
 {
   "name": "@opencircuit/cli",
-  "version": "0.0.0-dev",
-  "description": "Continue CLI",
+  "version": "1.0.0",
+  "description": "Open Circuit command-line coding agent",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.txt",
+    "scripts"
+  ],
   "bin": {
     "cn": "dist/cn.js"
   },
@@ -42,7 +48,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/open-circuit-dev/open-circuit.git"
+    "url": "git+https://github.com/open-circuit-dev/open-circuit.git"
   },
   "bugs": {
     "url": "https://github.com/open-circuit-dev/open-circuit/issues"

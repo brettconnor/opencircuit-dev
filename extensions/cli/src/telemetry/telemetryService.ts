@@ -232,7 +232,7 @@ class TelemetryService {
     });
 
     this.costCounter = this.meter.createCounter("ocircuit_cli_cost_usage", {
-      description: "Cost of the Continue CLI session",
+      description: "Cost of the Open Circuit CLI session",
       unit: "USD",
     });
 
@@ -257,7 +257,7 @@ class TelemetryService {
       },
     );
 
-    // Additional Continue CLI specific metrics
+    // Additional Open Circuit CLI specific metrics
     this.authAttemptsCounter = this.meter.createCounter(
       "ocircuit_cli_auth_attempts",
       {
