@@ -1,5 +1,5 @@
-import { ModelConfig } from "@continuedev/config-yaml";
-import { BaseLlmApi } from "@continuedev/openai-adapters";
+import { ModelConfig } from "@opencircuit/config-yaml";
+import { BaseLlmApi } from "@opencircuit/openai-adapters";
 import type { ChatHistoryItem } from "core/index.js";
 import { convertToUnifiedHistory } from "core/messageConversion.js";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.mjs";
@@ -308,10 +308,10 @@ describe("streamChatResponse - auto-continuation after compaction", () => {
 
     // Should only add "continue" once
     // The flag is reset after the first continuation
-    const continueCount = historyUpdates.filter(
+    const ocircuitCount = historyUpdates.filter(
       (msg) => msg === "continue",
     ).length;
-    expect(continueCount).toBeLessThanOrEqual(1);
+    expect(ocircuitCount).toBeLessThanOrEqual(1);
 
     // Should have called the LLM at least once
     expect(streamCallCount).toBeGreaterThanOrEqual(1);

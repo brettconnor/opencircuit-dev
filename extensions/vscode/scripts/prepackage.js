@@ -14,7 +14,7 @@ const { copySqlite } = require("./download-copy-sqlite");
 const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config");
 const { installAndCopyNodeModules } = require("./install-copy-nodemodule");
 const { npmInstall } = require("./npm-install");
-const { writeBuildTimestamp, continueDir } = require("./utils");
+const { writeBuildTimestamp, ocircuitDir } = require("./utils");
 
 // Clear folders that will be packaged to ensure clean slate
 rimrafSync(path.join(__dirname, "..", "bin"));
@@ -37,8 +37,8 @@ if (args[2] === "--target") {
 }
 if (!target) {
   const envTarget =
-    process.env.CONTINUE_VSCODE_TARGET ||
-    process.env.CONTINUE_BUILD_TARGET ||
+    process.env.OCIRCUIT_VSCODE_TARGET ||
+    process.env.OCIRCUIT_BUILD_TARGET ||
     process.env.VSCODE_TARGET;
   if (envTarget && typeof envTarget === "string") {
     target = envTarget.trim();
@@ -86,7 +86,7 @@ void (async () => {
     );
   }
 
-  process.chdir(path.join(continueDir, "gui"));
+  process.chdir(path.join(ocircuitDir, "gui"));
 
   // Copy over the dist folder to the VSCode extension //
   const vscodeGuiPath = path.join("../extensions/vscode/gui");
@@ -420,7 +420,7 @@ void (async () => {
 
     // Tutorial
     "media/move-chat-panel-right.md",
-    "continue_tutorial.py",
+    "ocircuit_tutorial.py",
     "config_schema.json",
 
     // Embeddings model

@@ -39,7 +39,7 @@
 //     const ideSettingsPromise = Promise.resolve({
 //       remoteConfigSyncPeriod: 60,
 //       userToken: "",
-//       continueTestEnvironment: "none" as const,
+//       ocircuitTestEnvironment: "none" as const,
 //       pauseCodebaseIndexOnStart: false,
 //       ideSettings: {} as any,
 //       enableDebugLogs: false,

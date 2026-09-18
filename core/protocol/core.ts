@@ -3,8 +3,8 @@ import {
   ConfigResult,
   DevDataLogEvent,
   ModelRole,
-} from "@continuedev/config-yaml";
-import { ToolPolicy } from "@continuedev/terminal-security";
+} from "@opencircuit/config-yaml";
+import { ToolPolicy } from "@opencircuit/terminal-security";
 
 import {
   AutocompleteInput,
@@ -16,7 +16,7 @@ import { GlobalContextModelSelections } from "../util/GlobalContext";
 
 import {
   BaseSessionMetadata,
-  BrowserSerializedContinueConfig,
+  BrowserSerializedOCircuitConfig,
   ChatMessage,
   CompiledMessagesResult,
   CompleteOnboardingPayload,
@@ -35,7 +35,7 @@ import {
   PromptLog,
   RangeInFile,
   RangeInFileWithNextEditInfo,
-  SerializedContinueConfig,
+  SerializedOCircuitConfig,
   Session,
   SiteIndexingConfig,
   SlashCommandDescWithSource,
@@ -47,7 +47,7 @@ import { GetLspDefinitionsFunction } from "../autocomplete/types";
 import { ConfigHandler } from "../config/ConfigHandler";
 import { ProcessedItem } from "../nextEdit/NextEditPrefetchQueue";
 import { NextEditOutcome } from "../nextEdit/types";
-import { ContinueErrorReason } from "../util/errors";
+import { OCircuitErrorReason } from "../util/errors";
 
 export enum OnboardingModes {
   API_KEY = "API Key",
@@ -77,7 +77,7 @@ export type ToCoreFromIdeOrWebviewProtocol = {
   "config/addOpenAiKey": [string, void];
   "config/addModel": [
     {
-      model: SerializedContinueConfig["models"][number];
+      model: SerializedOCircuitConfig["models"][number];
       role?: keyof ExperimentalModelRoles;
     },
     void,
@@ -94,7 +94,7 @@ export type ToCoreFromIdeOrWebviewProtocol = {
   "config/getSerializedProfileInfo": [
     undefined,
     {
-      result: ConfigResult<BrowserSerializedContinueConfig>;
+      result: ConfigResult<BrowserSerializedOCircuitConfig>;
       profileId: string | null;
       profiles: ProfileDescription[];
     },
@@ -305,7 +305,7 @@ export type ToCoreFromIdeOrWebviewProtocol = {
     {
       contextItems: ContextItem[];
       errorMessage?: string;
-      errorReason?: ContinueErrorReason;
+      errorReason?: OCircuitErrorReason;
       mcpUiState?: McpUiState;
     },
   ];
@@ -322,7 +322,7 @@ export type ToCoreFromIdeOrWebviewProtocol = {
     { toolName: string; args: Record<string, unknown> },
     {
       preprocessedArgs?: Record<string, unknown>;
-      errorReason?: ContinueErrorReason;
+      errorReason?: OCircuitErrorReason;
       errorMessage?: string;
     },
   ];

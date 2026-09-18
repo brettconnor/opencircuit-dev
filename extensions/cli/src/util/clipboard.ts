@@ -59,7 +59,7 @@ export async function getClipboardImage(): Promise<Buffer | null> {
     const tempDir = os.tmpdir();
     const tempImagePath = path.join(
       tempDir,
-      `continue-clipboard-${Date.now()}.png`,
+      `ocircuit-clipboard-${Date.now()}.png`,
     );
 
     if (platform === "darwin") {

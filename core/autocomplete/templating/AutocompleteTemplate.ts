@@ -72,7 +72,7 @@ const qwenCoderFimTemplate: AutocompleteTemplate = {
 };
 
 // Qwen multi-file FIM template for repository-level autocompletion
-// https://github.com/continuedev/continue/issues/3589
+// https://github.com/open-circuit-dev/open-circuit/issues/3589
 const qwenMultifileFimTemplate: AutocompleteTemplate = {
   compilePrefixSuffix: (
     prefix: string,

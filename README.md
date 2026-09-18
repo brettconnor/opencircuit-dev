@@ -72,5 +72,5 @@ listed in [`BUILD_DEPENDENCIES.md`](BUILD_DEPENDENCIES.md).
 ## Package compatibility
 
 Some package and environment-variable identifiers retain their historical
-`@continuedev/*` and `CONTINUE_*` names for compatibility. Those identifiers
+`@opencircuit/*` and `OCIRCUIT_*` names for compatibility. Those identifiers
 are implementation and distribution contracts, not the project branding.

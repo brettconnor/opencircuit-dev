@@ -39,6 +39,6 @@ child.on("close", (code) => {
     return;
   }
   console.log(
-    `vsce package completed - extension created at extensions/vscode/build/continue-${version}.vsix`,
+    `vsce package completed - extension created at extensions/vscode/build/ocircuit-${version}.vsix`,
   );
 });

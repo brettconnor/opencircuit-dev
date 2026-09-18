@@ -5,7 +5,7 @@ import { getVersion } from "./version.js";
 
 const d = chalk.dim;
 
-export const CONTINUE_ASCII_ART = `
+export const OCIRCUIT_ASCII_ART = `
 ${mind.multiline(`  ██████╗ ██████╗ ███╗   ██╗████████╗██╗███╗   ██╗██╗   ██╗███████╗
  ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██║████╗  ██║██║   ██║██╔════╝
  ██║     ██║   ██║██╔██╗ ██║   ██║   ██║██╔██╗ ██║██║   ██║█████╗
@@ -35,14 +35,14 @@ export function getDisplayableAsciiArt(): string {
   const terminalWidth = process.stdout.columns || 80;
 
   if (terminalWidth >= MIN_WIDTH_FOR_ASCII_ART) {
-    return CONTINUE_ASCII_ART;
+    return OCIRCUIT_ASCII_ART;
   }
 
   // If terminal is too narrow, show just "CN" ASCII art
   return CN_ASCII_ART;
 }
 
-export const CONTINUE_LOGO_ASCII_ART = `
+export const OCIRCUIT_LOGO_ASCII_ART = `
                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@
                  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@@@
@@ -68,7 +68,7 @@ export const CONTINUE_LOGO_ASCII_ART = `
   @@@@@@@@@@@@  @@@@@                                                    @@@@@@@@@@@@ @@@@@@@@@@@@
     @@@@@@@@@@@  @@@                                                      @@@@@@@@@@@@  @@@@@@@@@@@
      @@@@@@@@@@@                                                           @@@@@@@@@@@@  @@@@@@@@@@@
-                                          CONTINUE                                       @@@@@@@@@@@@
+                                          OCIRCUIT                                       @@@@@@@@@@@@
      @@@@@@@@@@@                                                           @@@@@@@@@@@@  @@@@@@@@@@@
    @@@@@@@@@@@@  @@@                                                      @@@@@@@@@@@@  @@@@@@@@@@@
   @@@@@@@@@@@@  @@@@@                                                    @@@@@@@@@@@@ @@@@@@@@@@@@

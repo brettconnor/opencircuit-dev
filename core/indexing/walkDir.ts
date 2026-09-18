@@ -3,7 +3,7 @@ import ignore, { Ignore } from "ignore";
 import type { FileType, IDE } from "..";
 
 import { joinPathsToUri } from "../util/uri";
-import { getGlobalContinueIgArray } from "./continueignore";
+import { getGlobalOCircuitIgArray } from "./ocircuitignore";
 import { defaultIgnoreFileAndDir, gitIgArrayFromFile } from "./ignore";
 
 export interface WalkerOptions {
@@ -91,7 +91,7 @@ class DFSWalker {
     let section = Date.now();
     const defaultAndGlobalIgnores = ignore()
       .add(this.options.overrideDefaultIgnores ?? defaultIgnoreFileAndDir)
-      .add(getGlobalContinueIgArray());
+      .add(getGlobalOCircuitIgArray());
     ignoreFileTime += Date.now() - section;
 
     const rootContext: WalkContext = {
@@ -307,10 +307,10 @@ export async function getIgnoreContext(
     .map(([name, _]) => name);
 
   // Find ignore files and get ignore arrays from their contexts
-  // These are done separately so that .continueignore can override .gitignore
+  // These are done separately so that .ocircuitignore can override .gitignore
   const gitIgnoreFile = dirFiles.find((name) => name === ".gitignore");
-  const continueIgnoreFile = dirFiles.find(
-    (name) => name === ".continueignore",
+  const ocircuitIgnoreFile = dirFiles.find(
+    (name) => name === ".ocircuitignore",
   );
 
   const getGitIgnorePatterns = async () => {
@@ -320,9 +320,9 @@ export async function getIgnoreContext(
     }
     return [];
   };
-  const getContinueIgnorePatterns = async () => {
-    if (continueIgnoreFile) {
-      const contents = await ide.readFile(`${currentDir}/.continueignore`);
+  const getOCircuitIgnorePatterns = async () => {
+    if (ocircuitIgnoreFile) {
+      const contents = await ide.readFile(`${currentDir}/.ocircuitignore`);
       return gitIgArrayFromFile(contents);
     }
     return [];
@@ -330,7 +330,7 @@ export async function getIgnoreContext(
 
   const ignoreArrays = await Promise.all([
     getGitIgnorePatterns(),
-    getContinueIgnorePatterns(),
+    getOCircuitIgnorePatterns(),
   ]);
 
   if (ignoreArrays[0].length === 0 && ignoreArrays[1].length === 0) {
@@ -340,8 +340,8 @@ export async function getIgnoreContext(
   // Note precedence here!
   const ignoreContext = ignore()
     .add(ignoreArrays[0]) // gitignore
-    .add(defaultAndGlobalIgnores) // default file/folder ignores followed by global .continueignore - this is combined for speed
-    .add(ignoreArrays[1]); // local .continueignore
+    .add(defaultAndGlobalIgnores) // default file/folder ignores followed by global .ocircuitignore - this is combined for speed
+    .add(ignoreArrays[1]); // local .ocircuitignore
 
   return ignoreContext;
 }

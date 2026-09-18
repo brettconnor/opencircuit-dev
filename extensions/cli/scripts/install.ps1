@@ -5,7 +5,7 @@
 .DESCRIPTION
     Installs Node.js (if needed) and the Continue CLI globally
 .EXAMPLE
-    irm https://continue.dev/install.ps1 | iex
+    irm https://raw.githubusercontent.com/open-circuit-dev/open-circuit/main/extensions/cli/scripts/install.ps1 | iex
 .NOTES
     Supports Windows 10/11, Windows Server 2016+
     Requires internet connectivity
@@ -21,7 +21,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 
 $script:RequiredNodeVersion = [version]"24.19.0"
-$script:PackageName = "@continuedev/cli"
+$script:PackageName = "@opencircuit/cli"
 $script:PackageVersion = "1.5.47"
 $script:CliCommand = "cn"
 $script:FnmInstalled = $false
@@ -269,7 +269,7 @@ function Install-Cli {
     $npmPrefix = npm config get prefix 2>$null
     if ($npmPrefix -and (Test-Path $npmPrefix)) {
         try {
-            $testFile = Join-Path $npmPrefix "_continue_test_write"
+            $testFile = Join-Path $npmPrefix "_ocircuit_test_write"
             [IO.File]::WriteAllText($testFile, "test")
             Remove-Item $testFile -Force
         } catch {

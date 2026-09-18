@@ -11,7 +11,7 @@ This repository provides a GitHub Action for automated PR reviews:
 Provides high-level PR assessment with overall feedback and recommendations.
 
 - **Path:** `brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351`
-- **Trigger:** `@continue-review`
+- **Trigger:** `@ocircuit-review`
 - **Output:** Summary comment with strengths, issues, and recommendations
 
 ## Quick Start
@@ -38,9 +38,9 @@ jobs:
     steps:
       - uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351
         with:
-          continue-api-key: ${{ secrets.CONTINUE_API_KEY }}
-          continue-org: "your-org-name"
-          continue-agent: "your-org-name/review-bot"
+          ocircuit-api-key: ${{ secrets.OCIRCUIT_API_KEY }}
+          ocircuit-org: "your-org-name"
+          ocircuit-agent: "your-org-name/review-bot"
 ```
 
 ## Inputs
@@ -49,20 +49,20 @@ The action accepts the following inputs:
 
 | Input              | Description                           | Required |
 | ------------------ | ------------------------------------- | -------- |
-| `continue-api-key` | API key for Continue service          | Yes      |
-| `continue-org`     | Organization for Continue config      | Yes      |
-| `continue-agent`   | Agent path (e.g., "myorg/review-bot") | Yes      |
+| `ocircuit-api-key` | API key for Continue service          | Yes      |
+| `ocircuit-org`     | Organization for Continue config      | Yes      |
+| `ocircuit-agent`   | Agent path (e.g., "myorg/review-bot") | Yes      |
 
 ## Setup Requirements
 
 ### 1. Continue API Key
 
-Add your Continue API key as a secret named `CONTINUE_API_KEY` in your repository:
+Add your Continue API key as a secret named `OCIRCUIT_API_KEY` in your repository:
 
 1. Go to your repository's Settings
 2. Navigate to Secrets and variables → Actions
 3. Click "New repository secret"
-4. Name: `CONTINUE_API_KEY`
+4. Name: `OCIRCUIT_API_KEY`
 5. Value: Your Continue API key
 
 ### 2. Continue Configuration
@@ -94,7 +94,7 @@ The action can be triggered in two ways:
 
 Team members can trigger reviews by commenting on any pull request:
 
-- `@continue-review` - Triggers a review
+- `@ocircuit-review` - Triggers a review
 
 ## Review Output
 
@@ -141,6 +141,6 @@ uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081
 
 For issues or questions:
 
-- [Continue Documentation](https://docs.continue.dev)
-- [GitHub Issues](https://github.com/continuedev/continue/issues)
-- [GitHub Discussions](https://github.com/continuedev/continue/discussions)
+- [Continue Documentation](/)
+- [GitHub Issues](https://github.com/open-circuit-dev/open-circuit/issues)
+- [GitHub Discussions](https://github.com/open-circuit-dev/open-circuit/discussions)

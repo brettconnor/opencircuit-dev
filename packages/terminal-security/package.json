@@ -1,5 +1,5 @@
 {
-  "name": "@continuedev/terminal-security",
+  "name": "@opencircuit/terminal-security",
   "version": "1.0.0",
   "description": "Terminal command security evaluation for Continue",
   "main": "dist/index.js",
@@ -11,7 +11,7 @@
     "build": "tsc",
     "clean": "rm -rf dist"
   },
-  "author": "Continue Dev, Inc",
+  "author": "Open Circuit",
   "license": "Apache-2.0",
   "allowScripts": {
     "esbuild@0.27.4": true

@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # Continue CLI Installer - Unix (macOS, Linux, WSL, Git Bash)
-# curl -fsSL https://continue.dev/install.sh | bash
+# curl -fsSL //install.sh | bash
 
 REQUIRED_NODE_VERSION="24.19.0"
-PACKAGE_NAME="@continuedev/cli"
+PACKAGE_NAME="@opencircuit/cli"
 PACKAGE_VERSION="1.5.47"
 CLI_COMMAND="cn"
 NETWORK_TIMEOUT=60

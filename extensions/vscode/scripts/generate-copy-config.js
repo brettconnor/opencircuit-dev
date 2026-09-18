@@ -8,35 +8,35 @@ const path = require("path");
 
 const { execCmdSync } = require("../../../scripts/util");
 
-const { continueDir } = require("./utils");
+const { ocircuitDir } = require("./utils");
 
 async function generateConfigYamlSchema() {
-  process.chdir(path.join(continueDir, "packages", "config-yaml"));
+  process.chdir(path.join(ocircuitDir, "packages", "config-yaml"));
   execCmdSync("npm install");
   execCmdSync("npm run build");
   execCmdSync("npm run generate-schema");
   fs.copyFileSync(
     path.join("schema", "config-yaml-schema.json"),
-    path.join(continueDir, "extensions", "vscode", "config-yaml-schema.json"),
+    path.join(ocircuitDir, "extensions", "vscode", "config-yaml-schema.json"),
   );
   console.log("[info] Generated config.yaml schema");
 }
 
 async function copyConfigSchema() {
-  process.chdir(path.join(continueDir, "extensions", "vscode"));
-  // Modify and copy for .continuerc.json
+  process.chdir(path.join(ocircuitDir, "extensions", "vscode"));
+  // Modify and copy for .ocircuitrc.json
   const schema = JSON.parse(fs.readFileSync("config_schema.json", "utf8"));
-  schema.$defs.SerializedContinueConfig.properties.mergeBehavior = {
+  schema.$defs.SerializedOCircuitConfig.properties.mergeBehavior = {
     type: "string",
     enum: ["merge", "overwrite"],
     default: "merge",
     title: "Merge behavior",
     markdownDescription:
-      "If set to 'merge', .continuerc.json will be applied on top of config.json (arrays and objects are merged). If set to 'overwrite', then every top-level property of .continuerc.json will overwrite that property from config.json.",
+      "If set to 'merge', .ocircuitrc.json will be applied on top of config.json (arrays and objects are merged). If set to 'overwrite', then every top-level property of .ocircuitrc.json will overwrite that property from config.json.",
     "x-intellij-html-description":
-      "<p>If set to <code>merge</code>, <code>.continuerc.json</code> will be applied on top of <code>config.json</code> (arrays and objects are merged). If set to <code>overwrite</code>, then every top-level property of <code>.continuerc.json</code> will overwrite that property from <code>config.json</code>.</p>",
+      "<p>If set to <code>merge</code>, <code>.ocircuitrc.json</code> will be applied on top of <code>config.json</code> (arrays and objects are merged). If set to <code>overwrite</code>, then every top-level property of <code>.ocircuitrc.json</code> will overwrite that property from <code>config.json</code>.</p>",
   };
-  fs.writeFileSync("continue_rc_schema.json", JSON.stringify(schema, null, 2));
+  fs.writeFileSync("ocircuit_rc_schema.json", JSON.stringify(schema, null, 2));
 }
 
 process.on("message", (msg) => {
@@ -78,7 +78,7 @@ async function generateAndCopyConfigYamlSchema() {
     });
   });
 
-  // Generate .continuerc.json schema
+  // Generate .ocircuitrc.json schema
   const copyConfigSchemaChild = fork(
     path.join(__dirname, "generate-copy-config.js"),
     {

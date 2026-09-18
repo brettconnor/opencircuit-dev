@@ -1,15 +1,15 @@
 import {
   ConfigValidationError,
   markdownToRule,
-} from "@continuedev/config-yaml";
+} from "@opencircuit/config-yaml";
 import { IDE, RuleWithSource } from "../..";
 import { PROMPTS_DIR_NAME, RULES_DIR_NAME } from "../../promptFiles";
 import { joinPathsToUri } from "../../util/uri";
-import { getAllDotContinueDefinitionFiles } from "../loadLocalAssistants";
+import { getAllDotOCircuitDefinitionFiles } from "../loadLocalAssistants";
 
 export const SUPPORTED_AGENT_FILES = ["AGENTS.md", "AGENT.md", "CLAUDE.md"];
 /**
- * Loads rules from markdown files in the .continue/rules and .continue/prompts directories
+ * Loads rules from markdown files in the .ocircuit/rules and .ocircuit/prompts directories
  * and agent files (AGENTS.md, AGENT.md, CLAUDE.md) at workspace root
  */
 export async function loadMarkdownRules(ide: IDE): Promise<{
@@ -54,12 +54,12 @@ export async function loadMarkdownRules(ide: IDE): Promise<{
     }
   }
 
-  // Load markdown files from both .continue/rules and .continue/prompts
+  // Load markdown files from both .ocircuit/rules and .ocircuit/prompts
   const dirsToCheck = [RULES_DIR_NAME, PROMPTS_DIR_NAME];
 
   for (const dirName of dirsToCheck) {
     try {
-      const markdownFiles = await getAllDotContinueDefinitionFiles(
+      const markdownFiles = await getAllDotOCircuitDefinitionFiles(
         ide,
         {
           includeGlobal: true,

@@ -6,8 +6,8 @@ import {
   PlatformClient,
   SecretResult,
   SecretType,
-} from "@continuedev/config-yaml";
-import { DefaultApiInterface } from "@continuedev/sdk/dist/api";
+} from "@opencircuit/config-yaml";
+import { DefaultApiInterface } from "@opencircuit/sdk/dist/api";
 import * as dotenv from "dotenv";
 
 import { env } from "./env.js";
@@ -61,11 +61,11 @@ export class CLIPlatformClient implements PlatformClient {
       return processEnvSecret;
     }
 
-    // Then check in priority order: ~/.continue/.env, <workspace>/.continue/.env, <workspace>/.env
+    // Then check in priority order: ~/.ocircuit/.env, <workspace>/.ocircuit/.env, <workspace>/.env
     const workspaceDir = process.cwd();
     const envPaths = [
-      path.join(env.continueHome, ".env"),
-      path.join(workspaceDir, ".continue", ".env"),
+      path.join(env.ocircuitHome, ".env"),
+      path.join(workspaceDir, ".ocircuit", ".env"),
       path.join(workspaceDir, ".env"),
     ];
 

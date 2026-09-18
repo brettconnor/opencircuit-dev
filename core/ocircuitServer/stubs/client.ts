@@ -1,10 +1,10 @@
 import type {
   ArtifactType,
   EmbeddingsCacheResponse,
-  IContinueServerClient,
+  IOCircuitServerClient,
 } from "../interface.js";
 
-export class ContinueServerClient implements IContinueServerClient {
+export class OCircuitServerClient implements IOCircuitServerClient {
   url: URL | undefined;
 
   constructor(

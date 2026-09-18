@@ -12,13 +12,13 @@ import {
 
 describe("Model Persistence Integration", () => {
   let testDir: string;
-  let originalContinueHome: string | undefined;
+  let originalOCircuitHome: string | undefined;
 
   beforeEach(() => {
     // Create a temporary directory for testing
-    testDir = fs.mkdtempSync(path.join(os.tmpdir(), "continue-test-"));
-    originalContinueHome = process.env.CONTINUE_GLOBAL_DIR;
-    process.env.CONTINUE_GLOBAL_DIR = testDir;
+    testDir = fs.mkdtempSync(path.join(os.tmpdir(), "ocircuit-test-"));
+    originalOCircuitHome = process.env.OCIRCUIT_GLOBAL_DIR;
+    process.env.OCIRCUIT_GLOBAL_DIR = testDir;
 
     // Clear GlobalContext for clean test state
     persistModelName(null);
@@ -29,10 +29,10 @@ describe("Model Persistence Integration", () => {
     if (fs.existsSync(testDir)) {
       fs.rmSync(testDir, { recursive: true });
     }
-    if (originalContinueHome) {
-      process.env.CONTINUE_GLOBAL_DIR = originalContinueHome;
+    if (originalOCircuitHome) {
+      process.env.OCIRCUIT_GLOBAL_DIR = originalOCircuitHome;
     } else {
-      delete process.env.CONTINUE_GLOBAL_DIR;
+      delete process.env.OCIRCUIT_GLOBAL_DIR;
     }
   });
 

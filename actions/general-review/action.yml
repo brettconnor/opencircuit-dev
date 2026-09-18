@@ -1,15 +1,15 @@
 name: "Continue PR Review"
 description: "Automated code review for pull requests using Continue CLI"
-author: "Continue Dev, Inc."
+author: "Open Circuit"
 
 inputs:
-  continue-api-key:
+  ocircuit-api-key:
     description: "API key for Continue service"
     required: true
-  continue-org:
+  ocircuit-org:
     description: "Organization for Continue config"
     required: true
-  continue-agent:
+  ocircuit-agent:
     description: 'Agent path to use (e.g., "myorg/review-bot")'
     required: true
 
@@ -62,7 +62,7 @@ runs:
             }
           } else if (context.eventName === 'issue_comment') {
             // Check if it's a PR comment with the trigger phrase
-            const hasTrigger = context.payload.comment.body.includes('@continue-review');
+            const hasTrigger = context.payload.comment.body.includes('@ocircuit-review');
             if (context.payload.issue.pull_request && hasTrigger) {
               const commenter = context.payload.comment.user.login;
               try {
@@ -91,7 +91,7 @@ runs:
                 }
               }
             } else {
-              skipReason = 'Comment does not contain @continue-review trigger, or is not on a PR';
+              skipReason = 'Comment does not contain @ocircuit-review trigger, or is not on a PR';
             }
           } else {
             skipReason = `Unsupported event type: ${context.eventName}`;
@@ -113,46 +113,46 @@ runs:
     - name: Install Continue CLI
       if: env.SHOULD_RUN == 'true'
       shell: bash
-      run: npm install -g @continuedev/cli@1.5.47
+      run: npm install -g @opencircuit/cli@1.5.47
 
     - name: Setup Action Scripts
       if: env.SHOULD_RUN == 'true'
       shell: bash
       run: |
         # Create directory for scripts
-        mkdir -p .continue-action-scripts
+        mkdir -p .ocircuit-action-scripts
 
         # Check if we're running in the Continue repo itself (scripts exist locally)
         if [ -f "actions/general-review/scripts/buildPrompt.js" ] && [ -f "actions/general-review/scripts/writeMarkdown.js" ]; then
           echo "Running in Continue repo - using local scripts from current checkout"
-          cp actions/general-review/scripts/buildPrompt.js .continue-action-scripts/buildPrompt.js
-          cp actions/general-review/scripts/writeMarkdown.js .continue-action-scripts/writeMarkdown.js
+          cp actions/general-review/scripts/buildPrompt.js .ocircuit-action-scripts/buildPrompt.js
+          cp actions/general-review/scripts/writeMarkdown.js .ocircuit-action-scripts/writeMarkdown.js
         else
           echo "Running in external repo - downloading scripts from Continue repo"
           
           # Download scripts from Continue repo
           echo "Downloading buildPrompt.js..."
           curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/actions/general-review/scripts/buildPrompt.js \
-            -o .continue-action-scripts/buildPrompt.js
+            -o .ocircuit-action-scripts/buildPrompt.js
           
           echo "Downloading writeMarkdown.js..."
           curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/actions/general-review/scripts/writeMarkdown.js \
-            -o .continue-action-scripts/writeMarkdown.js
+            -o .ocircuit-action-scripts/writeMarkdown.js
         fi
 
         # Verify scripts exist
-        if [ ! -f .continue-action-scripts/buildPrompt.js ]; then
+        if [ ! -f .ocircuit-action-scripts/buildPrompt.js ]; then
           echo "Error: buildPrompt.js not found"
           exit 1
         fi
 
-        if [ ! -f .continue-action-scripts/writeMarkdown.js ]; then
+        if [ ! -f .ocircuit-action-scripts/writeMarkdown.js ]; then
           echo "Error: writeMarkdown.js not found"
           exit 1
         fi
 
         echo "Scripts ready:"
-        ls -lh .continue-action-scripts/
+        ls -lh .ocircuit-action-scripts/
 
     - name: Post Initial Comment
       if: env.SHOULD_RUN == 'true'
@@ -160,7 +160,7 @@ runs:
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
       with:
         script: |
-          const marker = '<!-- continue-agent-review -->';
+          const marker = '<!-- ocircuit-agent-review -->';
 
           // Get PR number based on event type
           let prNumber;
@@ -200,7 +200,7 @@ runs:
           initialMessage += `- PR #${prNumber}\n\n`;
           initialMessage += `⏱️ This typically takes 1-2 minutes.\n\n`;
           initialMessage += `[View live progress →](${workflowRunUrl})\n\n`;
-          initialMessage += `---\n<!-- ${new Date().toISOString()} | Powered by Continue (https://continue.dev) -->`;
+          initialMessage += `---\n<!-- ${new Date().toISOString()} | Powered by Continue (/) -->`;
 
           if (existingComment) {
             // Check if comment is less than 1 hour old
@@ -257,16 +257,16 @@ runs:
         # Gather PR context and build prompt without heredocs
         gh pr diff "$PR_NUMBER" > pr_diff.txt
         gh pr view "$PR_NUMBER" --json title,author,body,files > pr_data.json
-        node .continue-action-scripts/buildPrompt.js "$PR_NUMBER"
+        node .ocircuit-action-scripts/buildPrompt.js "$PR_NUMBER"
         rm -f pr_data.json
 
     - name: Run Continue CLI Review
       if: env.SHOULD_RUN == 'true'
       shell: bash
       env:
-        CONTINUE_API_KEY: ${{ inputs.continue-api-key }}
-        CONTINUE_ORG: ${{ inputs.continue-org }}
-        CONTINUE_AGENT: ${{ inputs.continue-agent }}
+        OCIRCUIT_API_KEY: ${{ inputs.ocircuit-api-key }}
+        OCIRCUIT_ORG: ${{ inputs.ocircuit-org }}
+        OCIRCUIT_AGENT: ${{ inputs.ocircuit-agent }}
       run: |
         echo "Running Continue CLI with prompt:"
         echo "=================================="
@@ -276,22 +276,22 @@ runs:
         echo ""
 
         # Validate API key
-        if [ -z "$CONTINUE_API_KEY" ]; then
-          echo "Warning: CONTINUE_API_KEY environment variable is not set"
+        if [ -z "$OCIRCUIT_API_KEY" ]; then
+          echo "Warning: OCIRCUIT_API_KEY environment variable is not set"
           # Create fallback review and continue
-          node .continue-action-scripts/writeMarkdown.js code_review.md missing_api_key
+          node .ocircuit-action-scripts/writeMarkdown.js code_review.md missing_api_key
           echo "SKIP_CLI=true" >> $GITHUB_ENV
         else
           echo "SKIP_CLI=false" >> $GITHUB_ENV
         fi
 
         # Validate inputs to prevent command injection
-        if [[ ! "$CONTINUE_ORG" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        if [[ ! "$OCIRCUIT_ORG" =~ ^[a-zA-Z0-9_-]+$ ]]; then
           echo "Error: Invalid organization name. Must contain only alphanumeric characters, hyphens, and underscores."
           exit 1
         fi
 
-        if [[ ! "$CONTINUE_AGENT" =~ ^[a-zA-Z0-9_/-]+$ ]]; then
+        if [[ ! "$OCIRCUIT_AGENT" =~ ^[a-zA-Z0-9_/-]+$ ]]; then
           echo "Error: Invalid config path. Must contain only alphanumeric characters, hyphens, underscores, and forward slashes."
           exit 1
         fi
@@ -301,7 +301,7 @@ runs:
           echo "Testing Continue CLI..."
           if ! which cn > /dev/null 2>&1; then
             echo "Warning: Continue CLI not found or not working"
-            node .continue-action-scripts/writeMarkdown.js code_review.md cli_install_failed
+            node .ocircuit-action-scripts/writeMarkdown.js code_review.md cli_install_failed
             echo "SKIP_CLI=true" >> $GITHUB_ENV
           else
             echo "Continue CLI found at: $(which cn)"
@@ -311,18 +311,18 @@ runs:
 
         # Run the CLI with validated config and error handling
         if [ "$SKIP_CLI" != "true" ]; then
-          echo "Executing Continue CLI with config: $CONTINUE_ORG/$CONTINUE_AGENT"
+          echo "Executing Continue CLI with config: $OCIRCUIT_ORG/$OCIRCUIT_AGENT"
           
           # Write prompt to temp file for headless mode
-          PROMPT_FILE="/tmp/continue-review-$RANDOM.txt"
+          PROMPT_FILE="/tmp/ocircuit-review-$RANDOM.txt"
           cp review_prompt.txt "$PROMPT_FILE"
           echo "Prompt file: $PROMPT_FILE"
           echo "Prompt length: $(wc -c < "$PROMPT_FILE") characters"
           
           # Use timeout to prevent hanging (360 seconds = 6 minutes)
-          echo "Executing command: cn --agent $CONTINUE_ORG/$CONTINUE_AGENT -p @$PROMPT_FILE"
+          echo "Executing command: cn --agent $OCIRCUIT_ORG/$OCIRCUIT_AGENT -p @$PROMPT_FILE"
           
-          if timeout 360 cn --agent "$CONTINUE_ORG/$CONTINUE_AGENT" -p "@$PROMPT_FILE" > code_review_raw.md 2>cli_error.log; then
+          if timeout 360 cn --agent "$OCIRCUIT_ORG/$OCIRCUIT_AGENT" -p "@$PROMPT_FILE" > code_review_raw.md 2>cli_error.log; then
             echo "Continue CLI completed successfully"
             echo "Raw output length: $(wc -c < code_review_raw.md) characters"
             
@@ -337,7 +337,7 @@ runs:
             # Check if output is empty
             if [ ! -s code_review.md ]; then
               echo "Warning: Continue CLI returned empty output"
-              node .continue-action-scripts/writeMarkdown.js code_review.md empty_output
+              node .ocircuit-action-scripts/writeMarkdown.js code_review.md empty_output
             fi
           else
             echo "Error: Continue CLI command failed with exit code $?"
@@ -346,13 +346,13 @@ runs:
             
             # Check for specific error patterns
             if grep -q "not found\|ENOENT" cli_error.log 2>/dev/null; then
-              node .continue-action-scripts/writeMarkdown.js code_review.md cli_not_found
+              node .ocircuit-action-scripts/writeMarkdown.js code_review.md cli_not_found
             elif grep -q "config\|assistant" cli_error.log 2>/dev/null; then
-              node .continue-action-scripts/writeMarkdown.js code_review.md config_error
+              node .ocircuit-action-scripts/writeMarkdown.js code_review.md config_error
             elif grep -q "api\|auth" cli_error.log 2>/dev/null; then
-              node .continue-action-scripts/writeMarkdown.js code_review.md auth_error
+              node .ocircuit-action-scripts/writeMarkdown.js code_review.md auth_error
             else
-              node .continue-action-scripts/writeMarkdown.js code_review.md generic_failure
+              node .ocircuit-action-scripts/writeMarkdown.js code_review.md generic_failure
             fi
           fi
           
@@ -388,7 +388,7 @@ runs:
             } else {
               // Build direct link to workflow logs
               const workflowRunUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-              reviewContent = `⚠️ AI review completed but no review output was generated.\n\n**Likely cause:** Expired CONTINUE_API_KEY or missing continuedev/review-bot assistant\n\n[📋 View workflow logs](${workflowRunUrl}) for details.`;
+              reviewContent = `⚠️ AI review completed but no review output was generated.\n\n**Likely cause:** Expired OCIRCUIT_API_KEY or missing continuedev/review-bot assistant\n\n[📋 View workflow logs](${workflowRunUrl}) for details.`;
             }
 
             // Get PR number based on event type
@@ -407,10 +407,10 @@ runs:
 
             // Add footer with timestamp and branding
             const timestamp = new Date().toISOString();
-            reviewContent += `\n\n---\n<!-- ${timestamp} | Powered by Continue (https://continue.dev) -->`;
+            reviewContent += `\n\n---\n<!-- ${timestamp} | Powered by Continue (/) -->`;
 
             // Look for existing review comment to update (sticky comment)
-            const marker = '<!-- continue-agent-review -->';
+            const marker = '<!-- ocircuit-agent-review -->';
 
             // Try to get comment_id from the initial comment step
             const initialCommentId = '${{ steps.initial-comment.outputs.comment_id }}';

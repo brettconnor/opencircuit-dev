@@ -51,24 +51,24 @@ try {
 
     // Handle TypeScript paths and local packages
     alias: {
-      "@continuedev/config-yaml": resolve(
+      "@opencircuit/config-yaml": resolve(
         __dirname,
         "../../packages/config-yaml/dist/index.js",
       ),
-      "@continuedev/openai-adapters": resolve(
+      "@opencircuit/openai-adapters": resolve(
         __dirname,
         "../../packages/openai-adapters/dist/index.js",
       ),
       core: resolve(__dirname, "../../core"),
-      "@continuedev/fetch": resolve(
+      "@opencircuit/fetch": resolve(
         __dirname,
         "../../packages/fetch/dist/index.js",
       ),
-      "@continuedev/llm-info": resolve(
+      "@opencircuit/llm-info": resolve(
         __dirname,
         "../../packages/llm-info/dist/index.js",
       ),
-      "@continuedev/terminal-security": resolve(
+      "@opencircuit/terminal-security": resolve(
         __dirname,
         "../../packages/terminal-security/dist/index.js",
       ),

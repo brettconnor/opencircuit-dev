@@ -1,4 +1,4 @@
-import type { AssistantConfig } from "@continuedev/sdk";
+import type { AssistantConfig } from "@opencircuit/sdk";
 import React from "react";
 
 import type {

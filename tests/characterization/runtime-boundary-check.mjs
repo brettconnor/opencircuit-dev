@@ -22,7 +22,7 @@ const loaderReportPath = path.join(temporaryDirectory, "runtime-loader.json");
 const configPath = path.join(temporaryDirectory, "config.yaml");
 const onboardingPath = path.join(
   temporaryDirectory,
-  ".continue",
+  ".ocircuit",
   ".onboarding_complete",
 );
 
@@ -95,7 +95,7 @@ const childResult = await new Promise((resolve) => {
       cwd: cliDirectory,
       env: {
         ...process.env,
-        CONTINUE_CLI_TEST: "true",
+        OCIRCUIT_CLI_TEST: "true",
         FORCE_NO_TTY: "true",
         HOME: temporaryDirectory,
         USERPROFILE: temporaryDirectory,

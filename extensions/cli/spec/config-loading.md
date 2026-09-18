@@ -8,8 +8,8 @@ This document specifies the behavior of the CLI's configuration loading system, 
 
 **Authentication Source Priority:**
 
-1. **Environment Variable**: `CONTINUE_API_KEY` environment variable
-2. **File-Based Auth**: `~/.continue/auth.json` file
+1. **Environment Variable**: `OCIRCUIT_API_KEY` environment variable
+2. **File-Based Auth**: `~/.ocircuit/auth.json` file
 3. **No Authentication**: Unauthenticated mode
 
 **Authentication Effects:**
@@ -36,7 +36,7 @@ This document specifies the behavior of the CLI's configuration loading system, 
 
 3. **Default Resolution** (if no flag and no saved URI)
    - **Authenticated**: First user assistant from `listAssistants()`
-   - **config.yaml**: The saved config file at `~/.continue/config.yaml`
+   - **config.yaml**: The saved config file at `~/.ocircuit/config.yaml`
    - **Unauthenticated**: Falls back to `continuedev/default-cli-config`
 
 ## Authentication State Interactions
@@ -69,7 +69,7 @@ This document specifies the behavior of the CLI's configuration loading system, 
 - No config URI persistence
 - Direct fallback to default when no config specified
 
-### Environment Variable Auth (`CONTINUE_API_KEY`)
+### Environment Variable Auth (`OCIRCUIT_API_KEY`)
 
 **Behavior:**
 

@@ -34,8 +34,8 @@ secret stores:
 
 Compatibility-preserved Open Circuit variables include:
 
-- `CONTINUE_API_BASE`
-- `CONTINUE_API_KEY`
+- `OCIRCUIT_API_BASE`
+- `OCIRCUIT_API_KEY`
 
 Their historical names are package and workflow contracts and must not be
 renamed as a documentation-only change.

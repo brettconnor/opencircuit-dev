@@ -19,7 +19,7 @@ interface ConfigSelectorProps {
   onCancel: () => void;
 }
 
-const CONFIG_PATH = path.join(env.continueHome, "config.yaml");
+const CONFIG_PATH = path.join(env.ocircuitHome, "config.yaml");
 
 const ConfigSelector: React.FC<ConfigSelectorProps> = ({
   onSelect,

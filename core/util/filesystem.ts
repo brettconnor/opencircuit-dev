@@ -74,7 +74,7 @@ class FileSystemIde implements IDE {
       remoteConfigServerUrl: undefined,
       remoteConfigSyncPeriod: 60,
       userToken: "",
-      continueTestEnvironment: "none",
+      ocircuitTestEnvironment: "none",
       pauseCodebaseIndexOnStart: false,
     };
   }

@@ -24,7 +24,7 @@ const FIRST_TIME_DEFAULT_PROMPT_FILE = `# This is an example ".prompt" file
   # @os
   # @repo-map
 
-# To learn more, see the full .prompt file reference: https://docs.continue.dev/features/prompt-files
+# To learn more, see the full .prompt file reference: //features/prompt-files
 name: Example
 description: Example prompt file
 ---
@@ -48,7 +48,7 @@ export async function createNewPromptFileV2(
 
   const baseDirUri = joinPathsToUri(
     workspaceDirs[0],
-    promptPath ?? ".continue/prompts",
+    promptPath ?? ".ocircuit/prompts",
   );
 
   // Find the first available filename

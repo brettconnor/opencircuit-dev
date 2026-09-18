@@ -37,7 +37,7 @@ interface VsCodeCompletionInput {
   context: vscode.InlineCompletionContext;
 }
 
-export class ContinueCompletionProvider
+export class OCircuitCompletionProvider
   implements vscode.InlineCompletionItemProvider
 {
   private async onError(e: unknown) {
@@ -51,9 +51,7 @@ export class ContinueCompletionProvider
     vscode.window.showErrorMessage(message, "Documentation").then((val) => {
       if (val === "Documentation") {
         vscode.env.openExternal(
-          vscode.Uri.parse(
-            "https://docs.continue.dev/features/tab-autocomplete",
-          ),
+          vscode.Uri.parse("//features/tab-autocomplete"),
         );
       }
     });
@@ -595,7 +593,7 @@ export class ContinueCompletionProvider
         range,
         {
           title: "Log Autocomplete Outcome",
-          command: "continue.logAutocompleteOutcome",
+          command: "ocircuit.logAutocompleteOutcome",
           arguments: [completionId, this.completionProvider],
         },
       );
@@ -648,7 +646,7 @@ export class ContinueCompletionProvider
         }
 
         // Track this ghost text for acceptance detection.
-        // Ghost text acceptance can *technically* be acted upon in the command handler for "continue.logNextEditOutcomeAccept".
+        // Ghost text acceptance can *technically* be acted upon in the command handler for "ocircuit.logNextEditOutcomeAccept".
         // However, there is a substantial delay between accepting and logging, which introduces a lot of race conditions with different event handlers.
         // Plus, separating these concerns seems to make sense logically as well.
         GhostTextAcceptanceTracker.getInstance().setExpectedGhostTextAcceptance(
@@ -665,7 +663,7 @@ export class ContinueCompletionProvider
           ),
           {
             title: "Log Next Edit Outcome",
-            command: "continue.logNextEditOutcomeAccept",
+            command: "ocircuit.logNextEditOutcomeAccept",
             arguments: [completionId, this.nextEditLoggingService],
           },
         );

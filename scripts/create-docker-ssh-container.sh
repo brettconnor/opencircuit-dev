@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-container_name="${CONTAINER_NAME:-continue-ssh-container}"
+container_name="${CONTAINER_NAME:-ocircuit-ssh-container}"
 ssh_public_key_file="${SSH_PUBLIC_KEY_FILE:-$HOME/.ssh/id_ed25519.pub}"
 ssh_private_key_file="${SSH_PRIVATE_KEY_FILE:-${ssh_public_key_file%.pub}}"
 
@@ -42,12 +42,12 @@ EXPOSE 2222
 CMD ["/usr/sbin/sshd", "-D", "-e"]
 EOF
 
-docker build --tag continue-ubuntu-ssh "$docker_context"
+docker build --tag ocircuit-ubuntu-ssh "$docker_context"
 docker run --detach \
   --publish 127.0.0.1:2222:2222 \
   --name "$container_name" \
   --security-opt=no-new-privileges \
-  continue-ubuntu-ssh
+  ocircuit-ubuntu-ssh
 
 echo "Docker container ${container_name} is running on 127.0.0.1:2222"
 if [[ -r "$ssh_private_key_file" ]]; then

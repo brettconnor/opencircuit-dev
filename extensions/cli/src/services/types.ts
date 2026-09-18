@@ -4,10 +4,10 @@ import {
   ModelConfig,
   parseAgentFileRules,
   parseAgentFileTools,
-} from "@continuedev/config-yaml";
-import { BaseLlmApi } from "@continuedev/openai-adapters";
-import { AssistantConfig } from "@continuedev/sdk";
-import { DefaultApiInterface } from "@continuedev/sdk/dist/api/dist/index.js";
+} from "@opencircuit/config-yaml";
+import { BaseLlmApi } from "@opencircuit/openai-adapters";
+import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
+import { DefaultApiInterface } from "@opencircuit/sdk/dist/api/dist/index.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 import type { AuthConfig } from "../auth/workos.js";

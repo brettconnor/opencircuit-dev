@@ -21,7 +21,7 @@ irm https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4
 Or install with npm if you have Node.js 20+:
 
 ```bash
-npm i -g @continuedev/cli@1.5.47
+npm i -g @opencircuit/cli@1.5.47
 ```
 
 ## Usage
@@ -80,7 +80,7 @@ cn ls --json
 
 ## Environment Variables
 
-- `CONTINUE_CLI_DISABLE_COMMIT_SIGNATURE`: Disable adding the Continue commit signature to generated commit messages
+- `OCIRCUIT_CLI_DISABLE_COMMIT_SIGNATURE`: Disable adding the Continue commit signature to generated commit messages
 - `FORCE_NO_TTY`: Force TTY-less mode, prevents stdin reading (useful for testing and automation)
 
 ## Commands

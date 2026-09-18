@@ -2,7 +2,7 @@
 alwaysApply: false
 ---
 
-# Continue Development Data (Dev Data) Guide
+# Open Circuitelopment Data (Dev Data) Guide
 
 ## Overview
 
@@ -17,8 +17,8 @@ Development data (dev data) captures detailed information about how developers i
 
 ### Storage Locations
 
-- **Default storage**: `~/.continue/dev_data/`
-- **Event files**: `~/.continue/dev_data/{version}/{eventName}.jsonl`
+- **Default storage**: `~/.ocircuit/dev_data/`
+- **Event files**: `~/.ocircuit/dev_data/{version}/{eventName}.jsonl`
 
 ## Event Types and Schemas
 
@@ -90,7 +90,7 @@ Dev data is configured through `data` blocks in your Continue config:
 ```yaml
 data:
   - name: "Local Development Data"
-    destination: "file:///Users/developer/.continue/dev_data"
+    destination: "file:///Users/developer/.ocircuit/dev_data"
     schema: "0.2.0"
     level: "all"
     events: ["autocomplete", "chatInteraction", "editOutcome"]
@@ -142,7 +142,7 @@ data:
 
 ### Debugging Dev Data Issues
 
-1. **Check local storage**: Verify files are being created in `~/.continue/dev_data/`
+1. **Check local storage**: Verify files are being created in `~/.ocircuit/dev_data/`
 2. **Validate schemas**: Ensure event data matches expected schema format
 3. **Review configuration**: Check `data` blocks in Continue config
 4. **Test endpoints**: Verify remote endpoints are reachable and accepting data

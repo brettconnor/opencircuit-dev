@@ -6,11 +6,11 @@ import {
   McpJsonConfig,
   mcpServersJsonSchema,
   RequestOptions,
-} from "@continuedev/config-yaml";
+} from "@opencircuit/config-yaml";
 import * as JSONC from "comment-json";
 import ignore from "ignore";
 import { IDE, InternalMcpOptions } from "../../..";
-import { convertYamlMcpConfigToInternalMcpOptions } from "../../../config/yaml/yamlToContinueConfig";
+import { convertYamlMcpConfigToInternalMcpOptions } from "../../../config/yaml/yamlToOCircuitConfig";
 import {
   DEFAULT_IGNORE_DIRS,
   DEFAULT_IGNORE_FILETYPES,
@@ -22,7 +22,7 @@ import { localPathToUri } from "../../../util/pathToUri";
 import { getUriPathBasename, joinPathsToUri } from "../../../util/uri";
 
 /**
- * Loads MCP configs from JSON files in ~/.continue/mcpServers and workspace .continue/mcpServers
+ * Loads MCP configs from JSON files in ~/.ocircuit/mcpServers and workspace .ocircuit/mcpServers
  */
 export async function loadJsonMcpConfigs(
   ide: IDE,
@@ -37,7 +37,7 @@ export async function loadJsonMcpConfigs(
   // Get dirs
   const workspaceDirs = await ide.getWorkspaceDirs();
   const mcpDirs = workspaceDirs.map((dir) =>
-    joinPathsToUri(dir, ".continue", "mcpServers"),
+    joinPathsToUri(dir, ".ocircuit", "mcpServers"),
   );
   if (includeGlobal) {
     mcpDirs.push(localPathToUri(getGlobalFolderWithName("mcpServers")));

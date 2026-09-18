@@ -1,4 +1,4 @@
-import { ContinueConfig } from "core";
+import { OCircuitConfig } from "core";
 import * as vscode from "vscode";
 
 import { VerticalDiffCodeLens } from "../../diff/vertical/manager";
@@ -37,7 +37,7 @@ let downloadYamlExtensionCodeLensDisposable: vscode.Disposable | undefined =
  * @param context - The VS Code extension context
  */
 function registerQuickActionsProvider(
-  config: ContinueConfig,
+  config: OCircuitConfig,
   context: vscode.ExtensionContext,
 ) {
   if (quickActionsCodeLensDisposable) {
@@ -78,7 +78,7 @@ function registerQuickActionsProvider(
 export function registerAllCodeLensProviders(
   context: vscode.ExtensionContext,
   editorToVerticalDiffCodeLens: Map<string, VerticalDiffCodeLens[]>,
-  config: ContinueConfig | undefined,
+  config: OCircuitConfig | undefined,
 ) {
   if (verticalPerLineCodeLensProvider) {
     verticalPerLineCodeLensProvider.dispose();

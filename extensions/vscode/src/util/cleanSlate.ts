@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { getContinueGlobalPath } from "core/util/paths";
+import { getOCircuitGlobalPath } from "core/util/paths";
 import { ExtensionContext } from "vscode";
 
 /**
@@ -8,10 +8,10 @@ import { ExtensionContext } from "vscode";
  */
 export function cleanSlate(context: ExtensionContext) {
   // Commented just to be safe
-  // // Remove ~/.continue
-  // const continuePath = getContinueGlobalPath();
-  // if (fs.existsSync(continuePath)) {
-  //   fs.rmSync(continuePath, { recursive: true, force: true });
+  // // Remove ~/.ocircuit
+  // const ocircuitPath = getOCircuitGlobalPath();
+  // if (fs.existsSync(ocircuitPath)) {
+  //   fs.rmSync(ocircuitPath, { recursive: true, force: true });
   // }
   // // Clear extension's globalState
   // context.globalState.keys().forEach((key) => {

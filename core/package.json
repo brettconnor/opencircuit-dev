@@ -1,7 +1,7 @@
 {
-  "name": "@continuedev/core",
+  "name": "@opencircuit/core",
   "version": "1.1.0",
-  "description": "The Continue Core contains functionality that can be shared across web, VS Code, or Node.js",
+  "description": "The Open Circuit Core contains functionality that can be shared across web, VS Code, or Node.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest",
@@ -17,7 +17,7 @@
     "test:providers:deletion-gate": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath llm/llm.test.ts"
   },
   "type": "module",
-  "author": "Continue Dev, Inc",
+  "author": "Open Circuit",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/preset-env": "^7.24.7",
@@ -63,12 +63,12 @@
     "@aws-sdk/client-bedrock-runtime": "^3.931.0",
     "@aws-sdk/client-sagemaker-runtime": "^3.894.0",
     "@aws-sdk/credential-providers": "^3.974.0",
-    "@continuedev/config-types": "^1.0.14",
-    "@continuedev/config-yaml": "file:../packages/config-yaml",
-    "@continuedev/fetch": "file:../packages/fetch",
-    "@continuedev/llm-info": "file:../packages/llm-info",
-    "@continuedev/openai-adapters": "file:../packages/openai-adapters",
-    "@continuedev/terminal-security": "file:../packages/terminal-security",
+    "@opencircuit/config-types": "^1.0.14",
+    "@opencircuit/config-yaml": "file:../packages/config-yaml",
+    "@opencircuit/fetch": "file:../packages/fetch",
+    "@opencircuit/llm-info": "file:../packages/llm-info",
+    "@opencircuit/openai-adapters": "file:../packages/openai-adapters",
+    "@opencircuit/terminal-security": "file:../packages/terminal-security",
     "@modelcontextprotocol/sdk": "^1.25.2",
     "@mozilla/readability": "^0.6.0",
     "@octokit/rest": "^20.1.1",

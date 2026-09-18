@@ -1,10 +1,7 @@
 import * as fs from "fs";
 
-import {
-  validateMultiEdit,
-  executeMultiFindAndReplace,
-} from "core/editing.js";
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { validateMultiEdit, executeMultiFindAndReplace } from "core/editing.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
 import {
@@ -170,11 +167,11 @@ WARNINGS:
 
       return `Successfully edited ${args.file_path} with ${args.editCount} edit${args.editCount === 1 ? "" : "s"}\nDiff:\n${diff}`;
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
-      throw new ContinueError(
-        ContinueErrorReason.FileWriteError,
+      throw new OCircuitError(
+        OCircuitErrorReason.FileWriteError,
         `Error: failed to edit ${args.file_path}: ${
           error instanceof Error ? error.message : String(error)
         }`,

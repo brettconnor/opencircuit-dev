@@ -1,6 +1,6 @@
-import { ModelRole } from "@continuedev/config-yaml";
+import { ModelRole } from "@opencircuit/config-yaml";
 
-import { ContinueConfig, ILLM } from "..";
+import { OCircuitConfig, ILLM } from "..";
 import { LLMConfigurationStatuses } from "../llm/constants";
 import {
   GlobalContext,
@@ -8,10 +8,10 @@ import {
 } from "../util/GlobalContext";
 
 export function rectifySelectedModelsFromGlobalContext(
-  continueConfig: ContinueConfig,
+  ocircuitConfig: OCircuitConfig,
   profileId: string,
-): ContinueConfig {
-  const configCopy = { ...continueConfig };
+): OCircuitConfig {
+  const configCopy = { ...ocircuitConfig };
 
   const globalContext = new GlobalContext();
   const currentSelectedModels = globalContext.get("selectedModelsByProfileId");
@@ -35,7 +35,7 @@ export function rectifySelectedModelsFromGlobalContext(
     const currentSelection = currentForProfile[role] ?? null;
 
     if (currentSelection) {
-      const match = continueConfig.modelsByRole[role].find(
+      const match = ocircuitConfig.modelsByRole[role].find(
         (m) => m.title === currentSelection,
       );
       if (match) {
@@ -43,8 +43,8 @@ export function rectifySelectedModelsFromGlobalContext(
       }
     }
 
-    if (!newModel && continueConfig.modelsByRole[role].length > 0) {
-      newModel = continueConfig.modelsByRole[role][0];
+    if (!newModel && ocircuitConfig.modelsByRole[role].length > 0) {
+      newModel = ocircuitConfig.modelsByRole[role][0];
     }
 
     if (!(currentSelection === (newModel?.title ?? null))) {

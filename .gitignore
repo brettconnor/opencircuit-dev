@@ -136,13 +136,13 @@ codeql
 **/**/.qodana
 **/**/build
 
-continue_server.build
-continue_server.dist
+ocircuit_server.build
+ocircuit_server.dist
 
 Icon
 Icon?
 
-.continuerc.json
+.ocircuitrc.json
 .aider*
 
 *.notes.md

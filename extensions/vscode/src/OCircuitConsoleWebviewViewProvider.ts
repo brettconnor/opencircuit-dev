@@ -14,10 +14,10 @@ interface FromConsoleView {
 // oldest and also send a message to the view to do the same.
 const MAX_INTERACTIONS = 50;
 
-export class ContinueConsoleWebviewViewProvider
+export class OCircuitConsoleWebviewViewProvider
   implements vscode.WebviewViewProvider
 {
-  public static readonly viewType = "continue.continueConsoleView";
+  public static readonly viewType = "ocircuit.ocircuitConsoleView";
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,

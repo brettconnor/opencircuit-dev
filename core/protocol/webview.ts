@@ -1,6 +1,6 @@
-import { ConfigResult } from "@continuedev/config-yaml";
+import { ConfigResult } from "@opencircuit/config-yaml";
 import type {
-  BrowserSerializedContinueConfig,
+  BrowserSerializedOCircuitConfig,
   ContextItemWithId,
   ContextProviderName,
   IndexingProgressUpdate,
@@ -11,7 +11,7 @@ import type { ProfileDescription } from "../config/ProfileLifecycleManager.js";
 export type ToWebviewFromIdeOrCoreProtocol = {
   configUpdate: [
     {
-      result: ConfigResult<BrowserSerializedContinueConfig>;
+      result: ConfigResult<BrowserSerializedOCircuitConfig>;
       profileId: string | null;
       profiles: ProfileDescription[];
     },
@@ -27,7 +27,7 @@ export type ToWebviewFromIdeOrCoreProtocol = {
     void,
   ];
   didCloseFiles: [{ uris: string[] }, void];
-  isContinueInputFocused: [undefined, boolean];
+  isOCircuitInputFocused: [undefined, boolean];
   addContextItem: [
     {
       historyIndex: number;

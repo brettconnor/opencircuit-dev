@@ -77,7 +77,7 @@ mod tests {
     }
 
     #[test]
-    fn test_in_continue_repo() -> io::Result<()> {
+    fn test_in_ocircuit_repo() -> io::Result<()> {
         // Get the current directory
         let current_dir = std::env::current_dir()?;
         let parent_dir = current_dir.parent().unwrap();

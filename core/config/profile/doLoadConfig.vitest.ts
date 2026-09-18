@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { PackageIdentifier } from "@continuedev/config-yaml";
+import type { PackageIdentifier } from "@opencircuit/config-yaml";
 
 // Mock heavy dependencies before importing doLoadConfig
 const stubConfig = {
@@ -27,16 +27,16 @@ const mockLoadJson = vi.fn().mockResolvedValue({
 });
 
 vi.mock("../yaml/loadYaml", () => ({
-  loadContinueConfigFromYaml: (...args: any[]) => mockLoadYaml(...args),
+  loadOCircuitConfigFromYaml: (...args: any[]) => mockLoadYaml(...args),
 }));
 vi.mock("../load", () => ({
-  loadContinueConfigFromJson: (...args: any[]) => mockLoadJson(...args),
+  loadOCircuitConfigFromJson: (...args: any[]) => mockLoadJson(...args),
 }));
 vi.mock("../migrateSharedConfig", () => ({
   migrateJsonSharedConfig: vi.fn(),
 }));
-vi.mock("../getWorkspaceContinueRuleDotFiles", () => ({
-  getWorkspaceContinueRuleDotFiles: vi
+vi.mock("../getWorkspaceOCircuitRuleDotFiles", () => ({
+  getWorkspaceOCircuitRuleDotFiles: vi
     .fn()
     .mockResolvedValue({ rules: [], errors: [] }),
 }));
@@ -115,7 +115,7 @@ describe("doLoadConfig pre-read content bypass", () => {
     const packageIdentifier: PackageIdentifier = {
       uriType: "file",
       fileUri:
-        "vscode-remote://wsl+Ubuntu/home/user/.continue/agents/test.yaml",
+        "vscode-remote://wsl+Ubuntu/home/user/.ocircuit/agents/test.yaml",
       content: "name: Test\nversion: 1.0.0\nschema: v1\n",
     };
 
@@ -140,7 +140,7 @@ describe("doLoadConfig pre-read content bypass", () => {
     const packageIdentifier: PackageIdentifier = {
       uriType: "file",
       fileUri:
-        "vscode-remote://wsl+Ubuntu/home/user/.continue/agents/test.yaml",
+        "vscode-remote://wsl+Ubuntu/home/user/.ocircuit/agents/test.yaml",
     };
 
     await doLoadConfig({

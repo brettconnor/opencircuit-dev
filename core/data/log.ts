@@ -6,13 +6,13 @@ import {
   DataLogLevel,
   DevDataLogEvent,
   devDataVersionedSchemas,
-} from "@continuedev/config-yaml";
-import { fetchwithRequestOptions } from "@continuedev/fetch";
+} from "@opencircuit/config-yaml";
+import { fetchwithRequestOptions } from "@opencircuit/fetch";
 import * as URI from "uri-js";
 import { fileURLToPath } from "url";
 import { AnyZodObject } from "zod";
 import { Core } from "../core.js";
-import { ContinueConfig, IdeInfo, IdeSettings } from "../index.js";
+import { OCircuitConfig, IdeInfo, IdeSettings } from "../index.js";
 import { getDevDataFilePath } from "../util/paths.js";
 import { joinPathsToUri } from "../util/uri.js";
 
@@ -160,7 +160,7 @@ export class DataLogger {
   }
 
   async logToOneDestination(
-    dataConfig: NonNullable<ContinueConfig["data"]>[number],
+    dataConfig: NonNullable<OCircuitConfig["data"]>[number],
     event: DevDataLogEvent,
   ) {
     try {

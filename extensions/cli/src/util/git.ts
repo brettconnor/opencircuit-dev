@@ -64,8 +64,8 @@ export function isGitHubActions(): boolean {
 /**
  * Check if running in Continue remote agents
  */
-export function isContinueRemoteAgent(): boolean {
-  return process.env.CONTINUE_REMOTE === "true";
+export function isOCircuitRemoteAgent(): boolean {
+  return process.env.OCIRCUIT_REMOTE === "true";
 }
 
 /**

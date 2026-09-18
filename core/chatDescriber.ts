@@ -2,7 +2,7 @@
 //
 // This re-exports the existing implementation in `util/chatDescriber.ts`
 // under a root-relative path so it can be consumed as a durable subpath
-// (`@continuedev/core/chatDescriber`) without requiring a package.json
+// (`@opencircuit/core/chatDescriber`) without requiring a package.json
 // `exports` map yet. See docs/reduction/artifacts/phase3/item2-evidence.md
 // for the approved API proposal and
 // docs/reduction/artifacts/phase3/item4-errors-group.md for the migration

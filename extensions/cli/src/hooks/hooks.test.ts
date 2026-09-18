@@ -135,7 +135,7 @@ describe("hookConfig", () => {
     let tmpDir: string;
     let fakeHome: string;
     let projectDir: string;
-    let originalContinueGlobalDir: string | undefined;
+    let originalOCircuitGlobalDir: string | undefined;
 
     beforeEach(() => {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "hooks-test-"));
@@ -144,17 +144,17 @@ describe("hookConfig", () => {
       projectDir = path.join(tmpDir, "project");
       fs.mkdirSync(fakeHome, { recursive: true });
       fs.mkdirSync(projectDir, { recursive: true });
-      // Override CONTINUE_GLOBAL_DIR so that user-global settings
-      // from the real ~/.continue/settings.json don't leak into tests
-      originalContinueGlobalDir = process.env.CONTINUE_GLOBAL_DIR;
-      process.env.CONTINUE_GLOBAL_DIR = path.join(fakeHome, ".continue");
+      // Override OCIRCUIT_GLOBAL_DIR so that user-global settings
+      // from the real ~/.ocircuit/settings.json don't leak into tests
+      originalOCircuitGlobalDir = process.env.OCIRCUIT_GLOBAL_DIR;
+      process.env.OCIRCUIT_GLOBAL_DIR = path.join(fakeHome, ".ocircuit");
     });
 
     afterEach(() => {
-      if (originalContinueGlobalDir === undefined) {
-        delete process.env.CONTINUE_GLOBAL_DIR;
+      if (originalOCircuitGlobalDir === undefined) {
+        delete process.env.OCIRCUIT_GLOBAL_DIR;
       } else {
-        process.env.CONTINUE_GLOBAL_DIR = originalContinueGlobalDir;
+        process.env.OCIRCUIT_GLOBAL_DIR = originalOCircuitGlobalDir;
       }
       fs.rmSync(tmpDir, { recursive: true, force: true });
     });
@@ -170,8 +170,8 @@ describe("hookConfig", () => {
       expect(result.disabled).toBe(false);
     });
 
-    it("loads hooks from .continue/settings.json", () => {
-      const settingsDir = path.join(projectDir, ".continue");
+    it("loads hooks from .ocircuit/settings.json", () => {
+      const settingsDir = path.join(projectDir, ".ocircuit");
       fs.mkdirSync(settingsDir, { recursive: true });
       fs.writeFileSync(
         path.join(settingsDir, "settings.json"),
@@ -227,11 +227,11 @@ describe("hookConfig", () => {
         }),
       );
 
-      // .continue/settings.json (project-level)
-      const continueDir = path.join(projectDir, ".continue");
-      fs.mkdirSync(continueDir, { recursive: true });
+      // .ocircuit/settings.json (project-level)
+      const ocircuitDir = path.join(projectDir, ".ocircuit");
+      fs.mkdirSync(ocircuitDir, { recursive: true });
       fs.writeFileSync(
-        path.join(continueDir, "settings.json"),
+        path.join(ocircuitDir, "settings.json"),
         JSON.stringify({
           hooks: {
             PreToolUse: [
@@ -247,7 +247,7 @@ describe("hookConfig", () => {
     });
 
     it("respects disableAllHooks", () => {
-      const settingsDir = path.join(projectDir, ".continue");
+      const settingsDir = path.join(projectDir, ".ocircuit");
       fs.mkdirSync(settingsDir, { recursive: true });
       fs.writeFileSync(
         path.join(settingsDir, "settings.json"),
@@ -268,7 +268,7 @@ describe("hookConfig", () => {
     });
 
     it("handles malformed settings files gracefully", () => {
-      const settingsDir = path.join(projectDir, ".continue");
+      const settingsDir = path.join(projectDir, ".ocircuit");
       fs.mkdirSync(settingsDir, { recursive: true });
       fs.writeFileSync(
         path.join(settingsDir, "settings.json"),
@@ -828,14 +828,14 @@ describeUnix("hookRunner", () => {
   });
 
   describe("runHooks - environment variables", () => {
-    it("sets CONTINUE_PROJECT_DIR and CLAUDE_PROJECT_DIR env vars", async () => {
+    it("sets OCIRCUIT_PROJECT_DIR and CLAUDE_PROJECT_DIR env vars", async () => {
       const config: HooksConfig = {
         PreToolUse: [
           {
             hooks: [
               {
                 type: "command",
-                command: 'echo "$CONTINUE_PROJECT_DIR|$CLAUDE_PROJECT_DIR"',
+                command: 'echo "$OCIRCUIT_PROJECT_DIR|$CLAUDE_PROJECT_DIR"',
               },
             ],
           },

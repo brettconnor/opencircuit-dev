@@ -1,10 +1,10 @@
 import * as JSONC from "comment-json";
-import { ContinueRcJson, FileType, IDE } from "../..";
+import { OCircuitRcJson, FileType, IDE } from "../..";
 import { joinPathsToUri } from "../../util/uri";
 
 export async function getWorkspaceRcConfigs(
   ide: IDE,
-): Promise<ContinueRcJson[]> {
+): Promise<OCircuitRcJson[]> {
   try {
     const workspaces = await ide.getWorkspaceDirs();
     const rcFiles = await Promise.all(
@@ -15,7 +15,7 @@ export async function getWorkspaceRcConfigs(
             (entry) =>
               (entry[1] === (1 as FileType.File) ||
                 entry[1] === (64 as FileType.SymbolicLink)) &&
-              entry[0].endsWith(".continuerc.json"),
+              entry[0].endsWith(".ocircuitrc.json"),
           )
           .map((entry) => joinPathsToUri(dir, entry[0]));
         return await Promise.all(rcFiles.map(ide.readFile));
@@ -23,7 +23,7 @@ export async function getWorkspaceRcConfigs(
     );
     return rcFiles
       .flat()
-      .map((file) => JSONC.parse(file) as unknown as ContinueRcJson);
+      .map((file) => JSONC.parse(file) as unknown as OCircuitRcJson);
   } catch (e) {
     console.debug("Failed to load workspace configs: ", e);
     return [];

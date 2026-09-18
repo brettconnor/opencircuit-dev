@@ -1,11 +1,11 @@
-import { getContinueRcPath, getTsConfigPath } from "core/util/paths";
+import { getOCircuitRcPath, getTsConfigPath } from "core/util/paths";
 import * as vscode from "vscode";
 
 import { VsCodeExtension } from "../extension/VsCodeExtension";
 import { isUnsupportedPlatform } from "../util/util";
 
 import { GlobalContext } from "core/util/GlobalContext";
-import { VsCodeContinueApi } from "./api";
+import { VsCodeOCircuitApi } from "./api";
 import setupInlineTips from "./InlineTipManager";
 
 export async function activateExtension(context: vscode.ExtensionContext) {
@@ -26,7 +26,7 @@ export async function activateExtension(context: vscode.ExtensionContext) {
 
   // Add necessary files
   getTsConfigPath();
-  getContinueRcPath();
+  getOCircuitRcPath();
 
   // Register commands and providers
   setupInlineTips(context);
@@ -39,7 +39,7 @@ export async function activateExtension(context: vscode.ExtensionContext) {
   }
 
   // Register config.yaml schema by removing old entries and adding new one (uri.fsPath changes with each version)
-  const yamlMatcher = ".continue/**/*.yaml";
+  const yamlMatcher = ".ocircuit/**/*.yaml";
   const yamlConfig = vscode.workspace.getConfiguration("yaml");
   const yamlSchemas = yamlConfig.get<object>("schemas", {});
 
@@ -64,8 +64,8 @@ export async function activateExtension(context: vscode.ExtensionContext) {
     );
   }
 
-  const api = new VsCodeContinueApi(vscodeExtension);
-  const continuePublicApi = {
+  const api = new VsCodeOCircuitApi(vscodeExtension);
+  const ocircuitPublicApi = {
     registerCustomContextProvider: api.registerCustomContextProvider.bind(api),
   };
 
@@ -73,8 +73,8 @@ export async function activateExtension(context: vscode.ExtensionContext) {
   // or entire extension for testing
   return process.env.NODE_ENV === "test"
     ? {
-        ...continuePublicApi,
+        ...ocircuitPublicApi,
         extension: vscodeExtension,
       }
-    : continuePublicApi;
+    : ocircuitPublicApi;
 }

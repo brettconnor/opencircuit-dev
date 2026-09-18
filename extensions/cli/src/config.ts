@@ -1,13 +1,13 @@
-import { AssistantUnrolled, ModelConfig } from "@continuedev/config-yaml";
+import { AssistantUnrolled, ModelConfig } from "@opencircuit/config-yaml";
 import {
   BaseLlmApi,
   constructLlmApi,
   LLMConfig,
-} from "@continuedev/openai-adapters";
+} from "@opencircuit/openai-adapters";
 import {
   Configuration,
   DefaultApi,
-} from "@continuedev/sdk/dist/api/dist/index.js";
+} from "@opencircuit/sdk/dist/api/dist/index.js";
 
 import { AuthConfig } from "./auth/workos.js";
 import { env } from "./env.js";
@@ -33,7 +33,7 @@ function _mergeUserAgentIntoRequestOptions(
     headers: {
       ...requestOptions?.headers,
       "user-agent": getUserAgent(),
-      "x-continue-unique-id": getUniqueId(),
+      "x-ocircuit-unique-id": getUniqueId(),
     },
   };
 }

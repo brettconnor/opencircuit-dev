@@ -43,7 +43,7 @@ validation profile.
 
 The retained product is the CLI, VS Code extension/VSIX, Core, and their shared
 packages. Preserve historical
-`@continuedev/*` package names and `CONTINUE_*` environment variables when
+`@opencircuit/*` package names and `OCIRCUIT_*` environment variables when
 compatibility requires them.
 
 ## Contributor agreement

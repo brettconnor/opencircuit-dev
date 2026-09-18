@@ -242,11 +242,11 @@ class VsCodeIde implements IDE {
 
   async isTelemetryEnabled(): Promise<boolean> {
     const globalEnabled = vscode.env.isTelemetryEnabled;
-    const continueEnabled: boolean =
+    const ocircuitEnabled: boolean =
       (await vscode.workspace
         .getConfiguration(EXTENSION_NAME)
         .get("telemetryEnabled")) ?? true;
-    return globalEnabled && continueEnabled;
+    return globalEnabled && ocircuitEnabled;
   }
 
   isWorkspaceRemote(): Promise<boolean> {
@@ -484,7 +484,7 @@ class VsCodeIde implements IDE {
 
       // IMPORTANT: findFiles automatically accounts for .gitignore
       const ignoreFiles = await vscode.workspace.findFiles(
-        "**/.continueignore",
+        "**/.ocircuitignore",
         null,
       );
 
@@ -561,7 +561,7 @@ class VsCodeIde implements IDE {
           "--iglob",
           pattern,
           "--ignore-file",
-          ".continueignore",
+          ".ocircuitignore",
           "--ignore-file",
           ".gitignore",
           "--glob",
@@ -593,7 +593,7 @@ class VsCodeIde implements IDE {
       const dirResults = await this.runRipgrepQuery(dir, [
         "-i", // Case-insensitive search
         "--ignore-file",
-        ".continueignore",
+        ".ocircuitignore",
         "--ignore-file",
         ".gitignore",
         "-C",
@@ -697,7 +697,7 @@ class VsCodeIde implements IDE {
         60,
       ),
       userToken: settings.get<string>("userToken", ""),
-      continueTestEnvironment: "production",
+      ocircuitTestEnvironment: "production",
       pauseCodebaseIndexOnStart: settings.get<boolean>(
         "pauseCodebaseIndexOnStart",
         false,

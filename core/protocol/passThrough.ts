@@ -95,7 +95,7 @@ export const CORE_TO_WEBVIEW_PASS_THROUGH: (keyof ToWebviewFromCoreProtocol)[] =
     "indexing/statusUpdate", // Docs, etc.
     "addContextItem",
     "refreshSubmenuItems",
-    "isContinueInputFocused",
+    "isOCircuitInputFocused",
     "setTTSActive",
     "getWebviewHistoryLength",
     "getCurrentSessionId",

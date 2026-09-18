@@ -14,7 +14,7 @@ const SESSION_ID = crypto.randomBytes(4).toString("hex");
 
 // Get log directory
 function getLogDir(): string {
-  const logDir = path.join(env.continueHome, "logs");
+  const logDir = path.join(env.ocircuitHome, "logs");
 
   // Create directory if it doesn't exist
   if (!fs.existsSync(logDir)) {

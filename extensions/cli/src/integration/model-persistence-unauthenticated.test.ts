@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
-import { AssistantUnrolled, ModelConfig } from "@continuedev/config-yaml";
+import { AssistantUnrolled, ModelConfig } from "@opencircuit/config-yaml";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { getModelName, updateModelName } from "../auth/workos.js";
@@ -18,7 +18,7 @@ vi.mock("../config.js");
 
 describe("Model Persistence (Hub auth removed)", () => {
   let testDir: string;
-  let originalContinueHome: string | undefined;
+  let originalOCircuitHome: string | undefined;
   let mockAssistant: AssistantUnrolled;
   const mockLlmApi = { complete: vi.fn(), stream: vi.fn() };
 
@@ -26,9 +26,9 @@ describe("Model Persistence (Hub auth removed)", () => {
     vi.clearAllMocks();
 
     // Create a temporary directory for testing
-    testDir = fs.mkdtempSync(path.join(os.tmpdir(), "continue-test-"));
-    originalContinueHome = process.env.CONTINUE_GLOBAL_DIR;
-    process.env.CONTINUE_GLOBAL_DIR = testDir;
+    testDir = fs.mkdtempSync(path.join(os.tmpdir(), "ocircuit-test-"));
+    originalOCircuitHome = process.env.OCIRCUIT_GLOBAL_DIR;
+    process.env.OCIRCUIT_GLOBAL_DIR = testDir;
 
     // Clear GlobalContext for clean test state
     persistModelName(null);
@@ -74,10 +74,10 @@ describe("Model Persistence (Hub auth removed)", () => {
     if (fs.existsSync(testDir)) {
       fs.rmSync(testDir, { recursive: true });
     }
-    if (originalContinueHome) {
-      process.env.CONTINUE_GLOBAL_DIR = originalContinueHome;
+    if (originalOCircuitHome) {
+      process.env.OCIRCUIT_GLOBAL_DIR = originalOCircuitHome;
     } else {
-      delete process.env.CONTINUE_GLOBAL_DIR;
+      delete process.env.OCIRCUIT_GLOBAL_DIR;
     }
   });
 

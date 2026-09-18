@@ -129,10 +129,8 @@ function renderTextReport(
   } else {
     lines.push(
       isTTY
-        ? chalk.dim(
-            "Tip: Run these automatically on every PR → https://continue.dev",
-          )
-        : "Tip: Run these automatically on every PR → https://continue.dev",
+        ? chalk.dim("Tip: Run these automatically on every PR → /")
+        : "Tip: Run these automatically on every PR → /",
     );
   }
 

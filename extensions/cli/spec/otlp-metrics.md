@@ -19,8 +19,8 @@ The Continue CLI should emit metrics that provide insights into:
 
 | Environment Variable            | Description                                                     | Example Values                       |
 | ------------------------------- | --------------------------------------------------------------- | ------------------------------------ |
-| `CONTINUE_METRICS_ENABLED`      | Enables OTEL telemetry collection (preferred, takes precedence) | `0` to disable, `1` to enable        |
-| `CONTINUE_CLI_ENABLE_TELEMETRY` | Enables OTEL telemetry collection (legacy, lower precedence)    | `0` to disable, `1` to enable        |
+| `OCIRCUIT_METRICS_ENABLED`      | Enables OTEL telemetry collection (preferred, takes precedence) | `0` to disable, `1` to enable        |
+| `OCIRCUIT_CLI_ENABLE_TELEMETRY` | Enables OTEL telemetry collection (legacy, lower precedence)    | `0` to disable, `1` to enable        |
 | `OTEL_METRICS_EXPORTER`         | Metrics exporter type(s) (comma-separated)                      | `console`, `otlp`, `prometheus`      |
 | `OTEL_LOGS_EXPORTER`            | Logs/events exporter type(s) (comma-separated)                  | `console`, `otlp`                    |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`   | Protocol for OTLP exporter (all signals)                        | `grpc`, `http/json`, `http/protobuf` |
@@ -52,7 +52,7 @@ All metrics and events share these standard attributes:
 
 ## Core Metrics
 
-### ✅ `continue_cli_session_count`
+### ✅ `ocircuit_cli_session_count`
 
 **Type:** Counter  
 **Unit:** `count`  
@@ -66,7 +66,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_lines_of_code_count`
+### ✅ `ocircuit_cli_lines_of_code_count`
 
 **Type:** Counter  
 **Unit:** `count`  
@@ -81,7 +81,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_pull_request_count`
+### ✅ `ocircuit_cli_pull_request_count`
 
 **Type:** Counter  
 **Unit:** `count`  
@@ -95,7 +95,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_commit_count`
+### ✅ `ocircuit_cli_commit_count`
 
 **Type:** Counter  
 **Unit:** `count`  
@@ -109,7 +109,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_cost_usage`
+### ✅ `ocircuit_cli_cost_usage`
 
 **Type:** Counter  
 **Unit:** `USD`  
@@ -124,7 +124,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_token_usage`
+### ✅ `ocircuit_cli_token_usage`
 
 **Type:** Counter  
 **Unit:** `tokens`  
@@ -140,7 +140,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ❌ `continue_cli_code_edit_tool_decision`
+### ❌ `ocircuit_cli_code_edit_tool_decision`
 
 **Type:** Counter  
 **Unit:** `count`  
@@ -157,7 +157,7 @@ All metrics and events share these standard attributes:
 
 ---
 
-### ✅ `continue_cli_active_time_total`
+### ✅ `ocircuit_cli_active_time_total`
 
 **Type:** Counter  
 **Unit:** `s`  
@@ -173,7 +173,7 @@ All metrics and events share these standard attributes:
 
 ### ✅ User Prompt Event
 
-**Event Name:** `continue_cli_user_prompt`
+**Event Name:** `ocircuit_cli_user_prompt`
 
 **Attributes:**
 
@@ -189,7 +189,7 @@ All metrics and events share these standard attributes:
 
 ### ✅ Tool Result Event
 
-**Event Name:** `continue_cli_tool_result`
+**Event Name:** `ocircuit_cli_tool_result`
 
 **Attributes:**
 
@@ -210,7 +210,7 @@ All metrics and events share these standard attributes:
 
 ### ✅ API Request Event
 
-**Event Name:** `continue_cli_api_request`
+**Event Name:** `ocircuit_cli_api_request`
 
 **Attributes:**
 
@@ -233,7 +233,7 @@ These metrics are unique to Continue CLI and provide additional insights without
 
 ### Authentication Metrics
 
-#### ✅ `continue_cli_auth_attempts`
+#### ✅ `ocircuit_cli_auth_attempts`
 
 **Type:** Counter  
 **Unit:** `{attempt}`  
@@ -249,7 +249,7 @@ These metrics are unique to Continue CLI and provide additional insights without
 
 ### MCP Integration Metrics
 
-#### ❌ `continue_cli_mcp_connections`
+#### ❌ `ocircuit_cli_mcp_connections`
 
 **Type:** Gauge  
 **Unit:** `{connection}`  
@@ -265,7 +265,7 @@ These metrics are unique to Continue CLI and provide additional insights without
 
 ### Performance Metrics
 
-#### ❌ `continue_cli_startup_time`
+#### ❌ `ocircuit_cli_startup_time`
 
 **Type:** Histogram  
 **Unit:** `ms`  
@@ -279,7 +279,7 @@ These metrics are unique to Continue CLI and provide additional insights without
 
 **Implementation:** Track in `src/index.ts` and `src/commands/chat.ts`
 
-#### ✅ `continue_cli_response_time`
+#### ✅ `ocircuit_cli_response_time`
 
 **Type:** Histogram  
 **Unit:** `ms`  
@@ -298,7 +298,7 @@ These metrics are unique to Continue CLI and provide additional insights without
 
 ### Migration from Claude Code Dashboards
 
-The core metrics (`session_count`, `lines_of_code_count`, `token_usage`, `cost_usage`, etc.) use identical naming and attribute structures to Claude Code, allowing for easy dashboard migration by simply changing the metric prefix from `claude_code_*` to `continue_cli_*`.
+The core metrics (`session_count`, `lines_of_code_count`, `token_usage`, `cost_usage`, etc.) use identical naming and attribute structures to Claude Code, allowing for easy dashboard migration by simply changing the metric prefix from `claude_code_*` to `ocircuit_cli_*`.
 
 ### Privacy Considerations
 
@@ -311,7 +311,7 @@ The core metrics (`session_count`, `lines_of_code_count`, `token_usage`, `cost_u
 
 All metrics should include these resource attributes:
 
-- `service.name`: `continue-cli`
+- `service.name`: `ocircuit-cli`
 - `service.version`: CLI version
 - `deployment.environment`: `development` | `production`
 - `os.type`: Operating system
@@ -338,6 +338,6 @@ All metrics should include these resource attributes:
 
 **Missing implementations:**
 
-- `continue_cli_code_edit_tool_decision` - requires user confirmation UI
-- `continue_cli_mcp_connections` - needs MCP service monitoring
-- `continue_cli_startup_time` - needs startup time tracking
+- `ocircuit_cli_code_edit_tool_decision` - requires user confirmation UI
+- `ocircuit_cli_mcp_connections` - needs MCP service monitoring
+- `ocircuit_cli_startup_time` - needs startup time tracking

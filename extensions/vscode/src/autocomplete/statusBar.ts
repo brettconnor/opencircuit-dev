@@ -5,8 +5,8 @@ import * as vscode from "vscode";
 import { Battery } from "../util/battery";
 import { getMetaKeyLabel } from "../util/util";
 import {
-  CONTINUE_WORKSPACE_KEY,
-  getContinueWorkspaceConfig,
+  OCIRCUIT_WORKSPACE_KEY,
+  getOCircuitWorkspaceConfig,
 } from "../util/workspaceConfig";
 
 export enum StatusBarStatus {
@@ -147,7 +147,7 @@ export function setupStatusBar(
 
   statusBarItem.text = statusBarItemText(status, loading, statusBarError);
   statusBarItem.tooltip = statusBarItemTooltip(status ?? statusBarStatus);
-  statusBarItem.command = "continue.openTabAutocompleteConfigMenu";
+  statusBarItem.command = "ocircuit.openTabAutocompleteConfigMenu";
 
   statusBarItem.show();
   if (status !== undefined) {
@@ -159,8 +159,8 @@ export function setupStatusBar(
   if (!configListenerRegistered) {
     configListenerRegistered = true;
     vscode.workspace.onDidChangeConfiguration((event) => {
-      if (event.affectsConfiguration(CONTINUE_WORKSPACE_KEY)) {
-        const enabled = getContinueWorkspaceConfig().get<boolean>(
+      if (event.affectsConfiguration(OCIRCUIT_WORKSPACE_KEY)) {
+        const enabled = getOCircuitWorkspaceConfig().get<boolean>(
           "enableTabAutocomplete",
         );
         if (enabled && statusBarStatus === StatusBarStatus.Paused) {

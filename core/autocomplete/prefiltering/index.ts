@@ -2,9 +2,9 @@ import ignore from "ignore";
 
 import { IDE } from "../..";
 import {
-  getGlobalContinueIgArray,
-  getWorkspaceContinueIgArray,
-} from "../../indexing/continueignore";
+  getGlobalOCircuitIgArray,
+  getWorkspaceOCircuitIgArray,
+} from "../../indexing/ocircuitignore";
 import { getConfigJsonPath } from "../../util/paths";
 import { findUriInDirs } from "../../util/uri";
 import { HelperVars } from "../util/HelperVars";
@@ -57,8 +57,8 @@ export async function shouldPrefilter(
   const disableInFiles = [
     ...(helper.options.disableInFiles ?? []),
     "*.prompt",
-    ...getGlobalContinueIgArray(),
-    ...(await getWorkspaceContinueIgArray(ide)),
+    ...getGlobalOCircuitIgArray(),
+    ...(await getWorkspaceOCircuitIgArray(ide)),
   ];
   if (await isDisabledForFile(helper.filepath, disableInFiles, ide)) {
     return true;

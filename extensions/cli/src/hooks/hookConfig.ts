@@ -2,9 +2,9 @@
  * Hook configuration loader.
  *
  * Loads hooks from settings files in the same locations as Claude Code:
- * - ~/.continue/settings.json  (user-global)
- * - .continue/settings.json    (project, committable)
- * - .continue/settings.local.json (project-local, gitignored)
+ * - ~/.ocircuit/settings.json  (user-global)
+ * - .ocircuit/settings.json    (project, committable)
+ * - .ocircuit/settings.local.json (project-local, gitignored)
  *
  * Also supports Claude Code's native locations for cross-compatibility:
  * - ~/.claude/settings.json
@@ -72,21 +72,21 @@ function mergeHooksConfigs(
  */
 function getSettingsFilePaths(cwd: string, homeDir?: string): string[] {
   const home = homeDir ?? os.homedir();
-  const continueHome =
-    process.env.CONTINUE_GLOBAL_DIR || path.join(home, ".continue");
+  const ocircuitHome =
+    process.env.OCIRCUIT_GLOBAL_DIR || path.join(home, ".ocircuit");
 
   return [
     // User-global (lowest precedence)
     path.join(home, ".claude", "settings.json"),
-    path.join(continueHome, "settings.json"),
+    path.join(ocircuitHome, "settings.json"),
 
     // Project-level
     path.join(cwd, ".claude", "settings.json"),
-    path.join(cwd, ".continue", "settings.json"),
+    path.join(cwd, ".ocircuit", "settings.json"),
 
     // Project-local (highest precedence)
     path.join(cwd, ".claude", "settings.local.json"),
-    path.join(cwd, ".continue", "settings.local.json"),
+    path.join(cwd, ".ocircuit", "settings.local.json"),
   ];
 }
 

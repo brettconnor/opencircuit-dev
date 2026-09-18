@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const env = {
-  apiBase: process.env.CONTINUE_API_BASE ?? "https://api.continue.dev/",
-  continueHome:
-    process.env.CONTINUE_GLOBAL_DIR || path.join(os.homedir(), ".continue"),
+  apiBase: process.env.OCIRCUIT_API_BASE ?? "https://api.ocircuit.dev/",
+  ocircuitHome:
+    process.env.OCIRCUIT_GLOBAL_DIR || path.join(os.homedir(), ".ocircuit"),
 };

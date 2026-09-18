@@ -1,7 +1,7 @@
-import { ModelConfig } from "@continuedev/config-yaml";
+import { ModelConfig } from "@opencircuit/config-yaml";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ContinueConfig, ILLMLogger } from "../..";
+import { OCircuitConfig, ILLMLogger } from "../..";
 import { llmsFromModelConfig } from "./models";
 
 // Mock the LLM classes
@@ -44,7 +44,7 @@ vi.mock("../../llm/llms", () => ({
 
 describe("llmsFromModelConfig requestOptions merging", () => {
   let mockLLMLogger: ILLMLogger;
-  let mockConfig: ContinueConfig;
+  let mockConfig: OCircuitConfig;
 
   beforeEach(() => {
     mockLLMLogger = { log: vi.fn() } as any;
@@ -82,7 +82,7 @@ describe("llmsFromModelConfig requestOptions merging", () => {
       slashCommands: [],
       tools: [],
       allowAnonymousTelemetry: false,
-    } as ContinueConfig;
+    } as OCircuitConfig;
     vi.clearAllMocks();
   });
 

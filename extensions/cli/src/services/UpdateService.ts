@@ -93,7 +93,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
         autoUpdate &&
         isUpdateAvailable &&
         this.currentState.status !== "updating" &&
-        !process.env.CONTINUE_CLI_AUTO_UPDATED //Already auto updated, preventing sequential auto-update
+        !process.env.OCIRCUIT_CLI_AUTO_UPDATED //Already auto updated, preventing sequential auto-update
       ) {
         await this.performUpdate(true);
       } else {
@@ -148,7 +148,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       const { stdout, stderr } = await execFileAsync("npm", [
         "i",
         "-g",
-        `@continuedev/cli@${this.currentState.latestVersion}`,
+        `@opencircuit/cli@${this.currentState.latestVersion}`,
       ]);
       logger.debug("Update output:", { stdout, stderr });
 
@@ -224,7 +224,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
         stdio: "inherit",
         env: {
           ...process.env,
-          CONTINUE_CLI_AUTO_UPDATED: "true",
+          OCIRCUIT_CLI_AUTO_UPDATED: "true",
         },
       });
 

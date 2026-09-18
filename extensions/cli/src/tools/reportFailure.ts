@@ -1,4 +1,4 @@
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import {
   ApiRequestError,
@@ -43,8 +43,8 @@ export const reportFailureTool: Tool = {
     try {
       const trimmedMessage = args.errorMessage.trim();
       if (!trimmedMessage) {
-        throw new ContinueError(
-          ContinueErrorReason.Unspecified,
+        throw new OCircuitError(
+          OCircuitErrorReason.Unspecified,
           "errorMessage is required to report a failure.",
         );
       }
@@ -54,7 +54,7 @@ export const reportFailureTool: Tool = {
         const errorMessage =
           "Agent ID is required. Please use the --id flag with cn serve.";
         logger.error(errorMessage);
-        throw new ContinueError(ContinueErrorReason.Unspecified, errorMessage);
+        throw new OCircuitError(OCircuitErrorReason.Unspecified, errorMessage);
       }
 
       await post(`agents/${agentId}/status`, {
@@ -77,7 +77,7 @@ export const reportFailureTool: Tool = {
       logger.info(`Failure reported: ${trimmedMessage}`);
       return "Failure reported to user.";
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
 

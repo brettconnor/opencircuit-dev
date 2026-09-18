@@ -9,7 +9,7 @@ import { logger } from "../util/logger.js";
 import { PermissionPolicy, ToolPermissionPolicy } from "./types.js";
 
 export const PERMISSIONS_YAML_PATH = path.resolve(
-  path.join(env.continueHome, "permissions.yaml"),
+  path.join(env.ocircuitHome, "permissions.yaml"),
 );
 
 export interface PermissionsYamlConfig {
@@ -19,7 +19,7 @@ export interface PermissionsYamlConfig {
 }
 
 /**
- * Loads permissions from ~/.continue/permissions.yaml
+ * Loads permissions from ~/.ocircuit/permissions.yaml
  * Returns null if file doesn't exist or can't be parsed
  */
 export function loadPermissionsYaml(): PermissionsYamlConfig | null {

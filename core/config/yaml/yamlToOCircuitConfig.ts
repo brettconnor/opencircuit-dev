@@ -3,7 +3,7 @@ import {
   mergeConfigYamlRequestOptions,
   RequestOptions,
   Rule,
-} from "@continuedev/config-yaml";
+} from "@opencircuit/config-yaml";
 import {
   InternalMcpOptions,
   InternalSseMcpOptions,
@@ -12,7 +12,7 @@ import {
   RuleWithSource,
 } from "../..";
 
-export function convertYamlRuleToContinueRule(rule: Rule): RuleWithSource {
+export function convertYamlRuleToOCircuitRule(rule: Rule): RuleWithSource {
   if (typeof rule === "string") {
     return {
       rule: rule,

@@ -1,5 +1,5 @@
 {
-  "name": "@continuedev/cli",
+  "name": "@opencircuit/cli",
   "version": "0.0.0-dev",
   "description": "Continue CLI",
   "main": "dist/index.js",
@@ -24,28 +24,28 @@
     "check:install-scripts": "node ../../scripts/check-npm-install-scripts.mjs",
     "start": "node dist/cn.js",
     "dev": "tsx src/index.ts",
-    "repomix:sdk": "npx repomix node_modules/@continuedev/sdk --ignore **/api,cli-repomix.xml -o sdk-repomix.xml",
+    "repomix:sdk": "npx repomix node_modules/@opencircuit/sdk --ignore **/api,cli-repomix.xml -o sdk-repomix.xml",
     "repomix:cli": "npx repomix --ignore sdk-repomix.xml -o cli-repomix.xml",
     "lint": "tsc --noEmit && eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "watch:logs": "touch ~/.continue/logs/cn.log && tail -f ~/.continue/logs/cn.log",
+    "watch:logs": "touch ~/.ocircuit/logs/cn.log && tail -f ~/.ocircuit/logs/cn.log",
     "prepare": "npm run build",
     "semantic-release": "semantic-release",
     "semantic-release:dry-run": "semantic-release --dry-run"
   },
-  "author": "Continue Dev, Inc.",
+  "author": "Open Circuit",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/continuedev/continue.git"
+    "url": "https://github.com/open-circuit-dev/open-circuit.git"
   },
   "bugs": {
-    "url": "https://github.com/continuedev/continue/issues"
+    "url": "https://github.com/open-circuit-dev/open-circuit/issues"
   },
-  "homepage": "https://continue.dev",
+  "homepage": "/",
   "dependencies": {
     "fdir": "^6.4.2",
     "find-up": "^8.0.0",
@@ -53,10 +53,10 @@
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "@continuedev/config-yaml": "file:../../packages/config-yaml",
-    "@continuedev/openai-adapters": "file:../../packages/openai-adapters",
-    "@continuedev/sdk": "^0.0.13",
-    "@continuedev/terminal-security": "file:../../packages/terminal-security",
+    "@opencircuit/config-yaml": "file:../../packages/config-yaml",
+    "@opencircuit/openai-adapters": "file:../../packages/openai-adapters",
+    "@opencircuit/sdk": "^0.0.13",
+    "@opencircuit/terminal-security": "file:../../packages/terminal-security",
     "@modelcontextprotocol/sdk": "^1.24.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-metrics-otlp-grpc": "^0.222.0",
