@@ -3,10 +3,25 @@
 This document catalogs CI secrets and environment variables used by Open
 Circuit's retained CLI/Core repository and deferred VS Code workflows.
 
+## Retained-closure validation
+
+Run the complete deterministic profile from the repository root on Ubuntu1 or
+another Linux runner:
+
+    npm run validate:retained-closure
+
+The profile installs from lockfiles, builds shared packages and Core, checks
+the exact install-script and dependency policies, audits Core and CLI, runs
+the CLI smoke and hermetic CLI-to-Core runtime tests, validates the dry-run
+CLI package artifact, and runs Rust format/check/tests/benchmark/audit. Use
+npm run validate:retained-closure -- --skip-install only after dependencies
+have already been installed from the current lockfiles.
+
 ## Runtime
 
 - Node.js `24.19.0`, pinned by `.nvmrc` and `.node-version`.
 - npm with the committed package lockfiles.
+- Rust/Cargo 1.98.1 and cargo-audit for the sync retained-closure gate.
 
 ## CI and release secrets
 

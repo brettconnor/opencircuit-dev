@@ -59,6 +59,15 @@ Run the smallest applicable package checks for each change. Changes that cross
 package boundaries, declaration output, workspace configuration, or runtime
 resolution should use the fixed retained-closure validation profile.
 
+On a Linux runner with Node.js 24.19.0 and Rust 1.98.1 installed, run the
+complete profile from the repository root:
+
+    npm run validate:retained-closure
+
+Use --skip-install only when the committed lockfiles have already been
+installed. The profile includes dependency-policy checks, the hermetic
+CLI-to-Core runtime test, release-artifact validation, and the Rust benchmark.
+
 The contributor workflow is documented in
 [`CONTRIBUTING.md`](CONTRIBUTING.md). CI secrets and environment variables are
 listed in [`BUILD_DEPENDENCIES.md`](BUILD_DEPENDENCIES.md).

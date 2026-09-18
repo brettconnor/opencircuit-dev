@@ -50,6 +50,12 @@ local shared packages with their own lockfiles. Each listed version was
 reviewed as an install hook; adding a new version still requires a separate
 review.
 
+The Core `@tootallnate/once` 2.0.1 override is a temporary upstream-chain
+workaround. It is intentionally exact-version pinned and checked against the
+lockfile by `npm run check:dependency-policy`. Remove it only after the
+upstream dependency chain no longer resolves an affected version and the
+retained-closure audit remains clean.
+
 These approvals authorize install-time code execution; they do not suppress
 `npm audit`. Reviewers must re-run the pending-script check after dependency
 changes and keep any new package or version unapproved until reviewed.

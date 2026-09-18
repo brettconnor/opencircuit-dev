@@ -14,7 +14,7 @@ pub fn local_find_gitignores(workspace_dir: &Path) -> io::Result<HashMap<PathBuf
             match path.file_name().and_then(|name| name.to_str()) {
                 Some(file_name)
                     if file_name.ends_with(".gitignore")
-                        || file_name.ends_with(".continueignore") =>
+                        || file_name.ends_with(".ocircuitignore") =>
                 {
                     let mut contents = String::new();
                     fs::File::open(&path)?.read_to_string(&mut contents)?;
@@ -40,10 +40,10 @@ mod tests {
         let temp_dir = tempdir()?;
         let temp_path = temp_dir.path();
 
-        // Create some directories and .gitignore/.continueignore files
+        // Create some directories and .gitignore/.ocircuitignore files
         let dir_structure = [
             ("dir1", Some(".gitignore"), "node_modules/"),
-            ("dir2", Some(".continueignore"), "target/"),
+            ("dir2", Some(".ocircuitignore"), "target/"),
             ("dir3", None, ""),
         ];
 

@@ -16,7 +16,7 @@ const expectedNodeVersion = `v${fs
   .trim()}`;
 const nodeVersionMatches = process.version === expectedNodeVersion;
 const temporaryDirectory = fs.mkdtempSync(
-  path.join(os.tmpdir(), "phase0-boundary-"),
+  path.join(os.tmpdir(), "ocircuit-runtime-boundary-"),
 );
 const loaderReportPath = path.join(temporaryDirectory, "runtime-loader.json");
 const configPath = path.join(temporaryDirectory, "config.yaml");
@@ -126,7 +126,7 @@ const childResult = await new Promise((resolve) => {
 await new Promise((resolve) => server.close(resolve));
 
 let loaderReport = {
-  check: "phase0-runtime-module-resolution",
+  check: "retained-closure-runtime-module-resolution",
   status: "fail",
   violations: [],
   error: "Runtime loader did not produce a report.",
@@ -141,11 +141,42 @@ const passed =
   !childResult.timedOut &&
   childResult.stdout.includes("Hello World!") &&
   requests.length === 1 &&
+  requests[0]?.method === "POST" &&
+  requests[0]?.url?.includes("chat") &&
+  JSON.stringify(requests[0]?.body ?? {}).includes("Hi") &&
   loaderReport.status === "pass" &&
-  loaderReport.violations.length === 0;
+  loaderReport.violations.length === 0 &&
+  fs.existsSync(path.join(cliDirectory, "dist/meta.json")) &&
+  Object.keys(
+    JSON.parse(
+      fs.readFileSync(path.join(cliDirectory, "dist/meta.json"), "utf8"),
+    ).inputs ?? {},
+  ).some((input) => input.includes(`${path.sep}core${path.sep}`));
+
+const buildMetadata = fs.existsSync(path.join(cliDirectory, "dist/meta.json"))
+  ? JSON.parse(
+      fs.readFileSync(path.join(cliDirectory, "dist/meta.json"), "utf8"),
+    )
+  : { inputs: {} };
+const requestBody = requests[0]?.body ?? {};
+const requestSummary = requests[0]
+  ? {
+      method: requests[0].method,
+      url: requests[0].url,
+      model: requestBody.model ?? null,
+      messageCount: Array.isArray(requestBody.messages)
+        ? requestBody.messages.length
+        : null,
+      userPromptIncluded:
+        Array.isArray(requestBody.messages) &&
+        requestBody.messages.some(
+          (message) => message?.role === "user" && message?.content === "Hi",
+        ),
+    }
+  : null;
 
 const report = {
-  check: "phase0-runtime-boundary",
+  check: "retained-closure-cli-core-runtime",
   status: passed ? "pass" : "fail",
   command: `${process.execPath} --experimental-loader ${loaderPath} dist/cn.js -p --config <temporary-config> Hi`,
   workingDirectory: path.relative(repoRoot, cliDirectory),
@@ -164,7 +195,15 @@ const report = {
   mockTransport: {
     host: "127.0.0.1",
     requestCount: requests.length,
+    request: requestSummary,
+    requestShapeValid:
+      requests[0]?.method === "POST" &&
+      requests[0]?.url?.includes("chat") &&
+      JSON.stringify(requests[0]?.body ?? {}).includes("Hi"),
   },
+  coreBundled: Object.keys(buildMetadata.inputs ?? {}).some((input) =>
+    input.includes(`${path.sep}core${path.sep}`),
+  ),
   moduleResolution: loaderReport,
 };
 

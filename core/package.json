@@ -12,6 +12,7 @@
     "build": "tsc -p ./tsconfig.npm.json && node -e \"require('fs').copyFileSync('index.d.ts', 'dist/index.d.ts')\"",
     "build:npm": "npm run build",
     "check:install-scripts": "node ../scripts/check-npm-install-scripts.mjs",
+    "check:dependency-policy": "node ../scripts/check-dependency-policy.mjs",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "test:providers:deletion-gate": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath llm/llm.test.ts"
@@ -135,7 +136,7 @@
   },
   "overrides": {
     "tar": "^7.5.13",
-    "@tootallnate/once": "^2.0.1"
+    "@tootallnate/once": "2.0.1"
   },
   "allowScripts": {
     "@biomejs/biome@1.6.4": true,

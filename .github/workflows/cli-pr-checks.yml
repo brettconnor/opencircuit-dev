@@ -47,6 +47,7 @@ jobs:
           cd extensions/cli
           npm ci --include=optional
           npm run check:install-scripts
+          npm run check:dependency-policy
 
       - name: Run linting
         run: |
@@ -96,6 +97,7 @@ jobs:
           cd extensions/cli
           npm ci --include=optional
           npm run check:install-scripts
+          npm run check:dependency-policy
 
       - name: Build
         run: |
@@ -124,6 +126,11 @@ jobs:
         run: |
           cd extensions/cli
           npm run test:runtime-boundary
+
+      - name: Validate CLI release artifact
+        run: |
+          cd extensions/cli
+          npm run check:release-artifact
 
   smoke-api:
     # Only runs when secrets are available (not on fork PRs)
@@ -158,6 +165,7 @@ jobs:
           cd extensions/cli
           npm ci --include=optional
           npm run check:install-scripts
+          npm run check:dependency-policy
 
       - name: Build
         run: |

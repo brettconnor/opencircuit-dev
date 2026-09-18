@@ -1,11 +1,7 @@
 import fs from "node:fs";
 
 const reportPath = process.env.PHASE0_RUNTIME_BOUNDARY_REPORT;
-const deniedFragments = [
-  "/extensions/vscode/",
-  "/gui/",
-  "/binary/",
-];
+const deniedFragments = ["/extensions/vscode/", "/gui/", "/binary/"];
 const deniedPackages = ["vscode", "@vscode/", "electron"];
 const resolved = [];
 const violations = [];
@@ -31,7 +27,7 @@ function writeReport() {
     reportPath,
     JSON.stringify(
       {
-        check: "phase0-runtime-module-resolution",
+        check: "retained-closure-runtime-module-resolution",
         status: violations.length === 0 ? "pass" : "fail",
         deniedFragments,
         deniedPackages,
