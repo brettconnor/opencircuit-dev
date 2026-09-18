@@ -19,11 +19,12 @@ nvm use 24.19.0
 
 ## 2. Install the CLI
 
-The validated 1.0.0 package is currently a local tarball rather than a
-published npm package.
+The validated 1.0.0 package is currently a locally staged tarball rather than a
+published npm package. From an Open Circuit repository checkout, create it with:
 
 ```bash
-npm install --global /tmp/open-circuit-release/opencircuit-cli-1.0.0.tgz
+npm --prefix extensions/cli run release:artifact
+npm install --global release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
 ```
 
 Check the installation:
@@ -44,7 +45,26 @@ When the package is published, the equivalent registry install will be:
 npm install --global @opencircuit/cli@1.0.0
 ```
 
-## 3. See the available commands
+## 3. Download a GitHub Release asset
+
+For a published GitHub Release, download both assets from the `v1.0.0` release:
+
+- `opencircuit-cli-1.0.0.tgz`
+- `opencircuit-cli-1.0.0.tgz.sha256`
+
+Verify the checksum from the directory containing the tarball:
+
+```bash
+shasum -a 256 -c opencircuit-cli-1.0.0.tgz.sha256
+```
+
+Then install it:
+
+```bash
+npm install --global ./opencircuit-cli-1.0.0.tgz
+```
+
+## 4. See the available commands
 
 ```bash
 oc --help
@@ -59,7 +79,7 @@ oc ls                    # List saved sessions
 oc --resume              # Resume the previous session
 ```
 
-## 4. Try a first task
+## 5. Try a first task
 
 Open a terminal in a project directory and run:
 
@@ -80,7 +100,7 @@ For a one-shot command:
 oc -p "Explain the structure of this project and suggest where tests live."
 ```
 
-## 5. Use a configuration file
+## 6. Use a configuration file
 
 You can point Open Circuit at a specific configuration:
 
@@ -92,7 +112,7 @@ Open Circuit stores user-owned configuration and session data under the
 `.ocircuit` convention. Keep API keys and other secrets in environment
 variables or approved secret storage; do not commit them to a repository.
 
-## 6. Run without an interactive terminal
+## 7. Run without an interactive terminal
 
 This is useful for scripts and CI:
 
@@ -106,7 +126,7 @@ You can also pipe input:
 echo "Review the current working tree" | oc -p
 ```
 
-## 7. Troubleshooting
+## 8. Troubleshooting
 
 ### `oc: command not found`
 
@@ -130,7 +150,7 @@ oc --version
 Reinstall the package if it points to an older installation:
 
 ```bash
-npm install --global /tmp/open-circuit-release/opencircuit-cli-1.0.0.tgz
+npm install --global release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
 ```
 
 ### You need to develop Open Circuit

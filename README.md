@@ -16,13 +16,18 @@ New to Open Circuit? Follow the beginner guide:
 
 **[Read QUICKSTART.md](QUICKSTART.md)**
 
-The CLI-only 1.0.0 release candidate is available as a locally validated
-package artifact. It has not been published to npm yet.
+The CLI-only 1.0.0 release candidate can be staged as a GitHub Release asset.
+It has not been published to npm yet.
 
 ```bash
-npm install --global /tmp/open-circuit-release/opencircuit-cli-1.0.0.tgz
+npm --prefix extensions/cli run release:artifact
+npm install --global release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
 oc --version
 ```
+
+The generated tarball and `.sha256` file are written to the ignored
+`release-artifacts/v1.0.0/` directory. Upload both files to the GitHub Release
+for tag `v1.0.0` when the release is ready.
 
 ## What is included
 
@@ -77,6 +82,22 @@ npm run validate:retained-closure
 Use `--skip-install` only after the committed lockfiles have been installed.
 The profile covers dependency policy, Core and CLI builds, the CLI-to-Core
 runtime boundary, release-artifact shape, and the Rust benchmark.
+
+## Stage a release asset
+
+From the repository root:
+
+```bash
+npm --prefix extensions/cli run release:artifact
+shasum -a 256 release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
+```
+
+Upload these files manually to the GitHub `v1.0.0` release:
+
+- `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz`
+- `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256`
+
+CI automation and npm publication are intentionally deferred.
 
 ## Project guides
 
