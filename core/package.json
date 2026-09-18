@@ -134,5 +134,15 @@
   "overrides": {
     "tar": "^7.5.13",
     "@tootallnate/once": "^2.0.1"
+  },
+  "allowScripts": {
+    "@biomejs/biome@1.6.4": true,
+    "esbuild@0.25.12": true,
+    "onnxruntime-node@1.30.0": true,
+    "protobufjs@7.6.6": true,
+    "puppeteer@25.10.0": true,
+    "puppeteer-chromium-resolver@25.0.0": true,
+    "sqlite3@5.1.7": true,
+    "win-ca@3.5.1": true
   }
 }

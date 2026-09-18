@@ -27,18 +27,6 @@ pub fn local_find_gitignores(workspace_dir: &Path) -> io::Result<HashMap<PathBuf
     Ok(gitignores)
 }
 
-fn main() -> io::Result<()> {
-    let workspace_dir = Path::new("path/to/workspace");
-    let gitignore_map = local_find_gitignores(workspace_dir)?;
-
-    // Print out the result (optional)
-    for (path, contents) in gitignore_map {
-        println!("{}:\n{}", path.display(), contents);
-    }
-
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

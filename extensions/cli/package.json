@@ -150,5 +150,10 @@
     "@img/sharp-linux-arm64": "^0.33.5",
     "@img/sharp-linux-x64": "^0.33.5",
     "@img/sharp-win32-x64": "^0.33.5"
+  },
+  "allowScripts": {
+    "esbuild@0.25.9": true,
+    "protobufjs@7.6.6": true,
+    "unrs-resolver@1.11.1": true
   }
 }

@@ -1,8 +1,10 @@
 use std::path::Path;
 mod db;
+#[cfg(test)]
 mod gitignore;
 mod sync;
 mod sync_db;
+#[cfg(test)]
 mod utils;
 
 use neon::prelude::*;
