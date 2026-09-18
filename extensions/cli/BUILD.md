@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Continue CLI uses esbuild to bundle the application along with local packages (`@opencircuit/config-yaml` and `@opencircuit/openai-adapters`) into a single distributable file. This ensures that users who install the CLI from npm don't need to worry about local file references.
+The Open Circuit CLI uses esbuild to bundle the application along with local packages (`@opencircuit/config-yaml` and `@opencircuit/openai-adapters`) into a single distributable file. This ensures that users who install the CLI from npm don't need to worry about local file references.
 
 ## Build Steps
 

@@ -1,10 +1,10 @@
-name: Run Continue Agent
+name: Run Open Circuit Agent
 
 on:
   workflow_call:
     inputs:
       prompt:
-        description: "Additional prompting to send to the Continue agent"
+        description: "Additional prompting to send to the Open Circuit agent"
         required: false
         type: string
         default: ""

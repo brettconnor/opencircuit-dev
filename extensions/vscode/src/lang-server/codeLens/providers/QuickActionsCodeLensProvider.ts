@@ -78,7 +78,7 @@ export class QuickActionsCodeLensProvider implements vscode.CodeLensProvider {
   getDefaultCommand(range: vscode.Range): vscode.Command[] {
     const quickEdit: vscode.Command = {
       command: "ocircuit.defaultQuickAction",
-      title: "Continue",
+      title: "Open Circuit",
       arguments: [{ range } as QuickEditShowParams],
     };
 

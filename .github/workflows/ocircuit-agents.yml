@@ -1,4 +1,4 @@
-name: Continue Agents
+name: Open Circuit Agents
 
 on:
   workflow_call:
@@ -62,7 +62,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Continue CLI
+      - name: Install Open Circuit CLI
         run: npm i -g @opencircuit/cli
 
       - name: Extract agent name
@@ -82,7 +82,7 @@ jobs:
             const { data: check } = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: `Continue: ${process.env.AGENT_NAME}`,
+              name: `Open Circuit: ${process.env.AGENT_NAME}`,
               head_sha: context.sha,
               status: 'in_progress',
               started_at: new Date().toISOString(),
@@ -98,7 +98,7 @@ jobs:
           AGENT_FILE="${{ matrix.agent }}"
 
           # Run agent in non-interactive mode (-p flag)
-          if OUTPUT=$(cn -p --agent "$AGENT_FILE" 2>&1); then
+          if OUTPUT=$(oc -p --agent "$AGENT_FILE" 2>&1); then
             echo "success=true" >> $GITHUB_OUTPUT
             echo "output<<EOF" >> $GITHUB_OUTPUT
             echo "$OUTPUT" >> $GITHUB_OUTPUT

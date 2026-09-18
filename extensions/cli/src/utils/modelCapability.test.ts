@@ -96,7 +96,7 @@ describe("isModelCapable", () => {
     });
   });
 
-  describe("Continue Proxy models", () => {
+  describe("Open Circuit Proxy models", () => {
     test("should consider ocircuit-proxy models as not capable", () => {
       expect(isModelCapable("ocircuit-proxy", "any-model")).toBe(false);
     });

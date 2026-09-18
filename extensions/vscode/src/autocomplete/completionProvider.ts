@@ -44,7 +44,7 @@ export class OCircuitCompletionProvider
     if (await handleLLMError(e)) {
       return;
     }
-    let message = "Continue Autocomplete Error";
+    let message = "Open Circuit Autocomplete Error";
     if (e instanceof Error) {
       message += `: ${e.message}`;
     }

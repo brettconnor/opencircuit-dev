@@ -1,10 +1,10 @@
 ---
 globs: docs/\*_/_.{md,mdx}
-description: This style guide should be used as a reference for maintaining consistency across all Continue documentation
+description: This style guide should be used as a reference for maintaining consistency across all Open Circuit documentation
 alwaysApply: false
 ---
 
-# Continue Documentation Style Guide
+# Open Circuit Documentation Style Guide
 
 ## Overview
 
@@ -96,8 +96,8 @@ alwaysApply: false
 ### Terminology
 
 - **Consistent Terms**: Use the same terms throughout (e.g., "LLM" not "AI model" in some places)
-- **Product Names**: Capitalize product names correctly (VS Code, JetBrains, Continue)
-- **Feature Names**: Use consistent capitalization for Continue features (Chat, Edit, Agent, Autocomplete)
+- **Product Names**: Capitalize product names correctly (VS Code, JetBrains, Open Circuit)
+- **Feature Names**: Use consistent capitalization for Open Circuit features (Chat, Edit, Agent, Autocomplete)
 
 ### Abbreviations
 
@@ -108,4 +108,4 @@ alwaysApply: false
 
 - Use "you" to address the user directly
 - Use "it" to refer to the tool/model
-- Avoid "we" unless referring to the Continue team
+- Avoid "we" unless referring to the Open Circuit team

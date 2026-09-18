@@ -135,7 +135,7 @@ export class OCircuitGUIWebviewViewProvider
         <script>const vscode = acquireVsCodeApi();</script>
         <link href="${styleMainUri}" rel="stylesheet">
 
-        <title>Continue</title>
+        <title>Open Circuit</title>
       </head>
       <body>
         <div id="root"></div>

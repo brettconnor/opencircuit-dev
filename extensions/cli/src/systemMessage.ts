@@ -222,9 +222,9 @@ export async function constructSystemMessage(
     // Check if commit signature is disabled via environment variable
     if (!process.env.OCIRCUIT_CLI_DISABLE_COMMIT_SIGNATURE) {
       systemMessage += `\n<context name="commitSignature">When creating commits using any CLI or tool, include the following in the commit message:
-Generated with [Continue](/)
+Generated with [Open Circuit](/)
 
-Co-Authored-By: Continue <noreply@ocircuit.dev>
+Co-Authored-By: Open Circuit <noreply@ocircuit.dev>
 </context>\n`;
     }
   }

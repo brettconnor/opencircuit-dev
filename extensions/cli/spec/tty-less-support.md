@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Continue CLI supports running in TTY-less environments (environments without a terminal/TTY), which is essential for:
+The Open Circuit CLI supports running in TTY-less environments (environments without a terminal/TTY), which is essential for:
 
 - VSCode and IntelliJ extensions using the `run_terminal_command` tool
 - Docker containers without TTY allocation
@@ -121,7 +121,7 @@ docker run --rm my-image oc -p "Generate a README"
 ### From CI/CD Pipeline
 
 ```yaml
-- name: Run Continue CLI
+- name: Run Open Circuit CLI
   run: |
     oc -p "Review code changes" --format json
 ```

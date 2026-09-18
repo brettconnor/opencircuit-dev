@@ -115,50 +115,14 @@ Upload these files manually to the GitHub `v1.0.0` release:
 
 CI automation and npm publication are intentionally deferred.
 
-## Deploy to Ubuntu1
-
-The deployment helper transfers the verified CLI artifact and can install `oc`
-on Ubuntu1. It does not modify the existing source checkout or provider keys.
-
-Preview scoped cleanup:
-
-```bash
-./scripts/open-circuit-deploy.sh --cleanup --dry-run
-```
-
-Deploy and install the staged artifact:
-
-```bash
-./scripts/open-circuit-deploy.sh --install
-```
-
-Cleanup requires explicit confirmation:
-
-```bash
-./scripts/open-circuit-deploy.sh --cleanup --yes
-```
-
-Remove legacy Continue state while preserving the Open Circuit install,
-provider credentials, and source checkout:
-
-```bash
-./scripts/open-circuit-deploy.sh --remove-legacy-continue --dry-run
-./scripts/open-circuit-deploy.sh --remove-legacy-continue --yes
-```
-
-Cleanup is limited to Open Circuit release staging, the global
-`@opencircuit/cli` package, `~/.ocircuit`, and exact Open Circuit shell entries.
-The legacy cleanup removes only `.continue` and `.continueignore` paths in the
-home directory and existing checkout. It preserves `~/.ocircuit`, `oc`,
-provider credentials, Node.js, Rust, Ansible, SSH, and unrelated user data.
-
 ## Provider smoke test
 
 After installing `oc` on the target runtime, run the explicit live check with
 both provider keys exported in that shell:
 
 ```bash
-./scripts/provider-smoke.sh --live --cli oc
+bash /Users/brettcon/git/systems-orchestration/scripts/provider-smoke.sh \
+  --live --cli oc
 ```
 
 This makes one short request to OpenAI and one to Anthropic, with no retries,

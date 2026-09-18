@@ -1,4 +1,4 @@
-name: Weekly CN Task
+name: Weekly Open Circuit Task
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  run-cn-task:
+  run-oc-task:
     # Only run this workflow on the main repository (open-circuit-dev/open-circuit)
     if: github.repository == 'open-circuit-dev/open-circuit'
     uses: ./.github/workflows/run-ocircuit-agent.yml

@@ -2,7 +2,7 @@
 test
 .vscode
 .github
-.continue
+.ocircuit
 .releaserc.json
 AGENTS.md
 vitest.config.ts

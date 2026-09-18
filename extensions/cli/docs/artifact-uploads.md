@@ -2,7 +2,7 @@
 
 ## Overview
 
-The artifact upload feature enables Continue agents running in devboxes to upload arbitrary files (screenshots, videos, logs) to agent session storage for review and debugging purposes. The architecture uses a two-step presigned URL pattern for secure, performant uploads.
+The artifact upload feature enables Open Circuit agents running in devboxes to upload arbitrary files (screenshots, videos, logs) to agent session storage for review and debugging purposes. The architecture uses a two-step presigned URL pattern for secure, performant uploads.
 
 ## Architecture Pattern: Presigned URLs
 
@@ -210,7 +210,7 @@ The CLI requires these environment variables for artifact uploads:
 - `OCIRCUIT_API_BASE`: API base URL (defaults to `https://api.ocircuit.dev/`)
 - `AGENT_SESSION_ID`: The current agent session identifier
 
-These are automatically provided when running in Continue's devbox environment.
+These are automatically provided when running in Open Circuit's devbox environment.
 
 ## Error Handling
 

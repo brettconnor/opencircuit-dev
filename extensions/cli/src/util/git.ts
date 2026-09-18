@@ -62,7 +62,7 @@ export function isGitHubActions(): boolean {
 }
 
 /**
- * Check if running in Continue remote agents
+ * Check if running in Open Circuit remote agents
  */
 export function isOCircuitRemoteAgent(): boolean {
   return process.env.OCIRCUIT_REMOTE === "true";

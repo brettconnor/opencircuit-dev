@@ -1,6 +1,6 @@
-# Continue PR Review Actions
+# Open Circuit PR Review Actions
 
-GitHub Actions that provide automated code reviews for pull requests using Continue CLI.
+GitHub Actions that provide automated code reviews for pull requests using Open Circuit CLI.
 
 ## Available Actions
 
@@ -49,25 +49,25 @@ The action accepts the following inputs:
 
 | Input              | Description                           | Required |
 | ------------------ | ------------------------------------- | -------- |
-| `ocircuit-api-key` | API key for Continue service          | Yes      |
-| `ocircuit-org`     | Organization for Continue config      | Yes      |
+| `ocircuit-api-key` | API key for Open Circuit service      | Yes      |
+| `ocircuit-org`     | Organization for Open Circuit config  | Yes      |
 | `ocircuit-agent`   | Agent path (e.g., "myorg/review-bot") | Yes      |
 
 ## Setup Requirements
 
-### 1. Continue API Key
+### 1. Open Circuit API Key
 
-Add your Continue API key as a secret named `OCIRCUIT_API_KEY` in your repository:
+Add your Open Circuit API key as a secret named `OCIRCUIT_API_KEY` in your repository:
 
 1. Go to your repository's Settings
 2. Navigate to Secrets and variables → Actions
 3. Click "New repository secret"
 4. Name: `OCIRCUIT_API_KEY`
-5. Value: Your Continue API key
+5. Value: Your Open Circuit API key
 
-### 2. Continue Configuration
+### 2. Open Circuit Configuration
 
-Set up your review bot configuration in Continue:
+Set up your review bot configuration for Open Circuit:
 
 1. Create a configuration for your organization
 2. Configure the review bot settings
@@ -110,7 +110,7 @@ The general review provides a structured comment that includes:
 1. Checks out repository code
 2. Fetches PR diff using GitHub CLI
 3. Generates a comprehensive review prompt
-4. Runs Continue CLI with specified configuration
+4. Runs Open Circuit CLI with specified configuration
 5. Posts review as a PR comment
 
 ## Versioning
@@ -129,18 +129,18 @@ uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081
 
 - Ensure the PR author or commenter has appropriate permissions (OWNER, MEMBER, or COLLABORATOR)
 - Check that the workflow file is in the default branch
-- Verify the Continue API key is correctly set as a repository secret
+- Verify the Open Circuit API key is correctly set as a repository secret
 
 ### No review output generated
 
 - Check the action logs for any errors
-- Verify your Continue configuration is correct
-- Ensure your Continue API key is valid
+- Verify your Open Circuit configuration is correct
+- Ensure your Open Circuit API key is valid
 
 ## Support
 
 For issues or questions:
 
-- [Continue Documentation](/)
+- [Open Circuit Documentation](/)
 - [GitHub Issues](https://github.com/open-circuit-dev/open-circuit/issues)
 - [GitHub Discussions](https://github.com/open-circuit-dev/open-circuit/discussions)

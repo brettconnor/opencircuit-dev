@@ -11,7 +11,7 @@ import { DEFAULT_TIMEOUT } from "../constants";
 import { TestUtils } from "../TestUtils";
 
 export class GlobalActions {
-  static defaultFolder = "e2e/test-continue";
+  static defaultFolder = "e2e/test-ocircuit";
   public static defaultNewFilename = "test.py";
 
   public static async openTestWorkspace() {

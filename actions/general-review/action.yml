@@ -1,13 +1,13 @@
-name: "Continue PR Review"
-description: "Automated code review for pull requests using Continue CLI"
+name: "Open Circuit PR Review"
+description: "Automated code review for pull requests using Open Circuit CLI"
 author: "Open Circuit"
 
 inputs:
   ocircuit-api-key:
-    description: "API key for Continue service"
+    description: "API key for Open Circuit service"
     required: true
   ocircuit-org:
-    description: "Organization for Continue config"
+    description: "Organization for Open Circuit config"
     required: true
   ocircuit-agent:
     description: 'Agent path to use (e.g., "myorg/review-bot")'
@@ -110,7 +110,7 @@ runs:
       with:
         node-version: 24.19.0
 
-    - name: Install Continue CLI
+    - name: Install Open Circuit CLI
       if: env.SHOULD_RUN == 'true'
       shell: bash
       run: npm install -g @opencircuit/cli@1.5.47
@@ -122,15 +122,15 @@ runs:
         # Create directory for scripts
         mkdir -p .ocircuit-action-scripts
 
-        # Check if we're running in the Continue repo itself (scripts exist locally)
+        # Check if we're running in the Open Circuit repo itself (scripts exist locally)
         if [ -f "actions/general-review/scripts/buildPrompt.js" ] && [ -f "actions/general-review/scripts/writeMarkdown.js" ]; then
-          echo "Running in Continue repo - using local scripts from current checkout"
+          echo "Running in Open Circuit repo - using local scripts from current checkout"
           cp actions/general-review/scripts/buildPrompt.js .ocircuit-action-scripts/buildPrompt.js
           cp actions/general-review/scripts/writeMarkdown.js .ocircuit-action-scripts/writeMarkdown.js
         else
-          echo "Running in external repo - downloading scripts from Continue repo"
+          echo "Running in external repo - downloading scripts from Open Circuit repo"
           
-          # Download scripts from Continue repo
+          # Download scripts from Open Circuit repo
           echo "Downloading buildPrompt.js..."
           curl -fsSL https://raw.githubusercontent.com/brettconn/open-circuit-dev/ac4d68177934ba4c338b7081f7859275d3d95351/actions/general-review/scripts/buildPrompt.js \
             -o .ocircuit-action-scripts/buildPrompt.js
@@ -179,7 +179,7 @@ runs:
             per_page: 100
           });
 
-          // Find existing Continue review comment
+          // Find existing Open Circuit review comment
           const existingComment = comments
             .filter(c => c.body && c.body.includes(marker))
             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
@@ -194,13 +194,13 @@ runs:
             initialMessage = `${marker}\n**🔄 Review In Progress**\n\n*Triggered by @${context.payload.comment.user.login}'s request*\n\n`;
           }
 
-          initialMessage += `Continue AI is analyzing the code changes...\n\n`;
+          initialMessage += `Open Circuit AI is analyzing the code changes...\n\n`;
           initialMessage += `📊 **Review Scope:**\n`;
           initialMessage += `- Repository: ${context.repo.owner}/${context.repo.repo}\n`;
           initialMessage += `- PR #${prNumber}\n\n`;
           initialMessage += `⏱️ This typically takes 1-2 minutes.\n\n`;
           initialMessage += `[View live progress →](${workflowRunUrl})\n\n`;
-          initialMessage += `---\n<!-- ${new Date().toISOString()} | Powered by Continue (/) -->`;
+          initialMessage += `---\n<!-- ${new Date().toISOString()} | Powered by Open Circuit (/) -->`;
 
           if (existingComment) {
             // Check if comment is less than 1 hour old
@@ -260,7 +260,7 @@ runs:
         node .ocircuit-action-scripts/buildPrompt.js "$PR_NUMBER"
         rm -f pr_data.json
 
-    - name: Run Continue CLI Review
+    - name: Run Open Circuit CLI Review
       if: env.SHOULD_RUN == 'true'
       shell: bash
       env:
@@ -268,7 +268,7 @@ runs:
         OCIRCUIT_ORG: ${{ inputs.ocircuit-org }}
         OCIRCUIT_AGENT: ${{ inputs.ocircuit-agent }}
       run: |
-        echo "Running Continue CLI with prompt:"
+        echo "Running Open Circuit CLI with prompt:"
         echo "=================================="
         head -n 100 review_prompt.txt
         echo "... [truncated] ..."
@@ -296,22 +296,22 @@ runs:
           exit 1
         fi
 
-        # Test Continue CLI availability
+        # Test Open Circuit CLI availability
         if [ "$SKIP_CLI" != "true" ]; then
-          echo "Testing Continue CLI..."
-          if ! which cn > /dev/null 2>&1; then
-            echo "Warning: Continue CLI not found or not working"
+          echo "Testing Open Circuit CLI..."
+          if ! which oc > /dev/null 2>&1; then
+            echo "Warning: Open Circuit CLI not found or not working"
             node .ocircuit-action-scripts/writeMarkdown.js code_review.md cli_install_failed
             echo "SKIP_CLI=true" >> $GITHUB_ENV
           else
-            echo "Continue CLI found at: $(which cn)"
-            echo "Continue CLI version: $(cn --version 2>/dev/null || echo 'version check failed')"
+            echo "Open Circuit CLI found at: $(which oc)"
+            echo "Open Circuit CLI version: $(oc --version 2>/dev/null || echo 'version check failed')"
           fi
         fi
 
         # Run the CLI with validated config and error handling
         if [ "$SKIP_CLI" != "true" ]; then
-          echo "Executing Continue CLI with config: $OCIRCUIT_ORG/$OCIRCUIT_AGENT"
+          echo "Executing Open Circuit CLI with config: $OCIRCUIT_ORG/$OCIRCUIT_AGENT"
           
           # Write prompt to temp file for headless mode
           PROMPT_FILE="/tmp/ocircuit-review-$RANDOM.txt"
@@ -320,10 +320,10 @@ runs:
           echo "Prompt length: $(wc -c < "$PROMPT_FILE") characters"
           
           # Use timeout to prevent hanging (360 seconds = 6 minutes)
-          echo "Executing command: cn --agent $OCIRCUIT_ORG/$OCIRCUIT_AGENT -p @$PROMPT_FILE"
+          echo "Executing command: oc --agent $OCIRCUIT_ORG/$OCIRCUIT_AGENT -p @$PROMPT_FILE"
           
-          if timeout 360 cn --agent "$OCIRCUIT_ORG/$OCIRCUIT_AGENT" -p "@$PROMPT_FILE" > code_review_raw.md 2>cli_error.log; then
-            echo "Continue CLI completed successfully"
+          if timeout 360 oc --agent "$OCIRCUIT_ORG/$OCIRCUIT_AGENT" -p "@$PROMPT_FILE" > code_review_raw.md 2>cli_error.log; then
+            echo "Open Circuit CLI completed successfully"
             echo "Raw output length: $(wc -c < code_review_raw.md) characters"
             
             # Clean up ANSI codes if any
@@ -336,11 +336,13 @@ runs:
             
             # Check if output is empty
             if [ ! -s code_review.md ]; then
-              echo "Warning: Continue CLI returned empty output"
+              echo "Warning: Open Circuit CLI returned empty output"
+                echo "Warning: Open Circuit CLI returned empty output"
               node .ocircuit-action-scripts/writeMarkdown.js code_review.md empty_output
             fi
           else
-            echo "Error: Continue CLI command failed with exit code $?"
+            echo "Error: Open Circuit CLI command failed with exit code $?"
+              echo "Error: Open Circuit CLI command failed with exit code $?"
             echo "CLI error log:"
             cat cli_error.log
             
@@ -389,6 +391,7 @@ runs:
               // Build direct link to workflow logs
               const workflowRunUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
               reviewContent = `⚠️ AI review completed but no review output was generated.\n\n**Likely cause:** Expired OCIRCUIT_API_KEY or missing continuedev/review-bot assistant\n\n[📋 View workflow logs](${workflowRunUrl}) for details.`;
+                reviewContent = `⚠️ AI review completed but no review output was generated.\n\n**Likely cause:** Expired OCIRCUIT_API_KEY or missing review-bot assistant\n\n[📋 View workflow logs](${workflowRunUrl}) for details.`;
             }
 
             // Get PR number based on event type
@@ -407,7 +410,7 @@ runs:
 
             // Add footer with timestamp and branding
             const timestamp = new Date().toISOString();
-            reviewContent += `\n\n---\n<!-- ${timestamp} | Powered by Continue (/) -->`;
+            reviewContent += `\n\n---\n<!-- ${timestamp} | Powered by Open Circuit (/) -->`;
 
             // Look for existing review comment to update (sticky comment)
             const marker = '<!-- ocircuit-agent-review -->';
@@ -438,7 +441,8 @@ runs:
                   per_page: 100
                 });
 
-                // Find existing Continue review comment
+                // Find existing Open Circuit review comment
+                  // Find existing Open Circuit review comment
                 const existingComment = comments
                   .filter(c => c.body && c.body.includes(marker))
                   .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
@@ -471,7 +475,8 @@ runs:
                 per_page: 100
               });
 
-              // Find existing Continue review comment
+              // Find existing Open Circuit review comment
+                // Find existing Open Circuit review comment
               const existingComment = comments
                 .filter(c => c.body && c.body.includes(marker))
                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];

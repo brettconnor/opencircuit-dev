@@ -2,7 +2,7 @@
 alwaysApply: false
 ---
 
-# Open Circuitelopment Data (Dev Data) Guide
+# Open Circuit Development Data (Dev Data) Guide
 
 ## Overview
 
@@ -85,7 +85,7 @@ All events inherit from a base schema (`/packages/config-yaml/src/schemas/data/b
 
 ### Configuration Structure
 
-Dev data is configured through `data` blocks in your Continue config:
+Dev data is configured through `data` blocks in your Open Circuit config:
 
 ```yaml
 data:
@@ -144,7 +144,7 @@ data:
 
 1. **Check local storage**: Verify files are being created in `~/.ocircuit/dev_data/`
 2. **Validate schemas**: Ensure event data matches expected schema format
-3. **Review configuration**: Check `data` blocks in Continue config
+3. **Review configuration**: Check `data` blocks in Open Circuit config
 4. **Test endpoints**: Verify remote endpoints are reachable and accepting data
 
 ## Best Practices
@@ -197,4 +197,4 @@ onAutocompleteAccepted(completion: CompletionData) {
 }
 ```
 
-This guide provides the foundation for understanding and working with Continue's dev data system. Always prioritize user privacy and follow established patterns when making changes.
+This guide provides the foundation for understanding and working with Open Circuit's dev data system. Always prioritize user privacy and follow established patterns when making changes.

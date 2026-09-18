@@ -83,7 +83,7 @@ models:
 const SMOKE_PROXY_MODEL = process.env.SMOKE_PROXY_MODEL || "";
 
 /**
- * Writes a YAML config that uses the Continue proxy (OCIRCUIT_API_KEY).
+ * Writes a YAML config that uses the Open Circuit proxy (OCIRCUIT_API_KEY).
  * Requires SMOKE_PROXY_MODEL to be set to a valid proxy model name.
  */
 export async function writeOCircuitProxyConfig(

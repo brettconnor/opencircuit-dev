@@ -28,7 +28,7 @@ This is a CLI tool for Open Circuit that provides an interactive AI-assisted dev
    - `ensureAuth.ts`: Handles authentication flow
    - `workos.ts`: WorkOS configuration and token management
 
-3. **Continue SDK Integration** (`src/ocircuitSDK.ts`): Initializes the Continue SDK client with:
+3. **Open Circuit SDK Integration** (`src/ocircuitSDK.ts`): Initializes the Open Circuit SDK client with:
 
    - API key authentication
    - Assistant configuration (slug-based)

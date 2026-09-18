@@ -22,7 +22,7 @@ export function getNonce() {
 }
 
 export function getExtensionUri(): vscode.Uri {
-  return vscode.extensions.getExtension("Continue.ocircuit")!.extensionUri;
+  return vscode.extensions.getExtension("OpenCircuit.ocircuit")!.extensionUri;
 }
 
 export function getViewColumnOfFile(

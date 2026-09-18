@@ -7,7 +7,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  run-cn-task:
+  run-oc-task:
     runs-on: ubuntu-latest
     # Only run this workflow on the main repository (open-circuit-dev/open-circuit)
     if: github.repository == 'open-circuit-dev/open-circuit'
@@ -23,11 +23,11 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install Continue CLI globally
-        run: npm install -g @opencircuit/cli@1.5.47
+      - name: Install Open Circuit CLI globally
+        run: npm install -g @opencircuit/cli@1.0.0
 
       - name: Run Snyk Agent
-        run: cd extensions/cli && cn -p --agent continuedev/snyk-code-scan-agent "The current directory"
+        run: cd extensions/cli && oc -p --agent continuedev/snyk-code-scan-agent "The current directory"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           OCIRCUIT_API_KEY: ${{ secrets.OCIRCUIT_API_KEY }}

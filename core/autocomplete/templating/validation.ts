@@ -28,7 +28,7 @@ export const isValidSnippet = (snippet: AutocompleteSnippet): boolean => {
 
   if (
     (snippet as AutocompleteCodeSnippet).filepath?.startsWith(
-      "output:extension-output-Continue.ocircuit",
+      "output:extension-output-OpenCircuit.ocircuit",
     )
   ) {
     return false;

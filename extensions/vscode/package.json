@@ -84,19 +84,19 @@
       }
     ],
     "configuration": {
-      "title": "Continue",
+      "title": "Open Circuit",
       "properties": {
         "ocircuit.telemetryEnabled": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Continue collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more  at [ocircuit.dev › Telemetry](//telemetry).",
+          "markdownDescription": "Open Circuit collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more at [Open Circuit telemetry](//telemetry).",
           "markdownDeprecationMessage": "This setting is deprecated and will be removed in a later version. Please use the _Telemetry > Allow Anonymous Telemetry_ setting in the extension's User Settings page.",
           "deprecationMessage": "Please use the _Telemetry > Allow Anonymous Telemetry_ setting in the extension's User Settings page."
         },
         "ocircuit.showInlineTip": {
           "type": "boolean",
           "default": true,
-          "description": "Show inline suggestion to use the Continue keyboard shortcuts (e.g. \"Cmd/Ctrl L to select code, Cmd/Ctrl I to edit\")."
+          "description": "Show inline suggestions using the Open Circuit keyboard shortcuts (e.g. \"Cmd/Ctrl L to select code, Cmd/Ctrl I to edit\")."
         },
         "ocircuit.disableQuickFix": {
           "type": "boolean",
@@ -111,22 +111,22 @@
         "ocircuit.enableTabAutocomplete": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Enable Continue's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [ocircuit.dev › Walkthrough: Tab Autocomplete (beta)](//features/tab-autocomplete)"
+          "markdownDescription": "Enable Open Circuit's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [Open Circuit tab autocomplete](//features/tab-autocomplete)"
         },
         "ocircuit.enableNextEdit": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Enable Continue's next edit feature. Read our docs to learn about configuration and how to share feedback: [ocircuit.dev › Features › Autocomplete › Next Edit (experimental)](//features/autocomplete/next-edit)"
+          "markdownDescription": "Enable Open Circuit's next edit feature. Read our docs to learn about configuration and how to share feedback: [Open Circuit next edit](//features/autocomplete/next-edit)"
         },
         "ocircuit.pauseTabAutocompleteOnBattery": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Pause Continue's tab autocomplete feature when your battery is low."
+          "markdownDescription": "Pause Open Circuit's tab autocomplete feature when your battery is low."
         },
         "ocircuit.pauseCodebaseIndexOnStart": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Pause Continue's codebase index on start."
+          "markdownDescription": "Pause Open Circuit's codebase index on start."
         },
         "ocircuit.enableConsole": {
           "type": "boolean",
@@ -153,228 +153,228 @@
     "commands": [
       {
         "command": "ocircuit.applyCodeFromChat",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Apply code from chat",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.acceptDiff",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Accept Diff",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.rejectDiff",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Reject Diff",
-        "group": "Continue",
+        "group": "Open Circuit",
         "icon": "$(stop)"
       },
       {
         "command": "ocircuit.acceptVerticalDiffBlock",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Accept Vertical Diff Block",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.rejectVerticalDiffBlock",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Reject Vertical Diff Block",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.focusEdit",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Add to Edit",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.focusOCircuitInput",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Add Highlighted Code to Context and Clear Chat",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.focusOCircuitInputWithoutClear",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Add to Chat",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.debugTerminal",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Debug Terminal",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.exitEditMode",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Exit Edit Mode",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.openConfigPage",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Open Settings",
         "icon": "$(gear)",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.toggleTabAutocompleteEnabled",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Toggle Autocomplete Enabled",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.forceAutocomplete",
-        "title": "Continue: Force Autocomplete",
-        "category": "Continue"
+        "title": "Open Circuit: Force Autocomplete",
+        "category": "Open Circuit"
       },
       {
         "command": "ocircuit.selectFilesAsContext",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Select Files as Context",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.newSession",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "New Session",
         "icon": "$(add)",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.shareSession",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Share Current Chat Session as Markdown",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.viewHistory",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "View History",
         "icon": "$(history)",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.viewLogs",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "View Logs",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.clearConsole",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Clear Console",
         "icon": "$(clear-all)",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.navigateTo",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Navigate to a path",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.writeCommentsForCode",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Write Comments for this Code",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.writeDocstringForCode",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Write a Docstring for this Code",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.fixCode",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Fix this Code",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.optimizeCode",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Optimize this Code",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.fixGrammar",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Fix Grammar / Spelling",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.codebaseForceReIndex",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Codebase Force Re-Index",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.rebuildCodebaseIndex",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Rebuild codebase index",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.docsIndex",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Docs Index",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.docsReIndex",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Docs Force Re-Index",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.focusOCircuitInput",
-        "category": "Continue",
-        "title": "Focus Continue Chat",
-        "group": "Continue"
+        "category": "Open Circuit",
+        "title": "Focus Open Circuit Chat",
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.enterEnterpriseLicenseKey",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Enter Enterprise License Key",
-        "group": "Continue"
+        "group": "Open Circuit"
       },
       {
         "command": "ocircuit.toggleNextEditEnabled",
-        "title": "Continue: Toggle Next Edit"
+        "title": "Open Circuit: Toggle Next Edit"
       },
       {
         "command": "ocircuit.nextEditWindow.hideNextEditSuggestion",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Hide Next Edit Suggestion"
       },
       {
         "command": "ocircuit.nextEditWindow.acceptNextEditSuggestion",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Accept Next Edit Suggestion"
       },
       {
         "command": "ocircuit.forceNextEdit",
-        "category": "Continue",
-        "title": "Continue: Force Next Edit"
+        "category": "Open Circuit",
+        "title": "Open Circuit: Force Next Edit"
       },
       {
         "command": "ocircuit.acceptJump",
-        "category": "Continue",
-        "title": "Continue: Accept Jump Suggestion"
+        "category": "Open Circuit",
+        "title": "Open Circuit: Accept Jump Suggestion"
       },
       {
         "command": "ocircuit.rejectJump",
-        "category": "Continue",
-        "title": "Continue: Reject Jump Suggestion"
+        "category": "Open Circuit",
+        "title": "Open Circuit: Reject Jump Suggestion"
       },
       {
         "command": "ocircuit.openInNewWindow",
-        "category": "Continue",
+        "category": "Open Circuit",
         "title": "Open in new window",
-        "group": "Continue"
+        "group": "Open Circuit"
       }
     ],
     "keybindings": [
@@ -498,7 +498,7 @@
     "submenus": [
       {
         "id": "ocircuit.ocircuitSubMenu",
-        "label": "Continue"
+        "label": "Open Circuit"
       }
     ],
     "menus": {
@@ -531,18 +531,18 @@
       "editor/title/run": [
         {
           "command": "ocircuit.rejectDiff",
-          "group": "Continue",
+          "group": "Open Circuit",
           "when": "ocircuit.streamingDiff"
         }
       ],
       "ocircuit.ocircuitSubMenu": [
         {
           "command": "ocircuit.focusOCircuitInputWithoutClear",
-          "group": "Continue"
+          "group": "Open Circuit"
         },
         {
           "command": "ocircuit.focusEdit",
-          "group": "Continue",
+          "group": "Open Circuit",
           "when": "!editorReadonly"
         }
       ],
@@ -596,15 +596,15 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "continue",
-          "title": "Continue",
+          "id": "ocircuit",
+          "title": "Open Circuit",
           "icon": "media/sidebar-icon.png"
         }
       ],
       "panel": [
         {
           "id": "ocircuitConsole",
-          "title": "Continue Console",
+          "title": "Open Circuit Console",
           "icon": "$(window)"
         }
       ]
@@ -623,7 +623,7 @@
         {
           "type": "webview",
           "id": "ocircuit.ocircuitConsoleView",
-          "name": "Continue Console",
+          "name": "Open Circuit Console",
           "icon": "$(window)",
           "visibility": "visible",
           "when": "config.ocircuit.enableConsole"

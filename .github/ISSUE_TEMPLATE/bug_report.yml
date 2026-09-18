@@ -20,20 +20,20 @@ body:
         Feel free to omit any info that is not relevant to your issue.
 
         - **OS**: macOS
-        - **Continue version**: v0.9.4
+        - **Open Circuit version**: v0.9.4
         - **IDE version**:  VSCode 1.85.1
         - Model: Claude Sonnet 4.5
         - Agent configuration
       value: |
         - OS:
-        - Continue version:
+        - Open Circuit version:
         - IDE version:
         - Model:
         - config:
           ```yaml
 
           ```
-          OR link to agent in Continue hub:
+          OR link to agent in Open Circuit hub:
       render: Markdown
     validations:
       required: false

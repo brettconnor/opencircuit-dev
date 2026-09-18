@@ -12,7 +12,7 @@ import * as URI from "uri-js";
 import { fileURLToPath } from "url";
 import { AnyZodObject } from "zod";
 import { Core } from "../core.js";
-import { OCircuitConfig, IdeInfo, IdeSettings } from "../index.js";
+import { IdeInfo, IdeSettings, OCircuitConfig } from "../index.js";
 import { getDevDataFilePath } from "../util/paths.js";
 import { joinPathsToUri } from "../util/uri.js";
 
@@ -54,8 +54,8 @@ export class DataLogger {
     }
     if ("userAgent" in zodSchema.shape) {
       newBody.userAgent = ideInfo
-        ? `${ideInfo.name}/${ideInfo.version} (Continue/${ideInfo.extensionVersion})`
-        : "Unknown/Unknown (Continue/Unknown)";
+        ? `${ideInfo.name}/${ideInfo.version} (OpenCircuit/${ideInfo.extensionVersion})`
+        : "Unknown/Unknown (OpenCircuit/Unknown)";
     }
     if ("selectedProfileId" in zodSchema.shape) {
       newBody.selectedProfileId =

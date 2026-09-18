@@ -12,7 +12,7 @@ const messages = {
 `,
   cli_install_failed: `## Code Review Summary
 
-⚠️ AI review skipped: Continue CLI installation failed.
+⚠️ AI review skipped: Open Circuit CLI installation failed.
 
 ### Troubleshooting
 - Check that npm installation succeeded
@@ -20,28 +20,28 @@ const messages = {
 `,
   empty_output: `## Code Review Summary
 
-⚠️ Continue CLI returned an empty response. Please check the configuration.
+⚠️ Open Circuit CLI returned an empty response. Please check the configuration.
 `,
   cli_not_found: `## Code Review Summary
 
-⚠️ Continue CLI is not properly installed. Please ensure @opencircuit/cli is installed globally.
+⚠️ Open Circuit CLI is not properly installed. Please ensure @opencircuit/cli is installed globally.
 `,
   config_error: `## Code Review Summary
 
-⚠️ Continue configuration error. Please verify that the assistant exists in Continue Hub.
+⚠️ Open Circuit configuration error. Please verify that the assistant exists in the configured service.
 `,
   auth_error: `## Code Review Summary
 
-⚠️ Continue API authentication failed. Please check your OCIRCUIT_API_KEY.
+⚠️ Open Circuit API authentication failed. Please check your OCIRCUIT_API_KEY.
 `,
   generic_failure: `## Code Review Summary
 
-⚠️ AI review failed. Please check the Continue API key and configuration.
+⚠️ AI review failed. Please check the Open Circuit API key and configuration.
 
 ### Troubleshooting
 - Verify the OCIRCUIT_API_KEY secret is set correctly
 - Check that the organization and config path are valid
-- Ensure the Continue service is accessible
+- Ensure the Open Circuit service is accessible
 `,
 };
 
