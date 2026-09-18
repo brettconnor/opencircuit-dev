@@ -25,9 +25,8 @@ describe("useChat clear command", () => {
     // Clear all mocks to prevent call history leaking between tests
     vi.clearAllMocks();
 
-    mockSetChatHistory = vi.fn<
-      React.Dispatch<React.SetStateAction<ChatHistoryItem[]>>
-    >();
+    mockSetChatHistory =
+      vi.fn<React.Dispatch<React.SetStateAction<ChatHistoryItem[]>>>();
     mockOnClear = vi.fn<() => void>();
   });
 

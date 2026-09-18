@@ -29,8 +29,9 @@ function applyCompletionOptions<T extends BaseLLM>(llm: T): T {
 
 function createSseResponse(events: Array<object | string>) {
   const body = events
-    .map((event) =>
-      `data: ${typeof event === "string" ? event : JSON.stringify(event)}\n\n`,
+    .map(
+      (event) =>
+        `data: ${typeof event === "string" ? event : JSON.stringify(event)}\n\n`,
     )
     .join("");
 

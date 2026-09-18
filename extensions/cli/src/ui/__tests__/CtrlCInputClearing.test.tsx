@@ -9,9 +9,8 @@ describe("Ctrl+C input clearing", () => {
   let mockProcessKill: any;
 
   beforeEach(() => {
-    mockOnSubmit = vi.fn<
-      (message: string, imageMap?: Map<string, Buffer>) => void
-    >();
+    mockOnSubmit =
+      vi.fn<(message: string, imageMap?: Map<string, Buffer>) => void>();
 
     // Mock process.kill using vi.spyOn
     mockProcessKill = vi.spyOn(process, "kill").mockImplementation(() => {
