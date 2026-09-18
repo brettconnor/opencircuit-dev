@@ -126,7 +126,83 @@ You can also pipe input:
 echo "Review the current working tree" | oc -p
 ```
 
-## 8. Troubleshooting
+## 8. Use your own model provider
+
+The hosted Open Circuit API is currently disabled by default. For local or
+direct provider use, set the provider key in the shell that launches `oc`:
+
+```bash
+export OPENAI_API_KEY="your-openai-key"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export GEMINI_API_KEY="your-gemini-key"
+```
+
+Only set the keys you actually use. Do not commit them to a repository or put
+them in a shared system profile.
+
+Create a local `config.yaml` that selects one provider and references its
+environment variable:
+
+```yaml
+name: Local OpenAI
+version: 1.0.0
+schema: v1
+models:
+	- name: OpenAI model
+		provider: openai
+		model: gpt-4o-mini
+		apiKey: ${{ secrets.OPENAI_API_KEY }}
+		roles:
+			- chat
+```
+
+For Anthropic, use:
+
+```yaml
+name: Local Anthropic
+version: 1.0.0
+schema: v1
+models:
+	- name: Anthropic model
+		provider: anthropic
+		model: claude-3-5-sonnet-20241022
+		apiKey: ${{ secrets.ANTHROPIC_API_KEY }}
+		roles:
+			- chat
+```
+
+For Gemini, use:
+
+```yaml
+name: Local Gemini
+version: 1.0.0
+schema: v1
+models:
+	- name: Gemini model
+		provider: gemini
+		model: gemini-2.0-flash
+		apiKey: ${{ secrets.GEMINI_API_KEY }}
+		roles:
+			- chat
+```
+
+Run with the selected configuration:
+
+```bash
+oc --config ./config.yaml
+```
+
+For a one-shot request:
+
+```bash
+oc --config ./config.yaml -p "Summarize the current directory."
+```
+
+The CLI currently auto-detects `ANTHROPIC_API_KEY` during headless onboarding,
+but explicit `--config` files are the reliable path for OpenAI, Anthropic, and
+Gemini provider selection.
+
+## 9. Troubleshooting
 
 ### `oc: command not found`
 

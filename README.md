@@ -83,6 +83,22 @@ Use `--skip-install` only after the committed lockfiles have been installed.
 The profile covers dependency policy, Core and CLI builds, the CLI-to-Core
 runtime boundary, release-artifact shape, and the Rust benchmark.
 
+## Provider keys
+
+The hosted Open Circuit API is currently disabled by default. The CLI can use
+direct provider credentials instead. Set only the provider key you need in the
+shell that launches `oc`:
+
+```bash
+export OPENAI_API_KEY="your-openai-key"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export GEMINI_API_KEY="your-gemini-key"
+```
+
+Use a local `config.yaml` with `apiKey: ${{ secrets.PROVIDER_API_KEY }}` and run
+`oc --config ./config.yaml`. See the [beginner quickstart](QUICKSTART.md) for
+provider-specific examples. Never commit API keys.
+
 ## Stage a release asset
 
 From the repository root:
