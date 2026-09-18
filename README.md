@@ -16,18 +16,8 @@ New to Open Circuit? Follow the beginner guide:
 
 **[Read QUICKSTART.md](QUICKSTART.md)**
 
-The CLI-only 1.0.0 release candidate can be staged as a GitHub Release asset.
-It has not been published to npm yet.
-
-```bash
-npm --prefix extensions/cli run release:artifact
-npm install --global release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
-oc --version
-```
-
-The generated tarball and `.sha256` file are written to the ignored
-`release-artifacts/v1.0.0/` directory. Upload both files to the GitHub Release
-for tag `v1.0.0` when the release is ready.
+> Open Circuit CLI 1.0.0 is currently distributed as a GitHub Release asset.
+> npm publication is planned but not yet available.
 
 ## What is included
 
@@ -46,6 +36,39 @@ CLI-first release path. A VSIX is not required for the first CLI iteration.
 - Node.js `24.19.0` from [`.nvmrc`](.nvmrc) or [`.node-version`](.node-version)
 - npm
 - Git
+
+## Install the CLI
+
+Download these files from the GitHub `v1.0.0` release:
+
+- `opencircuit-cli-1.0.0.tgz`
+- `opencircuit-cli-1.0.0.tgz.sha256`
+
+Verify the download from the directory containing both files:
+
+```bash
+shasum -a 256 -c opencircuit-cli-1.0.0.tgz.sha256
+```
+
+Install the CLI:
+
+```bash
+npm install --global ./opencircuit-cli-1.0.0.tgz
+oc --version
+```
+
+Expected output:
+
+```text
+1.0.0
+```
+
+The npm registry package is not available yet. After publication, the install
+command will be:
+
+```bash
+npm install --global @opencircuit/cli@1.0.0
+```
 
 ## Build from source
 
@@ -101,33 +124,24 @@ provider-specific examples. Never commit API keys.
 
 ## Stage a release asset
 
+This section is for maintainers preparing a GitHub Release asset.
+
 From the repository root:
 
 ```bash
 npm --prefix extensions/cli run release:artifact
-shasum -a 256 release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz
+shasum -a 256 -c release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256
 ```
 
-Upload these files manually to the GitHub `v1.0.0` release:
+The command creates:
 
 - `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz`
 - `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256`
 
+Upload both files manually to the GitHub `v1.0.0` release. The staging
+directory is ignored by Git and is not an installation path for end users.
+
 CI automation and npm publication are intentionally deferred.
-
-## Provider smoke test
-
-After installing `oc` on the target runtime, run the explicit live check with
-both provider keys exported in that shell:
-
-```bash
-bash /Users/brettcon/git/systems-orchestration/scripts/provider-smoke.sh \
-  --live --cli oc
-```
-
-This makes one short request to OpenAI and one to Anthropic, with no retries,
-temporary configuration, a bounded timeout, and suppressed response bodies.
-It is not part of the offline retained-closure gate.
 
 ## Project guides
 

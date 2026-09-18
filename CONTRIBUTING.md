@@ -41,10 +41,10 @@ validation profile.
 
 ## Scope and compatibility
 
-The retained product is the CLI, VS Code extension/VSIX, Core, and their shared
-packages. Preserve historical
-`@opencircuit/*` package names and `OCIRCUIT_*` environment variables when
-compatibility requires them.
+The retained product is the CLI, Core, and their shared packages. The VS Code
+extension and VSIX are deferred surfaces with separate validation scope.
+Preserve `@opencircuit/*` package names and `OCIRCUIT_*` environment variables
+when compatibility requires them.
 
 ## Contributor agreement
 
