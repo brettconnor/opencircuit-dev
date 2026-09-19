@@ -3,7 +3,7 @@
 
 import type { ToolStatus, Usage } from "core/index.js";
 import { calculateRequestCost } from "core/llm/calculateRequestCost.js";
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
 
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";
@@ -424,9 +424,9 @@ export async function preprocessStreamedToolCalls(
       callbacks?.onToolStart?.(toolCall.name, toolCall.arguments);
 
       const errorReason =
-        error instanceof ContinueError
+        error instanceof OCircuitError
           ? error.reason
-          : ContinueErrorReason.Unknown;
+          : OCircuitErrorReason.Unknown;
 
       const errorMessage =
         error instanceof Error ? error.message : String(error);

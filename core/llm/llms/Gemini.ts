@@ -1,4 +1,4 @@
-import { streamResponse } from "@continuedev/fetch";
+import { streamResponse } from "@opencircuit/fetch";
 import { v4 as uuidv4 } from "uuid";
 import {
   AssistantChatMessage,
@@ -21,7 +21,7 @@ import {
   GeminiChatResponse,
   GeminiGenerationConfig,
   GeminiToolFunctionDeclaration,
-  convertContinueToolToGeminiFunction,
+  convertOCircuitToolToGeminiFunction,
   mergeConsecutiveGeminiMessages,
 } from "./gemini-types";
 
@@ -203,7 +203,7 @@ class Gemini extends BaseLLM {
     }
   }
 
-  continuePartToGeminiPart(part: MessagePart): GeminiChatContentPart {
+  ocircuitPartToGeminiPart(part: MessagePart): GeminiChatContentPart {
     if (part.type === "text") {
       return {
         text: part.text,
@@ -283,7 +283,7 @@ class Gemini extends BaseLLM {
               parts:
                 typeof msg.content === "string"
                   ? [{ text: msg.content }]
-                  : msg.content.map(this.continuePartToGeminiPart),
+                  : msg.content.map(this.ocircuitPartToGeminiPart),
             };
 
             if (msg.toolCalls && msg.toolCalls.length) {
@@ -323,7 +323,7 @@ class Gemini extends BaseLLM {
             parts:
               typeof msg.content === "string"
                 ? [{ text: msg.content }]
-                : msg.content.map(this.continuePartToGeminiPart),
+                : msg.content.map(this.ocircuitPartToGeminiPart),
           };
         }),
     };
@@ -348,7 +348,7 @@ class Gemini extends BaseLLM {
         const functions: GeminiToolFunctionDeclaration[] = [];
         options.tools.forEach((tool) => {
           try {
-            functions.push(convertContinueToolToGeminiFunction(tool));
+            functions.push(convertOCircuitToolToGeminiFunction(tool));
           } catch (e) {
             console.warn(
               `Failed to convert tool to gemini function definition. Skipping: ${JSON.stringify(tool, null, 2)}`,

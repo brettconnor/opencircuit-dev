@@ -117,7 +117,10 @@ function defineIntegrationSuite(
       "Complete works",
       retryOnce(async () => {
         const llm = withCompletionOptions(createLlm());
-        const completion = await llm.complete("Hi", new AbortController().signal);
+        const completion = await llm.complete(
+          "Hi",
+          new AbortController().signal,
+        );
         expect(completion.length).toBeGreaterThan(0);
       }),
       timeout,

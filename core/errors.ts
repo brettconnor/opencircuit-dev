@@ -2,7 +2,7 @@
 //
 // This re-exports the existing implementation in `util/errors.ts` under a
 // root-relative path so it can be consumed as a durable subpath
-// (`@continuedev/core/errors`) without requiring a package.json `exports`
+// (`@opencircuit/core/errors`) without requiring a package.json `exports`
 // map yet. See docs/reduction/artifacts/phase3/item2-evidence.md for the
 // approved API proposal and docs/planning/phase3-core-boundary_v1.md
 // ("Item 4") for the migration process this file is part of.

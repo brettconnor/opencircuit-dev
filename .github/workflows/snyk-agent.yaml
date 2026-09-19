@@ -7,27 +7,27 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  run-cn-task:
+  run-oc-task:
     runs-on: ubuntu-latest
     # Only run this workflow on the canonical repository.
     if: github.repository == 'brettconnor/opencircuit-dev'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: "20"
 
-      - name: Install Continue CLI globally
-        run: npm install -g @continuedev/cli@latest
+      - name: Install Open Circuit CLI globally
+        run: npm install -g @opencircuit/cli@1.0.0
 
       - name: Run Snyk Agent
-        run: cd extensions/cli && cn -p --agent continuedev/snyk-code-scan-agent "The current directory"
+        run: cd extensions/cli && oc -p --agent continuedev/snyk-code-scan-agent "The current directory"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          CONTINUE_API_KEY: ${{ secrets.CONTINUE_API_KEY }}
+          OCIRCUIT_API_KEY: ${{ secrets.OCIRCUIT_API_KEY }}

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -73,8 +73,8 @@ describe("multiEditTool CLI specific", () => {
       };
 
       const error = await multiEditTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.EditToolFileNotRead);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.EditToolFileNotRead);
     });
 
     it("should throw error if file does not exist", async () => {
@@ -93,8 +93,8 @@ describe("multiEditTool CLI specific", () => {
       };
 
       const error = await multiEditTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.FileNotFound);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.FileNotFound);
     });
 
     it("should throw error if file_path is missing", async () => {
@@ -108,9 +108,9 @@ describe("multiEditTool CLI specific", () => {
       };
 
       const error = await multiEditTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
+      expect(error).toBeInstanceOf(OCircuitError);
       expect(error.reason).toBe(
-        ContinueErrorReason.FindAndReplaceMissingFilepath,
+        OCircuitErrorReason.FindAndReplaceMissingFilepath,
       );
     });
   });
@@ -193,8 +193,8 @@ describe("multiEditTool CLI specific", () => {
       };
 
       const error = await multiEditTool.run(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.FileWriteError);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.FileWriteError);
     });
   });
 

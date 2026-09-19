@@ -28,12 +28,12 @@ describe("EditMessageSelector", () => {
     return history;
   };
 
-  let mockOnEdit: ReturnType<typeof vi.fn>;
-  let mockOnExit: ReturnType<typeof vi.fn>;
+  let mockOnEdit: (messageIndex: number, newContent: string) => void;
+  let mockOnExit: () => void;
 
   beforeEach(() => {
-    mockOnEdit = vi.fn();
-    mockOnExit = vi.fn();
+    mockOnEdit = vi.fn<(messageIndex: number, newContent: string) => void>();
+    mockOnExit = vi.fn<() => void>();
     vi.clearAllMocks();
   });
 

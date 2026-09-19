@@ -64,9 +64,32 @@ const trimFirstElement = (args: Array<string>): string => {
 const getSubprocess = async (extras: ContextProviderExtras) => {
   const workingDir = await extras.ide.getWorkspaceDirs().then(trimFirstElement);
 
-  return (command: string) =>
-    extras.ide.subprocess(command, workingDir).then(trimFirstElement);
+  return (command: string, args: string[]) =>
+    extras.ide.subprocess(command, workingDir, args).then(trimFirstElement);
 };
+
+/** Build a git argument list only for a validated GitLab diff position. */
+export function getGitShowArgs(
+  position: NonNullable<GitLabComment["position"]>,
+): string[] | null {
+  if (!/^[0-9a-f]{40}$/i.test(position.head_sha)) {
+    return null;
+  }
+
+  const path = position.new_path;
+  if (
+    !path ||
+    /[\u0000-\u001f\u007f]/.test(path) ||
+    path.startsWith("/") ||
+    path.startsWith("\\") ||
+    /^[a-z]:[\\/]/i.test(path) ||
+    path.split(/[\\/]/).some((segment) => segment === "..")
+  ) {
+    return null;
+  }
+
+  return ["show", `${position.head_sha}:${path}`];
+}
 
 class GitLabMergeRequestContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
@@ -77,7 +100,7 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
   };
 
   get deprecationMessage() {
-    return "The Gitlab Merge Request context provider is now deprecated and will be removed in a later version. Please consider using the GitLab MCP (https://continue.dev/docker/mcp-gitlab) instead.";
+    return "The Gitlab Merge Request context provider is now deprecated and will be removed in a later version. Please consider using the GitLab MCP (//docker/mcp-gitlab) instead.";
   }
 
   private async getApi(): Promise<AxiosInstance> {
@@ -103,13 +126,14 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
   ): Promise<RemoteBranchInfo> {
     const subprocess = await getSubprocess(extras);
 
-    const branchName = await subprocess("git branch --show-current");
+    const branchName = await subprocess("git", ["branch", "--show-current"]);
 
-    const branchRemote = await subprocess(
-      `git config branch.${branchName}.remote`,
-    );
+    const branchRemote = await subprocess("git", [
+      "config",
+      `branch.${branchName}.remote`,
+    ]);
 
-    const branchInfo = await subprocess("git branch -vv");
+    const branchInfo = await subprocess("git", ["branch", "-vv"]);
 
     const currentBranchInfo = branchInfo
       .split("\n")
@@ -123,7 +147,11 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
 
     const remoteBranch = remoteMatches?.groups?.remote_branch ?? null;
 
-    const remoteUrl = await subprocess(`git remote get-url ${branchRemote}`);
+    const remoteUrl = await subprocess("git", [
+      "remote",
+      "get-url",
+      branchRemote,
+    ]);
 
     let urlMatches: RegExpExecArray | null;
     if (/https?.*/.test(remoteUrl)) {
@@ -227,11 +255,12 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
             result += `\nline: ${comment.position.new_line}`;
 
             if (comment.position.head_sha) {
-              const sourceLines = await subprocess(
-                `git show ${comment.position.head_sha}:${comment.position.new_path}`,
-              )
-                .then((result) => result.split("\n"))
-                .catch((ex) => []);
+              const gitShowArgs = getGitShowArgs(comment.position);
+              const sourceLines = gitShowArgs
+                ? await subprocess("git", gitShowArgs)
+                    .then((result) => result.split("\n"))
+                    .catch(() => [])
+                : [];
 
               const line =
                 comment.position.new_line <= sourceLines.length

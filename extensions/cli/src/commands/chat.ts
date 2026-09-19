@@ -1,5 +1,5 @@
-import { ModelConfig } from "@continuedev/config-yaml";
-import { BaseLlmApi } from "@continuedev/openai-adapters";
+import { ModelConfig } from "@opencircuit/config-yaml";
+import { BaseLlmApi } from "@opencircuit/openai-adapters";
 import chalk from "chalk";
 import { ChatHistoryItem, Session } from "core";
 import { ChatDescriber } from "core/chatDescriber.js";
@@ -499,9 +499,9 @@ async function runHeadlessMode(
     }
 
     throw new Error(
-      'Headless mode requires a prompt. Use: cn -p "your prompt"\n' +
-        'Or pipe input: echo "prompt" | cn -p\n' +
-        "Or use agent files: cn -p --agent my-org/my-agent\n" +
+      'Headless mode requires a prompt. Use: oc -p "your prompt"\n' +
+        'Or pipe input: echo "prompt" | oc -p\n' +
+        "Or use agent files: oc -p --agent my-org/my-agent\n" +
         "Note: Agent files must contain a prompt field.",
     );
   }

@@ -17,8 +17,8 @@ interface ListSessionsOptions {
  */
 function setSessionId(sessionId: string): void {
   // Use the same environment variable that getSessionId() checks
-  process.env.CONTINUE_CLI_TEST_SESSION_ID = sessionId.replace(
-    "continue-cli-",
+  process.env.OCIRCUIT_CLI_TEST_SESSION_ID = sessionId.replace(
+    "ocircuit-cli-",
     "",
   );
 }
@@ -58,7 +58,7 @@ export async function listSessionsCommand(
   // Handle empty sessions case
   if (sessions.length === 0) {
     console.log(
-      "No previous sessions found. Start a new conversation with: cn",
+      "No previous sessions found. Start a new conversation with: oc",
     );
     return;
   }

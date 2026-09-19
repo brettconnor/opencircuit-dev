@@ -5,44 +5,43 @@ import { getVersion } from "./version.js";
 
 const d = chalk.dim;
 
-export const CONTINUE_ASCII_ART = `
-${mind.multiline(`  ██████╗ ██████╗ ███╗   ██╗████████╗██╗███╗   ██╗██╗   ██╗███████╗
- ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██║████╗  ██║██║   ██║██╔════╝
- ██║     ██║   ██║██╔██╗ ██║   ██║   ██║██╔██╗ ██║██║   ██║█████╗
- ██║     ██║   ██║██║╚██╗██║   ██║   ██║██║╚██╗██║██║   ██║██╔══╝
- ╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║██║ ╚████║╚██████╔╝███████╗
-  ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝`)}
+export const OCIRCUIT_ASCII_ART = `
+${mind.multiline(`
+  ██████╗  ██████╗ ██╗ ██████╗   ██████╗ ██████╗ ██╗   ██╗ ██╗████████╗
+██╔═══██╗ ██╔════╝ ██║ ██  ██║  ██╔════╝   ██╔═╝ ██║   ██║ ██║╚══██╔══╝
+██║   ██║ ██║      ██║ ██████║  ██║        ██║   ██║   ██║ ██║   ██║
+██║   ██║ ██║      ██║ ██╔══██╗ ██║        ██║   ██║   ██║ ██║   ██║
+╚██████╔╝ ╚██████╗ ██║ ██║   ██╗╚██████╗ ██████╗ ╚██████╔╝ ██║   ██║
+ ╚═════╝   ╚═════╝ ╚═╝ ╚═╝   ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═╝   ╚═╝`)}
                                                     ${d("v" + getVersion())}`;
 
-// ASCII art for just "CN" (first two letters)
-const CN_ASCII_ART = `
-${mind.multiline(`  ██████╗███╗   ██╗
- ██╔════╝████╗  ██║
- ██║     ██╔██╗ ██║
- ██║     ██║╚██╗██║
- ╚██████╗██║ ╚████║
-  ╚═════╝╚═╝  ╚═══╝`)}
+// Compact gradient mark for narrow terminals.
+const OC_ASCII_ART = `
+${mind.multiline(`
+ ██████╗  ██████╗
+██╔═══██╗██╔════╝
+██║   ██║██║
+██║   ██║██║
+╚██████╔╝╚██████╗
+ ╚═════╝  ╚═════╝`)}
   ${d("v" + getVersion())}`;
 
-// Minimum terminal width required to display ASCII art properly
-const MIN_WIDTH_FOR_ASCII_ART = 75;
+// The full block wordmark is 84 columns wide at its longest line.
+const MIN_WIDTH_FOR_ASCII_ART = 84;
 
 /**
- * Returns the ASCII art only if the terminal is wide enough to display it properly.
- * If terminal is too narrow, returns just the version string.
+ * Uses the full block wordmark only when the terminal can contain it without wrapping.
+ * Narrow terminals receive the compact OC mark instead.
  */
 export function getDisplayableAsciiArt(): string {
   const terminalWidth = process.stdout.columns || 80;
 
-  if (terminalWidth >= MIN_WIDTH_FOR_ASCII_ART) {
-    return CONTINUE_ASCII_ART;
-  }
-
-  // If terminal is too narrow, show just "CN" ASCII art
-  return CN_ASCII_ART;
+  return terminalWidth >= MIN_WIDTH_FOR_ASCII_ART
+    ? OCIRCUIT_ASCII_ART
+    : OC_ASCII_ART;
 }
 
-export const CONTINUE_LOGO_ASCII_ART = `
+export const OCIRCUIT_LOGO_ASCII_ART = `
                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@
                  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@@@
@@ -68,7 +67,7 @@ export const CONTINUE_LOGO_ASCII_ART = `
   @@@@@@@@@@@@  @@@@@                                                    @@@@@@@@@@@@ @@@@@@@@@@@@
     @@@@@@@@@@@  @@@                                                      @@@@@@@@@@@@  @@@@@@@@@@@
      @@@@@@@@@@@                                                           @@@@@@@@@@@@  @@@@@@@@@@@
-                                          CONTINUE                                       @@@@@@@@@@@@
+                                          OCIRCUIT                                       @@@@@@@@@@@@
      @@@@@@@@@@@                                                           @@@@@@@@@@@@  @@@@@@@@@@@
    @@@@@@@@@@@@  @@@                                                      @@@@@@@@@@@@  @@@@@@@@@@@
   @@@@@@@@@@@@  @@@@@                                                    @@@@@@@@@@@@ @@@@@@@@@@@@

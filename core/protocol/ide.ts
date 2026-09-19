@@ -30,7 +30,10 @@ export type ToIdeFromWebviewOrCoreProtocol = {
   runCommand: [{ command: string; options?: TerminalOptions }, void];
   getSearchResults: [{ query: string; maxResults?: number }, string];
   getFileResults: [{ pattern: string; maxResults?: number }, string[]];
-  subprocess: [{ command: string; cwd?: string }, [string, string]];
+  subprocess: [
+    { command: string; cwd?: string; args?: string[] },
+    [string, string],
+  ];
   saveFile: [{ filepath: string }, void];
   fileExists: [{ filepath: string }, boolean];
   readFile: [{ filepath: string }, string];

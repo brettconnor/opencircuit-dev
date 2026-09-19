@@ -171,9 +171,9 @@ process.on("SIGINT", async () => {
 const program = new Command();
 
 program
-  .name("cn")
+  .name("oc")
   .description(
-    "Continue CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
+    "Open Circuit CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
   )
   .version(getVersion(), "-v, --version", "Display version number");
 
@@ -238,7 +238,7 @@ addCommonOptions(program)
       ask: options.ask,
       exclude: options.exclude,
       isRootCommand: true,
-      commandName: "cn",
+      commandName: "oc",
     });
 
     if (!validation.isValid) {
@@ -281,12 +281,12 @@ addCommonOptions(program)
         "Error: A prompt is required when using the -p/--print flag, unless --prompt, --agent, or --resume is provided.\n\n",
       );
       safeStderr("Usage examples:\n");
-      safeStderr('  cn -p "please review my current git diff"\n');
-      safeStderr('  echo "hello" | cn -p\n');
-      safeStderr('  cn -p "analyze the code in src/"\n');
-      safeStderr("  cn -p --agent my-org/my-agent\n");
-      safeStderr("  cn -p --prompt my-org/my-prompt\n");
-      safeStderr("  cn -p --resume\n");
+      safeStderr('  oc -p "please review my current git diff"\n');
+      safeStderr('  echo "hello" | oc -p\n');
+      safeStderr('  oc -p "analyze the code in src/"\n');
+      safeStderr("  oc -p --agent my-org/my-agent\n");
+      safeStderr("  oc -p --prompt my-org/my-prompt\n");
+      safeStderr("  oc -p --resume\n");
       await gracefulExit(1);
     }
 
@@ -319,7 +319,7 @@ program
   .option("--port <port>", "Port to run the server on (default: 8000)", "8000")
   .option(
     "--id <storageId>",
-    "Upload session snapshots to Continue-managed storage using the provided identifier",
+    "Upload session snapshots to Open Circuit-managed storage using the provided identifier",
   )
   .option(
     "--beta-upload-artifact-tool",
@@ -368,7 +368,7 @@ program.on("command:*", () => {
 });
 
 export async function runCli(): Promise<void> {
-  // Handle internal worker subprocess for cn review
+  // Handle internal worker subprocess for oc review
   if (process.argv.includes("--internal-review-worker")) {
     const { runReviewWorker } = await import(
       "./commands/review/reviewWorker.js"

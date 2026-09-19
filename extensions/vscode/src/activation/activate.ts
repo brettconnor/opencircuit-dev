@@ -1,11 +1,11 @@
-import { getContinueRcPath, getTsConfigPath } from "core/util/paths";
+import { getOCircuitRcPath, getTsConfigPath } from "core/util/paths";
 import * as vscode from "vscode";
 
 import { VsCodeExtension } from "../extension/VsCodeExtension";
 import { isUnsupportedPlatform } from "../util/util";
 
 import { GlobalContext } from "core/util/GlobalContext";
-import { VsCodeContinueApi } from "./api";
+import { VsCodeOCircuitApi } from "./api";
 import setupInlineTips from "./InlineTipManager";
 
 export async function activateExtension(context: vscode.ExtensionContext) {
@@ -20,26 +20,26 @@ export async function activateExtension(context: vscode.ExtensionContext) {
 
     globalContext.update("hasShownUnsupportedPlatformWarning", true);
     void vscode.window.showInformationMessage(
-      `Continue detected that you are using ${platformTarget}. Due to native dependencies, Continue may not be able to start`,
+      `Open Circuit detected that you are using ${platformTarget}. Due to native dependencies, Open Circuit may not be able to start`,
     );
   }
 
   // Add necessary files
   getTsConfigPath();
-  getContinueRcPath();
+  getOCircuitRcPath();
 
   // Register commands and providers
   setupInlineTips(context);
 
   const vscodeExtension = new VsCodeExtension(context);
 
-  // Load Continue configuration
+  // Load Open Circuit configuration
   if (!context.globalState.get("hasBeenInstalled")) {
     void context.globalState.update("hasBeenInstalled", true);
   }
 
   // Register config.yaml schema by removing old entries and adding new one (uri.fsPath changes with each version)
-  const yamlMatcher = ".continue/**/*.yaml";
+  const yamlMatcher = ".ocircuit/**/*.yaml";
   const yamlConfig = vscode.workspace.getConfiguration("yaml");
   const yamlSchemas = yamlConfig.get<object>("schemas", {});
 
@@ -59,13 +59,13 @@ export async function activateExtension(context: vscode.ExtensionContext) {
     );
   } catch (error) {
     console.error(
-      "Failed to register Continue config.yaml schema, most likely, YAML extension is not installed",
+      "Failed to register Open Circuit config.yaml schema, most likely, YAML extension is not installed",
       error,
     );
   }
 
-  const api = new VsCodeContinueApi(vscodeExtension);
-  const continuePublicApi = {
+  const api = new VsCodeOCircuitApi(vscodeExtension);
+  const ocircuitPublicApi = {
     registerCustomContextProvider: api.registerCustomContextProvider.bind(api),
   };
 
@@ -73,8 +73,8 @@ export async function activateExtension(context: vscode.ExtensionContext) {
   // or entire extension for testing
   return process.env.NODE_ENV === "test"
     ? {
-        ...continuePublicApi,
+        ...ocircuitPublicApi,
         extension: vscodeExtension,
       }
-    : continuePublicApi;
+    : ocircuitPublicApi;
 }

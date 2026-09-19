@@ -34,8 +34,8 @@ export interface ExtendedSessionMetadata extends BaseSessionMetadata {
  */
 function getSessionDir(): string {
   // For tests, use the test directory if we're in test mode
-  if (process.env.CONTINUE_CLI_TEST && process.env.HOME) {
-    const sessionDir = path.join(process.env.HOME, ".continue", "sessions");
+  if (process.env.OCIRCUIT_CLI_TEST && process.env.HOME) {
+    const sessionDir = path.join(process.env.HOME, ".ocircuit", "sessions");
 
     // Create directory if it doesn't exist
     if (!fs.existsSync(sessionDir)) {
@@ -45,10 +45,10 @@ function getSessionDir(): string {
     return sessionDir;
   }
 
-  // Use CONTINUE_GLOBAL_DIR if set (for testing)
-  const continueHome =
-    process.env.CONTINUE_GLOBAL_DIR || path.join(os.homedir(), ".continue");
-  const sessionDir = path.join(continueHome, "sessions");
+  // Use OCIRCUIT_GLOBAL_DIR if set (for testing)
+  const ocircuitHome =
+    process.env.OCIRCUIT_GLOBAL_DIR || path.join(os.homedir(), ".ocircuit");
+  const sessionDir = path.join(ocircuitHome, "sessions");
 
   // Create directory if it doesn't exist
   if (!fs.existsSync(sessionDir)) {
@@ -93,8 +93,8 @@ class SessionManager {
   getCurrentSession(): Session {
     if (!this.currentSession) {
       // Use test session ID for testing consistency
-      const sessionId = process.env.CONTINUE_CLI_TEST_SESSION_ID
-        ? process.env.CONTINUE_CLI_TEST_SESSION_ID
+      const sessionId = process.env.OCIRCUIT_CLI_TEST_SESSION_ID
+        ? process.env.OCIRCUIT_CLI_TEST_SESSION_ID
         : uuidv4();
 
       this.currentSession = {
@@ -514,7 +514,7 @@ export function loadSessionById(sessionId: string): Session | null {
 
 /**
  * Load an existing session by ID or create a new one with that ID.
- * Useful for long-lived processes (e.g., cn serve) that need to
+ * Useful for long-lived processes (e.g., oc serve) that need to
  * preserve chat history across restarts for the same storage/agent id.
  */
 export function loadOrCreateSessionById(

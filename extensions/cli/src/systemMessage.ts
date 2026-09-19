@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-import { parseMarkdownRule, RuleObject } from "@continuedev/config-yaml";
+import { parseMarkdownRule, RuleObject } from "@opencircuit/config-yaml";
 
 import { env } from "./env.js";
 import { processRule } from "./hubLoader.js";
@@ -40,7 +40,7 @@ function getGitStatus(): string {
   }
 }
 
-const baseSystemMessage = `You are an agent in the Continue CLI. Given the user's prompt, you should use the tools available to you to answer the user's question.
+const baseSystemMessage = `You are an agent in the Open Circuit CLI. Given the user's prompt, you should use the tools available to you to answer the user's question.
 
 Notes:
 1. IMPORTANT: You should be concise, direct, and to the point, since your responses will be displayed on a command line interface.
@@ -84,13 +84,13 @@ function getRuleNameFromPath(filePath: string): string {
 }
 
 /**
- * Scan .continue/rules/ directories for markdown rule files and return the rules with metadata that should be always-applied
+ * Scan .ocircuit/rules/ directories for markdown rule files and return the rules with metadata that should be always-applied
  */
 export function loadMarkdownRulesWithMetadata(): RuleObject[] {
   const cwd = process.cwd();
   const rulesDirs = [
-    path.join(cwd, ".continue", "rules"),
-    path.join(env.continueHome, "rules"),
+    path.join(cwd, ".ocircuit", "rules"),
+    path.join(env.ocircuitHome, "rules"),
   ];
 
   const rules: RuleObject[] = [];
@@ -200,7 +200,7 @@ export async function constructSystemMessage(
   const configYamlRules = await getConfigYamlRules();
   processedRules.push(...configYamlRules);
 
-  // Load markdown rules from .continue/rules/ directories
+  // Load markdown rules from .ocircuit/rules/ directories
   const markdownRules = loadMarkdownRulesWithMetadata();
   // Deduplicate against already-loaded rules
   const existingRulesSet = new Set(processedRules);
@@ -220,11 +220,11 @@ export async function constructSystemMessage(
       '\n<context name="planMode">You are operating in _Plan Mode_, which means that your goal is to help the user investigate their ideas and develop a plan before taking action. You only have access to read-only tools and should not attempt to circumvent them to write / delete / create files. Ask the user to switch to agent mode if they want to make changes. For example, it is not acceptable to use the Bash tool to write to files.</context>\n';
   } else {
     // Check if commit signature is disabled via environment variable
-    if (!process.env.CONTINUE_CLI_DISABLE_COMMIT_SIGNATURE) {
+    if (!process.env.OCIRCUIT_CLI_DISABLE_COMMIT_SIGNATURE) {
       systemMessage += `\n<context name="commitSignature">When creating commits using any CLI or tool, include the following in the commit message:
-Generated with [Continue](https://continue.dev)
+Generated with [Open Circuit](/)
 
-Co-Authored-By: Continue <noreply@continue.dev>
+Co-Authored-By: Open Circuit <noreply@ocircuit.dev>
 </context>\n`;
     }
   }

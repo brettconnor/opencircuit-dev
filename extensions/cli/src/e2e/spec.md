@@ -1,6 +1,6 @@
-# End-to-End Testing for Continue CLI
+# End-to-End Testing for Open Circuit CLI
 
-This document describes the principles, practices, and patterns for writing end-to-end (E2E) tests for the Continue CLI.
+This document describes the principles, practices, and patterns for writing end-to-end (E2E) tests for the Open Circuit CLI.
 
 ## Overview
 
@@ -61,7 +61,7 @@ const result = await runCLI(context, {
 
 // Verify output and exit code
 expect(result.exitCode).toBe(0);
-expect(result.stdout).toContain("Continue CLI");
+expect(result.stdout).toContain("Open Circuit CLI");
 ```
 
 ### Testing with Input

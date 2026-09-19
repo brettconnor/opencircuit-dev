@@ -5,14 +5,14 @@ import {
   ConfigResult,
   ConfigValidationError,
   PackageIdentifier,
-} from "@continuedev/config-yaml";
+} from "@opencircuit/config-yaml";
 
 import {
-  ContinueConfig,
+  OCircuitConfig,
   IDE,
   ILLMLogger,
   RuleWithSource,
-  SerializedContinueConfig,
+  SerializedOCircuitConfig,
   SlashCommandDescWithSource,
   Tool,
 } from "../../";
@@ -29,25 +29,25 @@ import { getConfigJsonPath, getConfigYamlPath } from "../../util/paths";
 import { localPathOrUriToPath } from "../../util/pathToUri";
 import { IdeInfoService } from "../../util/IdeInfoService";
 import { TTS } from "../../util/tts";
-import { getWorkspaceContinueRuleDotFiles } from "../getWorkspaceContinueRuleDotFiles";
-import { loadContinueConfigFromJson } from "../load";
+import { getWorkspaceOCircuitRuleDotFiles } from "../getWorkspaceOCircuitRuleDotFiles";
+import { loadOCircuitConfigFromJson } from "../load";
 import { CodebaseRulesCache } from "../markdown/loadCodebaseRules";
 import { loadMarkdownRules } from "../markdown/loadMarkdownRules";
 import { migrateJsonSharedConfig } from "../migrateSharedConfig";
 import { rectifySelectedModelsFromGlobalContext } from "../selectedModels";
-import { loadContinueConfigFromYaml } from "../yaml/loadYaml";
+import { loadOCircuitConfigFromYaml } from "../yaml/loadYaml";
 
 async function loadRules(ide: IDE) {
   const rules: RuleWithSource[] = [];
   const errors = [];
 
-  // Add rules from .continuerules files
-  const { rules: yamlRules, errors: continueRulesErrors } =
-    await getWorkspaceContinueRuleDotFiles(ide);
+  // Add rules from .ocircuitrules files
+  const { rules: yamlRules, errors: ocircuitRulesErrors } =
+    await getWorkspaceOCircuitRuleDotFiles(ide);
   rules.unshift(...yamlRules);
-  errors.push(...continueRulesErrors);
+  errors.push(...ocircuitRulesErrors);
 
-  // Add rules from markdown files in .continue/rules
+  // Add rules from markdown files in .ocircuit/rules
   const { rules: markdownRules, errors: markdownRulesErrors } =
     await loadMarkdownRules(ide);
   rules.unshift(...markdownRules);
@@ -64,12 +64,12 @@ async function loadRules(ide: IDE) {
 export default async function doLoadConfig(options: {
   ide: IDE;
   llmLogger: ILLMLogger;
-  overrideConfigJson?: SerializedContinueConfig;
+  overrideConfigJson?: SerializedOCircuitConfig;
   overrideConfigYaml?: AssistantUnrolled;
   profileId: string;
   overrideConfigYamlByPath?: string;
   packageIdentifier: PackageIdentifier;
-}): Promise<ConfigResult<ContinueConfig>> {
+}): Promise<ConfigResult<OCircuitConfig>> {
   const {
     ide,
     llmLogger,
@@ -95,7 +95,7 @@ export default async function doLoadConfig(options: {
     overrideConfigYamlByPath || getConfigYamlPath(ideInfo.ideType),
   );
 
-  let newConfig: ContinueConfig | undefined;
+  let newConfig: OCircuitConfig | undefined;
   let errors: ConfigValidationError[] | undefined;
   let configLoadInterrupted = false;
   let configName: string | undefined;
@@ -109,7 +109,7 @@ export default async function doLoadConfig(options: {
     hasPreReadContent ||
     fs.existsSync(configYamlPath)
   ) {
-    const result = await loadContinueConfigFromYaml({
+    const result = await loadOCircuitConfigFromYaml({
       ide,
       ideSettings,
       ideInfo,
@@ -123,7 +123,7 @@ export default async function doLoadConfig(options: {
     configLoadInterrupted = result.configLoadInterrupted;
     configName = result.configName;
   } else {
-    const result = await loadContinueConfigFromJson(
+    const result = await loadOCircuitConfigFromJson(
       ide,
       ideSettings,
       ideInfo,

@@ -1,5 +1,5 @@
-import { RequestOptions } from "@continuedev/config-types";
-import { fetchwithRequestOptions, patchedFetch } from "@continuedev/fetch";
+import { RequestOptions } from "@opencircuit/config-types";
+import { fetchwithRequestOptions, patchedFetch } from "@opencircuit/fetch";
 import {
   ChatCompletionChunk,
   CompletionUsage,

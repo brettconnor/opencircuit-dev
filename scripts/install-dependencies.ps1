@@ -85,37 +85,9 @@ npm install
 npm link
 Pop-Location
 
-Write-Output "`nInstalling GUI extension dependencies..." -ForegroundColor White
-Push-Location gui
-npm install
-npm link @continuedev/core
-npm run build
-Pop-Location
-
-# VSCode Extension (will also package GUI)
-Write-Output "`nInstalling VSCode extension dependencies..." -ForegroundColor White
-Push-Location extensions/vscode
-
-# This does way too many things inline but is the common denominator between many of the scripts
-npm install
-npm link @continuedev/core
-npm run prepackage
-npm run package
-
-Pop-Location
-
-
-Write-Output "`nInstalling binary dependencies..." -ForegroundColor White
-Push-Location binary
-
+Write-Output "`nInstalling CLI extension dependencies..." -ForegroundColor White
+Push-Location extensions/cli
 npm install
 npm run build
-
-Pop-Location
-
-Write-Output "`nInstalling docs dependencies..." -ForegroundColor White
-Push-Location docs
-
-npm install
 
 Pop-Location

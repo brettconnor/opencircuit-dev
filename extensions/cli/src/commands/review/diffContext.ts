@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 
 import { logger } from "../../util/logger.js";
 
@@ -17,22 +17,26 @@ export interface DiffContext {
  */
 function detectDefaultBranch(): string {
   try {
-    const ref = execSync("git symbolic-ref refs/remotes/origin/HEAD", {
-      encoding: "utf-8",
-      stdio: ["pipe", "pipe", "pipe"],
-    }).trim();
+    const ref = execFileSync(
+      "git",
+      ["symbolic-ref", "refs/remotes/origin/HEAD"],
+      {
+        encoding: "utf-8",
+        stdio: ["pipe", "pipe", "pipe"],
+      },
+    ).trim();
     // refs/remotes/origin/main -> main
     return ref.replace("refs/remotes/origin/", "");
   } catch {
     // Fallback: check if main or master exists
     try {
-      execSync("git rev-parse --verify main", {
+      execFileSync("git", ["rev-parse", "--verify", "main"], {
         stdio: ["pipe", "pipe", "pipe"],
       });
       return "main";
     } catch {
       try {
-        execSync("git rev-parse --verify master", {
+        execFileSync("git", ["rev-parse", "--verify", "master"], {
           stdio: ["pipe", "pipe", "pipe"],
         });
         return "master";
@@ -53,7 +57,7 @@ export function computeDiffContext(baseBranch?: string): DiffContext {
   // Get the merge-base to handle diverged branches
   let mergeBase: string;
   try {
-    mergeBase = execSync(`git merge-base ${base} HEAD`, {
+    mergeBase = execFileSync("git", ["merge-base", base, "HEAD"], {
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
     }).trim();
@@ -69,7 +73,7 @@ export function computeDiffContext(baseBranch?: string): DiffContext {
   let truncated = false;
   try {
     // Use diff against merge-base to include all branch changes + working tree
-    diff = execSync(`git diff ${mergeBase}`, {
+    diff = execFileSync("git", ["diff", mergeBase], {
       encoding: "utf-8",
       maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       stdio: ["pipe", "pipe", "pipe"],
@@ -86,7 +90,7 @@ export function computeDiffContext(baseBranch?: string): DiffContext {
   // Get changed file list
   let changedFiles: string[] = [];
   try {
-    const fileList = execSync(`git diff --name-only ${mergeBase}`, {
+    const fileList = execFileSync("git", ["diff", "--name-only", mergeBase], {
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
     }).trim();
@@ -98,7 +102,7 @@ export function computeDiffContext(baseBranch?: string): DiffContext {
   // Get diff stat
   let stat = "";
   try {
-    stat = execSync(`git diff --stat ${mergeBase}`, {
+    stat = execFileSync("git", ["diff", "--stat", mergeBase], {
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
     }).trim();

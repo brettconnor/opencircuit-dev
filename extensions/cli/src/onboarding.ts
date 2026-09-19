@@ -15,7 +15,9 @@ import {
 import { question } from "./util/prompt.js";
 import { updateAnthropicModelInYaml } from "./util/yamlConfigUpdater.js";
 
-const CONFIG_PATH = path.join(env.continueHome, "config.yaml");
+function getConfigPath(): string {
+  return path.join(env.ocircuitHome, "config.yaml");
+}
 
 export async function checkHasAcceptableModel(
   configPath: string,
@@ -33,19 +35,42 @@ export async function checkHasAcceptableModel(
 }
 
 export async function createOrUpdateConfig(apiKey: string): Promise<void> {
-  const configDir = path.dirname(CONFIG_PATH);
+  const configPath = getConfigPath();
+  const configDir = path.dirname(configPath);
 
   if (!fs.existsSync(configDir)) {
     fs.mkdirSync(configDir, { recursive: true });
   }
 
-  const existingContent = fs.existsSync(CONFIG_PATH)
-    ? fs.readFileSync(CONFIG_PATH, "utf8")
+  const existingContent = fs.existsSync(configPath)
+    ? fs.readFileSync(configPath, "utf8")
     : "";
 
   const updatedContent = updateAnthropicModelInYaml(existingContent, apiKey);
-  fs.writeFileSync(CONFIG_PATH, updatedContent);
-  setConfigFilePermissions(CONFIG_PATH);
+  fs.writeFileSync(configPath, updatedContent);
+  setConfigFilePermissions(configPath);
+}
+
+async function acceptExistingLocalConfig(
+  authConfig: AuthConfig,
+): Promise<boolean> {
+  const configPath = getConfigPath();
+  if (!fs.existsSync(configPath)) {
+    return false;
+  }
+
+  try {
+    const loaded = await loadConfiguration(
+      authConfig,
+      configPath,
+      getApiClient(undefined),
+      [],
+      false,
+    );
+    return Boolean(loaded.config.models?.length);
+  } catch {
+    return false;
+  }
 }
 
 export async function runOnboardingFlow(
@@ -56,10 +81,10 @@ export async function runOnboardingFlow(
     return false;
   }
 
-  // Step 2: Check for CONTINUE_USE_BEDROCK environment variable first (before test env check)
-  if (process.env.CONTINUE_USE_BEDROCK === "1") {
+  // Step 2: Check for OCIRCUIT_USE_BEDROCK environment variable first (before test env check)
+  if (process.env.OCIRCUIT_USE_BEDROCK === "1") {
     console.log(
-      chalk.blue("✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)"),
+      chalk.blue("✓ Using AWS Bedrock (OCIRCUIT_USE_BEDROCK detected)"),
     );
     return true;
   }
@@ -77,7 +102,7 @@ export async function runOnboardingFlow(
     if (process.env.ANTHROPIC_API_KEY) {
       console.log(chalk.blue("✓ Using ANTHROPIC_API_KEY from environment"));
       await createOrUpdateConfig(process.env.ANTHROPIC_API_KEY);
-      console.log(chalk.gray(`  Config saved to: ${CONFIG_PATH}`));
+      console.log(chalk.gray(`  Config saved to: ${getConfigPath()}`));
       return false;
     }
 
@@ -98,18 +123,18 @@ export async function runOnboardingFlow(
 
   await createOrUpdateConfig(apiKey);
   console.log(
-    chalk.green(`✓ Config file updated successfully at ${CONFIG_PATH}`),
+    chalk.green(`✓ Config file updated successfully at ${getConfigPath()}`),
   );
 
   return true;
 }
 
 export async function isFirstTime(): Promise<boolean> {
-  return !fs.existsSync(path.join(env.continueHome, ".onboarding_complete"));
+  return !fs.existsSync(path.join(env.ocircuitHome, ".onboarding_complete"));
 }
 
 export async function markOnboardingComplete(): Promise<void> {
-  const flagPath = path.join(env.continueHome, ".onboarding_complete");
+  const flagPath = path.join(env.ocircuitHome, ".onboarding_complete");
   const flagDir = path.dirname(flagPath);
 
   if (!fs.existsSync(flagDir)) {
@@ -143,6 +168,14 @@ export async function initializeWithOnboarding(
   }
 
   if (!firstTime) return;
+
+  if (
+    configPath === undefined &&
+    (await acceptExistingLocalConfig(authConfig))
+  ) {
+    await markOnboardingComplete();
+    return;
+  }
 
   const wasOnboarded = await runOnboardingFlow(configPath);
   if (wasOnboarded) {

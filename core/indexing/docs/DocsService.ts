@@ -1,10 +1,10 @@
-import { ConfigResult } from "@continuedev/config-yaml";
+import { ConfigResult } from "@opencircuit/config-yaml";
 import { open, type Database } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import {
   Chunk,
-  ContinueConfig,
+  OCircuitConfig,
   DocsIndexingDetails,
   IDE,
   IdeInfo,
@@ -32,9 +32,10 @@ import {
   markdownPageToArticleWithChunks,
 } from "./article";
 import DocsCrawler, { DocsCrawlerType, PageData } from "./crawlers/DocsCrawler";
+import { startUrlFilter } from "./lanceFilter";
 import { runLanceMigrations, runSqliteMigrations } from "./migrations";
 
-import type * as LanceType from "vectordb";
+import type * as LanceType from "@lancedb/lancedb";
 import { LLMError } from "../../llm";
 
 // Purposefully lowercase because lancedb converts
@@ -126,8 +127,8 @@ const docConfigsAreEqualExceptTitleAndFavicon = (
 const siteIndexingConfigsAreEqual = (
   siteConfig1: SiteIndexingConfig,
   siteConfig2: SiteIndexingConfig,
-  contConfig1: ContinueConfig | undefined,
-  contConfig2: ContinueConfig,
+  contConfig1: OCircuitConfig | undefined,
+  contConfig2: OCircuitConfig,
 ) => {
   return (
     docConfigsAreEqual(siteConfig1, siteConfig2) &&
@@ -141,8 +142,8 @@ const siteIndexingConfigsAreEqual = (
 const siteIndexingConfigsAreEqualExceptTitleAndFavicon = (
   siteConfig1: SiteIndexingConfig,
   siteConfig2: SiteIndexingConfig,
-  contConfig1: ContinueConfig | undefined,
-  contConfig2: ContinueConfig,
+  contConfig1: OCircuitConfig | undefined,
+  contConfig2: OCircuitConfig,
 ) => {
   return (
     docConfigsAreEqualExceptTitleAndFavicon(siteConfig1, siteConfig2) &&
@@ -177,7 +178,7 @@ export default class DocsService {
   private docsIndexingQueue = new Set<string>();
   private lanceTableNamesSet = new Set<string>();
 
-  private config!: ContinueConfig;
+  private config!: OCircuitConfig;
   private sqliteDb?: Database;
 
   private ideInfoPromise: Promise<IdeInfo>;
@@ -203,7 +204,7 @@ export default class DocsService {
 
     try {
       if (!DocsService.lance) {
-        DocsService.lance = await import("vectordb");
+        DocsService.lance = await import("@lancedb/lancedb");
       }
       return DocsService.lance;
     } catch (err) {
@@ -365,7 +366,7 @@ export default class DocsService {
 
   private async handleConfigUpdate({
     config: newConfig,
-  }: ConfigResult<ContinueConfig>) {
+  }: ConfigResult<OCircuitConfig>) {
     if (newConfig) {
       const oldConfig = this.config;
       this.config = newConfig; // IMPORTANT - need to set up top, other methods below use this without passing it in
@@ -503,7 +504,7 @@ export default class DocsService {
     // This particular failure will not mark as a failed config in global context
     // Since SiteIndexingConfig is likely to be valid
     try {
-      await provider.embed(["continue-test-run"]);
+      await provider.embed(["ocircuit-test-run"]);
     } catch (e) {
       if (e instanceof LLMError) {
         // Report the error to the IDE
@@ -750,7 +751,7 @@ export default class DocsService {
       void this.ide.showToast(
         "error",
         "Set up an embeddings model to use the @docs context provider. See: " +
-          "https://docs.continue.dev/customize/model-roles/embeddings",
+          "//customize/model-roles/embeddings",
       );
       return [];
     }
@@ -805,9 +806,10 @@ export default class DocsService {
         startUrl,
       });
       const rows = (await table
-        .filter(`starturl = '${startUrl}'`)
+        .query()
+        .where(startUrlFilter(startUrl))
         .limit(1000)
-        .execute()) as LanceDbDocsRow[];
+        .toArray()) as LanceDbDocsRow[];
 
       return {
         startUrl,
@@ -844,8 +846,8 @@ export default class DocsService {
       docs = await table
         .search(vector)
         .limit(nRetrieve)
-        .where(`starturl = '${startUrl}'`)
-        .execute();
+        .where(startUrlFilter(startUrl))
+        .toArray();
     } catch (e: any) {
       console.warn("Error retrieving chunks from LanceDB", e);
     }
@@ -861,10 +863,11 @@ export default class DocsService {
       });
 
       const rows = (await table
-        .filter(`starturl = '${startUrl}'`)
+        .query()
+        .where(startUrlFilter(startUrl))
         .select(["path"]) // Only select path to minimize data transfer
         .limit(99999999) // Default is 10, we want to show all
-        .execute()) as { path: string }[];
+        .toArray()) as { path: string }[];
 
       // Get unique paths (pages)
       return new Set(rows.map((row) => row.path));
@@ -925,8 +928,8 @@ export default class DocsService {
    * Sync with no embeddings provider change
    */
   private async syncDocs(
-    oldConfig: ContinueConfig | undefined,
-    newConfig: ContinueConfig,
+    oldConfig: OCircuitConfig | undefined,
+    newConfig: OCircuitConfig,
     forceReindex: boolean,
   ) {
     try {
@@ -1233,7 +1236,7 @@ export default class DocsService {
     for (const tableName of this.lanceTableNamesSet) {
       const conn = await lance.connect(getLanceDbPath());
       const table = await conn.openTable(tableName);
-      await table.delete(`starturl = '${startUrl}'`);
+      await table.delete(startUrlFilter(startUrl));
     }
   }
 

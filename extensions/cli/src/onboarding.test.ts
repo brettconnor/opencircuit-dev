@@ -5,15 +5,18 @@ import * as path from "path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import type { AuthConfig } from "./auth/workos.js";
+import { env } from "./env.js";
 import { initializeWithOnboarding } from "./onboarding.js";
 
 describe("onboarding config flag handling", () => {
   let tempDir: string;
   let mockAuthConfig: AuthConfig;
+  const originalOcircuitHome = env.ocircuitHome;
 
   beforeEach(() => {
     // Create a temporary directory for test config files
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "continue-test-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "ocircuit-test-"));
+    env.ocircuitHome = tempDir;
 
     // Auth config is always null after Hub removal
     mockAuthConfig = null;
@@ -24,6 +27,7 @@ describe("onboarding config flag handling", () => {
     if (fs.existsSync(tempDir)) {
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
+    env.ocircuitHome = originalOcircuitHome;
   });
 
   test("should fail loudly when --config points to non-existent file", async () => {
@@ -127,7 +131,7 @@ name: "Incomplete Config"
       expect(message).toContain(configPath);
 
       // Should NOT mention falling back to default config (this was the bug!)
-      expect(message).not.toContain("~/.continue/config.yaml");
+      expect(message).not.toContain("~/.ocircuit/config.yaml");
       expect(message).not.toContain("default config");
       expect(message).not.toContain("fallback");
     }
@@ -153,13 +157,46 @@ name: "Incomplete Config"
       expect(errorMessage).not.toMatch(/^Failed to load config from "/);
     }
   });
+
+  test("accepts a valid existing local config without prompting", async () => {
+    fs.writeFileSync(
+      path.join(tempDir, "config.yaml"),
+      `name: Local OpenAI
+version: 1.0.0
+schema: v1
+models:
+  - name: OpenAI model
+    provider: openai
+    model: gpt-4o-mini
+    apiKey: local-test-key
+    roles:
+      - chat
+`,
+    );
+
+    await initializeWithOnboarding(mockAuthConfig, undefined);
+
+    expect(fs.existsSync(path.join(tempDir, ".onboarding_complete"))).toBe(
+      true,
+    );
+  });
+
+  test("does not accept an invalid existing local config", async () => {
+    fs.writeFileSync(path.join(tempDir, "config.yaml"), "invalid: [yaml");
+
+    await initializeWithOnboarding(mockAuthConfig, undefined);
+
+    expect(fs.existsSync(path.join(tempDir, ".onboarding_complete"))).toBe(
+      false,
+    );
+  });
 });
 
 // Separate describe block with its own mocking for BEDROCK tests
-describe("CONTINUE_USE_BEDROCK environment variable", () => {
+describe("OCIRCUIT_USE_BEDROCK environment variable", () => {
   const mockConsoleLog = vi.fn();
   let mockAuthConfig: AuthConfig;
-  const originalEnv = process.env.CONTINUE_USE_BEDROCK;
+  const originalEnv = process.env.OCIRCUIT_USE_BEDROCK;
 
   // Mock initialize for these tests only
   const mockInitialize = vi.fn().mockResolvedValue({
@@ -185,16 +222,16 @@ describe("CONTINUE_USE_BEDROCK environment variable", () => {
 
   afterEach(() => {
     if (originalEnv) {
-      process.env.CONTINUE_USE_BEDROCK = originalEnv;
+      process.env.OCIRCUIT_USE_BEDROCK = originalEnv;
     } else {
-      delete process.env.CONTINUE_USE_BEDROCK;
+      delete process.env.OCIRCUIT_USE_BEDROCK;
     }
     vi.restoreAllMocks();
     vi.doUnmock("./config.js");
   });
 
-  test("should bypass interactive options when CONTINUE_USE_BEDROCK=1", async () => {
-    process.env.CONTINUE_USE_BEDROCK = "1";
+  test("should bypass interactive options when OCIRCUIT_USE_BEDROCK=1", async () => {
+    process.env.OCIRCUIT_USE_BEDROCK = "1";
 
     // Re-import to get the mocked version
     vi.resetModules();
@@ -205,13 +242,13 @@ describe("CONTINUE_USE_BEDROCK environment variable", () => {
     expect(result).toBe(true);
     expect(mockConsoleLog).toHaveBeenCalledWith(
       expect.stringContaining(
-        "✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)",
+        "✓ Using AWS Bedrock (OCIRCUIT_USE_BEDROCK detected)",
       ),
     );
   });
 
-  test("should not bypass when CONTINUE_USE_BEDROCK is not '1'", async () => {
-    process.env.CONTINUE_USE_BEDROCK = "0";
+  test("should not bypass when OCIRCUIT_USE_BEDROCK is not '1'", async () => {
+    process.env.OCIRCUIT_USE_BEDROCK = "0";
 
     // Re-import to get the mocked version
     vi.resetModules();
@@ -228,7 +265,7 @@ describe("CONTINUE_USE_BEDROCK environment variable", () => {
       const allCalls = mockConsoleLog.mock.calls.flat();
       const hasBedrockMessage = allCalls.some((call) =>
         String(call).includes(
-          "✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)",
+          "✓ Using AWS Bedrock (OCIRCUIT_USE_BEDROCK detected)",
         ),
       );
       expect(hasBedrockMessage).toBe(false);

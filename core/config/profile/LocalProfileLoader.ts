@@ -1,6 +1,6 @@
-import { ConfigResult } from "@continuedev/config-yaml";
+import { ConfigResult } from "@opencircuit/config-yaml";
 
-import { ContinueConfig, IDE, ILLMLogger } from "../../index.js";
+import { OCircuitConfig, IDE, ILLMLogger } from "../../index.js";
 import { ProfileDescription } from "../ProfileLifecycleManager.js";
 
 import { getPrimaryConfigFilePath } from "../../util/paths.js";
@@ -40,7 +40,7 @@ export default class LocalProfileLoader implements IProfileLoader {
     };
   }
 
-  async doLoadConfig(): Promise<ConfigResult<ContinueConfig>> {
+  async doLoadConfig(): Promise<ConfigResult<OCircuitConfig>> {
     const result = await doLoadConfig({
       ide: this.ide,
       llmLogger: this.llmLogger,

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { createTwoFilesPatch } from "diff";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
@@ -170,11 +170,11 @@ export const writeFileTool: Tool = {
         return `Successfully created file: ${args.filepath}`;
       }
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
-      throw new ContinueError(
-        ContinueErrorReason.FileWriteError,
+      throw new OCircuitError(
+        OCircuitErrorReason.FileWriteError,
         `Error writing to file: ${
           error instanceof Error ? error.message : String(error)
         }`,

@@ -23,7 +23,11 @@ import { RelaceApi } from "./apis/Relace.js";
 import { VertexAIApi } from "./apis/VertexAI.js";
 import { WatsonXApi } from "./apis/WatsonX.js";
 import { BaseLlmApi } from "./apis/base.js";
-import { LLMConfig, OpenAIConfigSchema } from "./types.js";
+import {
+  LLMConfig,
+  OpenAICompatibleConfig,
+  OpenAIConfigSchema,
+} from "./types.js";
 import { appendPathToUrlIfNotPresent } from "./util/appendPathToUrl.js";
 
 dotenv.config();
@@ -36,6 +40,19 @@ function openAICompatible(
     ...config,
     apiBase: config.apiBase ?? apiBase,
   });
+}
+
+function openAICompatibleCustom(
+  config: z.infer<typeof OpenAIConfigSchema> | OpenAICompatibleConfig,
+): OpenAIApi {
+  if (!config.apiBase) {
+    throw new Error("openai-compatible apiBase is required");
+  }
+  const apiBase = new URL(config.apiBase);
+  if (apiBase.protocol !== "http:" && apiBase.protocol !== "https:") {
+    throw new Error("openai-compatible apiBase must use http or https");
+  }
+  return openAICompatible(config.apiBase, config);
 }
 
 /**
@@ -82,7 +99,7 @@ function createAiSdkApiForProvider(
 }
 
 export function constructLlmApi(config: LLMConfig): BaseLlmApi | undefined {
-  if (process.env.CONTINUE_USE_AI_SDK) {
+  if (process.env.OCIRCUIT_USE_AI_SDK) {
     if (["openai", "anthropic"].includes(config.provider)) {
       const aiSdkApi = createAiSdkApiForProvider(
         config as LLMConfig & { model?: string },
@@ -97,6 +114,8 @@ export function constructLlmApi(config: LLMConfig): BaseLlmApi | undefined {
   switch (config.provider) {
     case "openai":
       return new OpenAIApi(config);
+    case "openai-compatible":
+      return openAICompatibleCustom(config);
     case "azure":
       return new AzureApi(config);
     case "bedrock":
@@ -231,6 +250,7 @@ export type {
   AskSageToolCall,
   AskSageToolChoice,
   LLMConfig,
+  OpenAICompatibleConfig,
 } from "./types.js";
 
 export {

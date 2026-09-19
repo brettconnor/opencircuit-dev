@@ -1,13 +1,13 @@
-# HTTP Wire Protocol: `cn remote` � `cn serve`
+# HTTP Wire Protocol: `oc remote` � `oc serve`
 
-This document describes the HTTP protocol used for communication between the `cn remote` client and `cn serve` server
+This document describes the HTTP protocol used for communication between the `oc remote` client and `oc serve` server
 
 ## Overview
 
 The protocol uses a polling-based REST API where:
 
-- The server (`cn serve`) runs an Express HTTP server on port 3000
-- The client (`cn remote`) polls the server every 500ms for state updates
+- The server (`oc serve`) runs an Express HTTP server on port 3000
+- The client (`oc remote`) polls the server every 500ms for state updates
 - All communication uses JSON payloads
 
 ## Endpoints

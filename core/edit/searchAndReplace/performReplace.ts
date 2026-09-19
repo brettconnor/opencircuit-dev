@@ -1,5 +1,5 @@
 import type { EditOperation } from "../../tools/definitions/multiEdit.js";
-import { ContinueError, ContinueErrorReason } from "../../util/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "../../util/errors.js";
 import type { SearchMatchResult } from "./findSearchMatch.js";
 import { findSearchMatches } from "./findSearchMatch.js";
 
@@ -93,8 +93,8 @@ export function executeFindAndReplace(
   const matches = findSearchMatches(fileContent, oldString);
 
   if (matches.length === 0) {
-    throw new ContinueError(
-      ContinueErrorReason.FindAndReplaceOldStringNotFound,
+    throw new OCircuitError(
+      OCircuitErrorReason.FindAndReplaceOldStringNotFound,
       `Edit at index ${editIndex}: string not found in file: "${oldString}"`,
     );
   }
@@ -119,8 +119,8 @@ export function executeFindAndReplace(
   } else {
     // For single replacement, check for multiple matches first
     if (matches.length > 1) {
-      throw new ContinueError(
-        ContinueErrorReason.FindAndReplaceMultipleOccurrences,
+      throw new OCircuitError(
+        OCircuitErrorReason.FindAndReplaceMultipleOccurrences,
         `Edit at index ${editIndex}: String "${oldString}" appears ${matches.length} times in the file. Either provide a more specific string with surrounding context to make it unique, or use replace_all=true to replace all occurrences.`,
       );
     }

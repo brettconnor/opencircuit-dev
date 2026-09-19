@@ -6,8 +6,8 @@ import {
   PlatformClient,
   SecretResult,
   SecretType,
-} from "@continuedev/config-yaml";
-import { DefaultApiInterface } from "@continuedev/sdk/dist/api";
+} from "@opencircuit/config-yaml";
+import { DefaultApiInterface } from "@opencircuit/sdk/dist/api";
 import * as dotenv from "dotenv";
 
 import { env } from "./env.js";
@@ -17,6 +17,13 @@ export class CLIPlatformClient implements PlatformClient {
     private orgScopeId: string | null,
     private readonly apiClient: DefaultApiInterface,
   ) {}
+
+  private hasRemoteCredentials(): boolean {
+    const client = this.apiClient as DefaultApiInterface & {
+      configuration?: { accessToken?: string };
+    };
+    return Boolean(client.configuration?.accessToken);
+  }
 
   private findSecretInEnvFile(
     filePath: string,
@@ -61,11 +68,11 @@ export class CLIPlatformClient implements PlatformClient {
       return processEnvSecret;
     }
 
-    // Then check in priority order: ~/.continue/.env, <workspace>/.continue/.env, <workspace>/.env
+    // Then check in priority order: ~/.ocircuit/.env, <workspace>/.ocircuit/.env, <workspace>/.env
     const workspaceDir = process.cwd();
     const envPaths = [
-      path.join(env.continueHome, ".env"),
-      path.join(workspaceDir, ".continue", ".env"),
+      path.join(env.ocircuitHome, ".env"),
+      path.join(workspaceDir, ".ocircuit", ".env"),
       path.join(workspaceDir, ".env"),
     ];
 
@@ -105,12 +112,14 @@ export class CLIPlatformClient implements PlatformClient {
       }
     }
 
-    // For secrets not found locally, try to resolve through the API
+    // For secrets not found locally, try to resolve through the API only when
+    // the client is authenticated. Local CLI config should remain completely
+    // offline when the hosted resolver is unavailable or disabled.
     const unresolvedIndices = results
       .map((r, i) => (r === undefined ? i : -1))
       .filter((i) => i !== -1);
 
-    if (unresolvedIndices.length > 0) {
+    if (unresolvedIndices.length > 0 && this.hasRemoteCredentials()) {
       try {
         const unresolvedFqsns = unresolvedIndices.map((i) => fqsns[i]);
         const apiResults: any = await this.apiClient.syncSecrets({

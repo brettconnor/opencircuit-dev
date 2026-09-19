@@ -1,4 +1,4 @@
-import { exec, spawn } from "child_process";
+import { execFile, spawn } from "child_process";
 import { promisify } from "util";
 
 import { GlobalContext } from "core/globalContext.js";
@@ -10,7 +10,7 @@ import { compareVersions, getLatestVersion, getVersion } from "../version.js";
 import { BaseService } from "./BaseService.js";
 import { serviceContainer } from "./ServiceContainer.js";
 import { UpdateServiceState, UpdateStatus } from "./types.js";
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 /**
  * Service for checking and performing CLI updates
@@ -54,7 +54,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       if (this.currentState.currentVersion === "0.0.0-dev") {
         this.setState({
           status: UpdateStatus.IDLE,
-          message: `Continue CLI`,
+          message: `Open Circuit CLI`,
         });
         return; // Uncomment to test auto-update behavior in dev
       }
@@ -73,7 +73,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       if (!latestVersion) {
         this.setState({
           status: UpdateStatus.IDLE,
-          message: "Continue CLI",
+          message: "Open Circuit CLI",
           isUpdateAvailable: false,
         });
         return;
@@ -93,7 +93,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
         autoUpdate &&
         isUpdateAvailable &&
         this.currentState.status !== "updating" &&
-        !process.env.CONTINUE_CLI_AUTO_UPDATED //Already auto updated, preventing sequential auto-update
+        !process.env.OCIRCUIT_CLI_AUTO_UPDATED //Already auto updated, preventing sequential auto-update
       ) {
         await this.performUpdate(true);
       } else {
@@ -101,7 +101,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
           status: UpdateStatus.IDLE,
           message: isUpdateAvailable
             ? `Update available: v${latestVersion}`
-            : `Continue CLI v${this.currentState.currentVersion}`,
+            : `Open Circuit CLI v${this.currentState.currentVersion}`,
           isUpdateAvailable,
           latestVersion,
         });
@@ -110,7 +110,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       logger.error("Error checking for updates:", error);
       this.setState({
         status: UpdateStatus.ERROR,
-        message: `Continue CLI v${this.currentState.currentVersion}`,
+        message: `Open Circuit CLI v${this.currentState.currentVersion}`,
         error,
       });
     }
@@ -145,7 +145,11 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       });
 
       // Install the update
-      const { stdout, stderr } = await execAsync("npm i -g @continuedev/cli");
+      const { stdout, stderr } = await execFileAsync("npm", [
+        "i",
+        "-g",
+        `@opencircuit/cli@${this.currentState.latestVersion}`,
+      ]);
       logger.debug("Update output:", { stdout, stderr });
 
       if (stderr) {
@@ -202,25 +206,25 @@ export class UpdateService extends BaseService<UpdateServiceState> {
         )}`,
       );
 
-      // Halt/clean up parent cn process
+      // Halt/clean up parent oc process
       try {
         // Remove all input listeners
         global.clearTimeout = () => {};
         global.clearInterval = () => {};
         process.stdin.removeAllListeners();
         process.stdin.pause();
-        // console.clear(); // Don't want to clear things that were in console before cn started
+        // console.clear(); // Don't want to clear things that were in console before oc started
       } catch (e) {
         logger.debug("Error cleaning up terminal:", e);
       }
 
-      // Spawn a new detached cn process
+      // Spawn a new detached oc process
       const child = spawn(nodeExecutable, [entryPoint, ...cliArgs], {
         detached: true,
         stdio: "inherit",
         env: {
           ...process.env,
-          CONTINUE_CLI_AUTO_UPDATED: "true",
+          OCIRCUIT_CLI_AUTO_UPDATED: "true",
         },
       });
 

@@ -1,4 +1,4 @@
-import { ModelConfig } from "@continuedev/config-yaml";
+import { ModelConfig } from "@opencircuit/config-yaml";
 import * as dotenv from "dotenv";
 import { vi } from "vitest";
 import { BedrockApi } from "../apis/Bedrock.js";
@@ -6,6 +6,7 @@ import { DEEPSEEK_API_BASE } from "../apis/DeepSeek.js";
 import { INCEPTION_API_BASE } from "../apis/Inception.js";
 import { OpenAIApi } from "../apis/OpenAI.js";
 import { constructLlmApi } from "../index.js";
+import { LLMConfigSchema, OpenAICompatibleConfigSchema } from "../types.js";
 import { getLlmApi, testChat, testEmbed, testFim, testRerank } from "./util.js";
 
 dotenv.config();
@@ -174,7 +175,7 @@ const TESTS: Omit<ModelConfig & { options?: TestConfigOptions }, "name">[] = [
   {
     provider: "azure",
     model: "gpt-4.1",
-    apiBase: "https://continue-openai.openai.azure.com",
+    apiBase: "https://ocircuit-openai.openai.azure.com",
     apiKey: process.env.AZURE_OPENAI_GPT41_API_KEY,
     roles: ["chat"],
     env: {
@@ -216,6 +217,37 @@ if (process.env.IGNORE_API_KEY_TESTS === "true") {
 }
 
 describe("Configuration", () => {
+  it("configures an explicit OpenAI-compatible endpoint", () => {
+    const config = OpenAICompatibleConfigSchema.parse({
+      provider: "openai-compatible",
+      model: "local-model",
+      apiKey: "test-api-key",
+      apiBase: "http://127.0.0.1:8000/v1/",
+    });
+    const api = constructLlmApi(config);
+
+    expect(api).toBeInstanceOf(OpenAIApi);
+    expect((api as OpenAIApi).openai.baseURL).toBe("http://127.0.0.1:8000/v1/");
+    expect((api as OpenAIApi).openai.apiKey).toBe("test-api-key");
+  });
+
+  it("requires an HTTP(S) API base for OpenAI-compatible endpoints", () => {
+    expect(() =>
+      constructLlmApi({
+        provider: "openai-compatible",
+        model: "local-model",
+      } as any),
+    ).toThrow("openai-compatible apiBase is required");
+
+    expect(() =>
+      constructLlmApi({
+        provider: "openai-compatible",
+        model: "local-model",
+        apiBase: "ftp://127.0.0.1:8000/v1/",
+      } as any),
+    ).toThrow("openai-compatible apiBase must use http or https");
+  });
+
   it("should configure DeepSeek OpenAI client with correct apiBase and apiKey", () => {
     const deepseek = constructLlmApi({
       provider: "deepseek",

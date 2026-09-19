@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { EditOperation } from "../../tools/definitions/multiEdit";
-import { ContinueErrorReason } from "../../util/errors";
+import { OCircuitErrorReason } from "../../util/errors";
 import { validateMultiEdit } from "./multiEditValidation";
 import { executeMultiFindAndReplace } from "./performReplace";
 
@@ -9,7 +9,7 @@ describe("multiEdit shared validation", () => {
     it("should throw error if edits is not an array", () => {
       expect(() => validateMultiEdit({ edits: "not an array" })).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.MultiEditEditsArrayRequired,
+          reason: OCircuitErrorReason.MultiEditEditsArrayRequired,
         }),
       );
     });
@@ -17,7 +17,7 @@ describe("multiEdit shared validation", () => {
     it("should throw error if edits is missing", () => {
       expect(() => validateMultiEdit({})).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.MultiEditEditsArrayRequired,
+          reason: OCircuitErrorReason.MultiEditEditsArrayRequired,
         }),
       );
     });
@@ -25,7 +25,7 @@ describe("multiEdit shared validation", () => {
     it("should throw error if edits array is empty", () => {
       expect(() => validateMultiEdit({ edits: [] })).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.MultiEditEditsArrayEmpty,
+          reason: OCircuitErrorReason.MultiEditEditsArrayEmpty,
         }),
       );
     });
@@ -52,7 +52,7 @@ describe("multiEdit shared validation", () => {
 
       expect(() => validateMultiEdit(args)).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceMissingOldString,
+          reason: OCircuitErrorReason.FindAndReplaceMissingOldString,
         }),
       );
     });
@@ -69,7 +69,7 @@ describe("multiEdit shared validation", () => {
 
       expect(() => validateMultiEdit(args)).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceMissingNewString,
+          reason: OCircuitErrorReason.FindAndReplaceMissingNewString,
         }),
       );
     });
@@ -86,7 +86,7 @@ describe("multiEdit shared validation", () => {
 
       expect(() => validateMultiEdit(args)).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceIdenticalOldAndNewStrings,
+          reason: OCircuitErrorReason.FindAndReplaceIdenticalOldAndNewStrings,
         }),
       );
     });
@@ -107,7 +107,7 @@ describe("multiEdit shared validation", () => {
 
       expect(() => validateMultiEdit(args)).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceNonFirstEmptyOldString,
+          reason: OCircuitErrorReason.FindAndReplaceNonFirstEmptyOldString,
         }),
       );
     });
@@ -229,7 +229,7 @@ describe("multiEdit shared validation", () => {
         executeMultiFindAndReplace(originalContent, edits),
       ).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceOldStringNotFound,
+          reason: OCircuitErrorReason.FindAndReplaceOldStringNotFound,
         }),
       );
     });
@@ -247,7 +247,7 @@ describe("multiEdit shared validation", () => {
         executeMultiFindAndReplace(originalContent, edits),
       ).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceMultipleOccurrences,
+          reason: OCircuitErrorReason.FindAndReplaceMultipleOccurrences,
         }),
       );
     });
@@ -261,7 +261,7 @@ describe("multiEdit shared validation", () => {
 
       expect(() => executeMultiFindAndReplace(content, edits)).toThrowError(
         expect.objectContaining({
-          reason: ContinueErrorReason.FindAndReplaceOldStringNotFound,
+          reason: OCircuitErrorReason.FindAndReplaceOldStringNotFound,
         }),
       );
     });

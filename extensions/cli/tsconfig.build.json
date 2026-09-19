@@ -11,5 +11,8 @@
     "src/test-utils/**/*",
     "src/**/__tests__/**/*",
     "src/**/__mocks__/**/*"
-  ]
+  ],
+  "compilerOptions": {
+    "emitDeclarationOnly": true
+  }
 }

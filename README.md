@@ -1,57 +1,202 @@
-<h1 align="center">Continue</h1>
+# Open Circuit
 
-<p align="center">Pioneering open-source coding agent</p>
+> A terminal-native coding agent for working through real software tasks.
 
-<div align="center">
+[![CLI](https://img.shields.io/badge/CLI-1.0.0-111827)](extensions/cli/README.md)
+[![Node.js](https://img.shields.io/badge/Node.js-24.19.0-16a34a)](.nvmrc)
+[![License](https://img.shields.io/badge/license-Apache--2.0-2563eb)](LICENSE)
 
-<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" /></a>
-<a href="https://docs.continue.dev"><img src="https://img.shields.io/badge/Docs-docs.continue.dev-blue" /></a>
-<a href="https://github.com/continuedev/continue/releases"><img src="https://img.shields.io/badge/Changelog-GitHub_Releases-blue" /></a>
+Open Circuit is a focused coding-agent project built around the `oc` command
+and a reusable Core runtime. It can work interactively in a terminal or run
+headlessly in scripts and CI.
 
-</div>
+## Start here
 
-<p align="center">
-  <img src="media/github-readme.png" alt="Banner" />
-</p>
+New to Open Circuit? Follow the beginner guide:
 
-## What is Continue?
+**[Read QUICKSTART.md](QUICKSTART.md)**
 
-> _Note: The `continuedev/continue` repository is no longer actively maintained and is read-only for all users._
+> Open Circuit CLI 1.0.0 is currently distributed as a
+> [GitHub Release asset](https://github.com/open-circuit-dev/open-circuit/releases/tag/v1.0.0).
+> npm publication is planned but not yet available.
 
-Continue is a coding agent available as a [CLI](#cli) and [VS Code extension](#vs-code).
+## What is included
 
-## Documentation
+| Area       | Location                | Purpose                                                     |
+| ---------- | ----------------------- | ----------------------------------------------------------- |
+| CLI        | `extensions/cli/`       | The installable `oc` command                                |
+| Core       | `core/`                 | Shared agent, configuration, and provider runtime           |
+| Packages   | `packages/`             | Fetching, model information, adapters, and security         |
+| Validation | `tests/` and `scripts/` | Builds, smoke tests, release checks, and runtime boundaries |
 
-To learn how to configure Continue, how it works, and how to customize it, check out the [Continue Docs](https://docs.continue.dev).
+The retained product path is the CLI and Core runtime. The VS Code extension,
+binary packaging, and other UI surfaces are maintained separately and have
+separate validation requirements.
 
-## Final 2.0.0 Release
+## Architecture
 
-We polished Continue and did a final 2.0.0 release of the VS Code extension, CLI, and JetBrains plugin.
+Open Circuit follows this runtime path:
 
-This included removing anonymous telemetry, pulling out authentication, squashing bugs, and more.
+`oc` CLI -> CLI services and streaming -> Core runtime -> model providers and tools
 
-### VS Code
+The CLI owns command-line behavior, interactive and headless execution, session
+management, and terminal presentation. Core provides reusable agent capabilities
+for the CLI and IDE integrations, including model providers, configuration,
+codebase indexing, editing, autocomplete, MCP tools, and protocol communication.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=Continue.continue) [![OpenVSX Registry](https://img.shields.io/badge/OpenVSX_Registry-C160EF?logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/Continue/continue) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/vscode)
+A typical CLI request works as follows:
 
-### CLI
+1. `extensions/cli/src/index.ts` parses commands and options.
+2. `extensions/cli/src/commands/chat.ts` selects interactive or headless execution.
+3. CLI services load configuration, the selected model, permissions, and agent files.
+4. `extensions/cli/src/session.ts` creates, resumes, or persists the conversation.
+5. `extensions/cli/src/stream/` streams the model response and handles tool calls, retries, compaction, and continuation.
+6. Core and CLI tools read files, edit code, search the repository, run commands, and connect to MCP servers.
 
-[![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/@continuedev/cli) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/cli)
+## Requirements
 
-## Contributors
+- Node.js `24.19.0` from [`.nvmrc`](.nvmrc) or [`.node-version`](.node-version)
+- npm
+- Git
 
-Thank you to the entire Continue community for helping us create a pioneering coding agent.
+## Install the CLI
 
-What we built together pushed the boundaries of what AI developer tooling could be.
+Download these files from the GitHub `v1.0.0` release:
 
-We hope this codebase continues to serve as a foundation for others.
+- `opencircuit-cli-1.0.0.tgz`
+- `opencircuit-cli-1.0.0.tgz.sha256`
 
-## Code friends
+Verify the download from the directory containing both files:
 
-<a href="https://github.com/continuedev/continue/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=continuedev/continue&max=500" />
-</a>
+```bash
+shasum -a 256 -c opencircuit-cli-1.0.0.tgz.sha256
+```
+
+Install the CLI:
+
+```bash
+npm install --global ./opencircuit-cli-1.0.0.tgz
+oc --version
+```
+
+Expected output:
+
+```text
+1.0.0
+```
+
+The npm registry package is not available yet. After publication, the install
+command will be:
+
+```bash
+npm install --global @opencircuit/cli@1.0.0
+```
+
+## Build from source
+
+Use this path when developing Open Circuit itself:
+
+```bash
+cd core
+npm install
+npm run build
+npm run tsc:check
+
+cd ../extensions/cli
+npm install
+npm run build
+npm run typecheck
+npm run test:smoke
+```
+
+Run the locally built command:
+
+```bash
+./dist/oc.js --version
+./dist/oc.js --help
+```
+
+## Validation
+
+The complete retained-closure profile runs on Linux with Node.js `24.19.0`:
+
+```bash
+npm run validate:retained-closure
+```
+
+Use `--skip-install` only after the committed lockfiles have been installed.
+The profile covers dependency policy, Core and CLI builds, the CLI-to-Core
+runtime boundary, release-artifact shape, and the Rust benchmark.
+
+## Provider keys
+
+The hosted Open Circuit API is currently disabled by default. The CLI can use
+direct provider credentials instead. Set only the provider key you need in the
+shell that launches `oc`:
+
+```bash
+export OPENAI_API_KEY="your-openai-key"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export GEMINI_API_KEY="your-gemini-key"
+```
+
+Use a local `config.yaml` with `apiKey: ${{ secrets.PROVIDER_API_KEY }}` and run
+`oc --config ./config.yaml`. See the [beginner quickstart](QUICKSTART.md) for
+provider-specific examples. Never commit API keys.
+
+## Stage a release asset
+
+This section is for maintainers preparing a GitHub Release asset.
+
+From the repository root:
+
+```bash
+npm --prefix extensions/cli run release:artifact
+shasum -a 256 -c release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256
+```
+
+The command creates:
+
+- `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz`
+- `release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256`
+
+Upload both files manually to the GitHub `v1.0.0` release. The staging
+directory is ignored by Git and is not an installation path for end users.
+
+CI automation and npm publication are intentionally deferred.
+
+## Development map
+
+Start changes in the layer that owns the behavior:
+
+| Change                                | Location                                                         |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| CLI commands and flags                | `extensions/cli/src/index.ts` and `extensions/cli/src/commands/` |
+| Chat streaming and tool calls         | `extensions/cli/src/stream/`                                     |
+| Session creation, resume, and forking | `extensions/cli/src/session.ts`                                  |
+| Shared agent runtime                  | `core/`                                                          |
+| Model providers and LLM behavior      | `core/llm/`                                                      |
+| Codebase indexing and search          | `core/indexing/`                                                 |
+| File editing and diffs                | `core/edit/` and `core/diff/`                                    |
+| Tools and permissions                 | `core/tools/` and `packages/terminal-security/`                  |
+| Configuration                         | `core/config/` and `packages/config-yaml/`                       |
+| VS Code integration                   | `extensions/vscode/`                                             |
+| Binary packaging                      | `binary/`                                                        |
+
+Read the neighboring tests before changing behavior. Run Core validation for
+Core changes and CLI validation for CLI changes. Use the retained-closure
+profile when changing package boundaries, generated declarations, workspace
+configuration, or runtime resolution.
+
+## Project guides
+
+- [Beginner quickstart](QUICKSTART.md)
+- [CLI reference](extensions/cli/README.md)
+- [Contributor workflow](CONTRIBUTING.md)
+- [Build dependencies](BUILD_DEPENDENCIES.md)
+- [Security policy](SECURITY.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## License
 
-Apache 2.0 © 2023-2026 Continue Dev, Inc.
+Open Circuit is released under the [Apache License 2.0](LICENSE).

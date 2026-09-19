@@ -1,4 +1,4 @@
-import { type AssistantConfig } from "@continuedev/sdk";
+import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
 
 import {
   getSkillSlashCommandName,
@@ -35,7 +35,7 @@ export const SYSTEM_SLASH_COMMANDS: SystemCommand[] = [
   },
   {
     name: "update",
-    description: "Update the Continue CLI",
+    description: "Update the Open Circuit CLI",
     category: "system",
   },
   {
@@ -110,7 +110,7 @@ export const SYSTEM_SLASH_COMMANDS: SystemCommand[] = [
   },
   {
     name: "import-skill",
-    description: "Import a skill from a URL or name into ~/.continue/skills",
+    description: "Import a skill from a URL or name into ~/.ocircuit/skills",
     category: "system",
   },
   {

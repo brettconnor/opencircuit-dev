@@ -1,4 +1,4 @@
-import type { AssistantUnrolled } from "@continuedev/config-yaml";
+import type { AssistantUnrolled } from "@opencircuit/config-yaml";
 import {
   beforeEach,
   describe,
@@ -45,7 +45,7 @@ vi.mock("./util/logger.js", () => ({
 // Mock env.js to avoid file operations
 vi.mock("./env.js", () => ({
   env: {
-    continueHome: "/home/test/.continue",
+    ocircuitHome: "/home/test/.ocircuit",
   },
 }));
 
@@ -80,7 +80,7 @@ vi.mock("core/util/history.js", () => ({
 // Mock session functions
 vi.mock("./session.js", () => ({
   getSessionFilePath: vi.fn(
-    () => "/home/test/.continue/cli-sessions/continue-cli-pid-12345.json",
+    () => "/home/test/.ocircuit/cli-sessions/ocircuit-cli-pid-12345.json",
   ),
   hasSession: vi.fn(() => false),
   getCurrentSession: vi.fn(() => {
@@ -209,7 +209,7 @@ describe("slashCommands", () => {
 
       // Mock the session functions for this specific test
       (getSessionFilePath as any).mockReturnValue(
-        "/test-home/.continue/cli-sessions/continue-cli-test-123.json",
+        "/test-home/.ocircuit/cli-sessions/ocircuit-cli-test-123.json",
       );
       (getCurrentSession as any).mockReturnValue({
         sessionId: "test-123",
@@ -229,7 +229,7 @@ describe("slashCommands", () => {
 
       expect(result?.output).toContain("Session:");
       expect(result?.output).toContain("Test Session");
-      expect(result?.output).toContain("/test-home/.continue/cli-sessions/");
+      expect(result?.output).toContain("/test-home/.ocircuit/cli-sessions/");
       expect(result?.output).toContain(".json");
     });
 

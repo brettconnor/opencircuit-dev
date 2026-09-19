@@ -12,7 +12,7 @@ import { GUISelectors } from "../selectors/GUI.selectors";
 import { TestUtils } from "../TestUtils";
 
 export class GUIActions {
-  public static moveContinueToSidebar = async (driver: WebDriver) => {
+  public static moveOCircuitToSidebar = async (driver: WebDriver) => {
     await GUIActions.toggleGui();
     await TestUtils.waitForSuccess(async () => {
       await new Workbench().executeCommand("View: Move View");
@@ -26,11 +26,11 @@ export class GUIActions {
 
     // first call focuses the input
     await TestUtils.waitForTimeout(DEFAULT_TIMEOUT.XS);
-    await GUIActions.executeFocusContinueInputShortcut(driver);
+    await GUIActions.executeFocusOCircuitInputShortcut(driver);
 
     // second call closes the gui
     await TestUtils.waitForTimeout(DEFAULT_TIMEOUT.XS);
-    await GUIActions.executeFocusContinueInputShortcut(driver);
+    await GUIActions.executeFocusOCircuitInputShortcut(driver);
   };
 
   public static switchToReactIframe = async () => {
@@ -38,21 +38,21 @@ export class GUIActions {
     const driver = view.getDriver();
 
     const iframes = await GUISelectors.getAllIframes(driver);
-    let continueIFrame: WebElement | undefined = undefined;
+    let ocircuitIFrame: WebElement | undefined = undefined;
     for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes[i];
       const src = await iframe.getAttribute("src");
-      if (src.includes("extensionId=Continue.continue")) {
-        continueIFrame = iframe;
+      if (src.includes("extensionId=OpenCircuit.ocircuit")) {
+        ocircuitIFrame = iframe;
         break;
       }
     }
 
-    if (!continueIFrame) {
+    if (!ocircuitIFrame) {
       throw new Error("Could not find Continue iframe");
     }
 
-    await driver.switchTo().frame(continueIFrame);
+    await driver.switchTo().frame(ocircuitIFrame);
 
     await new Promise((res) => {
       setTimeout(res, 500);
@@ -73,7 +73,7 @@ export class GUIActions {
 
   public static toggleGui = async () => {
     return TestUtils.waitForSuccess(() =>
-      new Workbench().executeCommand("continue.focusContinueInput"),
+      new Workbench().executeCommand("ocircuit.focusOCircuitInput"),
     );
   };
 
@@ -122,7 +122,7 @@ export class GUIActions {
     await editor.sendKeys(Key.ENTER);
   }
 
-  public static async executeFocusContinueInputShortcut(driver: WebDriver) {
+  public static async executeFocusOCircuitInputShortcut(driver: WebDriver) {
     return driver
       .actions()
       .keyDown(TestUtils.osControlKey)

@@ -1,12 +1,9 @@
 import * as fs from "fs";
 import path from "path";
 
-import {
-  validateSingleEdit,
-  executeFindAndReplace,
-} from "core/editing.js";
+import { validateSingleEdit, executeFindAndReplace } from "core/editing.js";
 import { throwIfFileIsSecurityConcern } from "core/security.js";
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
 import {
@@ -26,8 +23,8 @@ export function validateAndResolveFilePath(args: any): {
   const { file_path } = args;
 
   if (!file_path) {
-    throw new ContinueError(
-      ContinueErrorReason.FindAndReplaceMissingFilepath,
+    throw new OCircuitError(
+      OCircuitErrorReason.FindAndReplaceMissingFilepath,
       "file_path is required",
     );
   }
@@ -42,16 +39,16 @@ export function validateAndResolveFilePath(args: any): {
 
   // Check if file exists
   if (!fs.existsSync(resolvedPath)) {
-    throw new ContinueError(
-      ContinueErrorReason.FileNotFound,
+    throw new OCircuitError(
+      OCircuitErrorReason.FileNotFound,
       `File ${file_path} does not exist`,
     );
   }
 
   // Check if file has been read
   if (!readFilesSet.has(resolvedPath)) {
-    throw new ContinueError(
-      ContinueErrorReason.EditToolFileNotRead,
+    throw new OCircuitError(
+      OCircuitErrorReason.EditToolFileNotRead,
       `You must use the ${readFileTool.name} tool to read ${file_path} before editing it.`,
     );
   }
@@ -181,11 +178,11 @@ WARNINGS:
 
       return `Successfully edited ${args.resolvedPath}\nDiff:\n${diff}`;
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
-      throw new ContinueError(
-        ContinueErrorReason.FileWriteError,
+      throw new OCircuitError(
+        OCircuitErrorReason.FileWriteError,
         `Error: failed to edit ${args.resolvedPath}: ${
           error instanceof Error ? error.message : String(error)
         }`,

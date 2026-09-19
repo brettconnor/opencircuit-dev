@@ -17,7 +17,6 @@ const deniedRepositoryPaths = [
   "extensions/cli/",
   "extensions/vscode/",
   "gui/",
-  "docs-site/",
   "binary/",
 ];
 const deniedPackages = ["vscode", "@vscode/", "electron"];

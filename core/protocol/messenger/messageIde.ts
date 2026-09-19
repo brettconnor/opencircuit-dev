@@ -220,8 +220,12 @@ export class MessageIde implements IDE {
     return this.request("getProblems", { filepath: fileUri });
   }
 
-  subprocess(command: string, cwd?: string): Promise<[string, string]> {
-    return this.request("subprocess", { command, cwd });
+  subprocess(
+    command: string,
+    cwd?: string,
+    args?: string[],
+  ): Promise<[string, string]> {
+    return this.request("subprocess", { command, cwd, args });
   }
 
   async getBranch(dir: string): Promise<string> {

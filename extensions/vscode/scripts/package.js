@@ -1,4 +1,4 @@
-const { exec } = require("child_process");
+const { spawn } = require("child_process");
 const fs = require("fs");
 
 const version = JSON.parse(
@@ -18,19 +18,27 @@ if (!fs.existsSync("build")) {
 
 const isPreRelease = args.includes("--pre-release");
 
-let command = isPreRelease
-  ? "npx @vscode/vsce package --out ./build --pre-release --no-dependencies" // --yarn"
-  : "npx @vscode/vsce package --out ./build --no-dependencies"; // --yarn";
-
-if (target) {
-  command += ` --target ${target}`;
+if (target && !/^(win32|linux|darwin|alpine)-(x64|arm64|armhf)$/.test(target)) {
+  throw new Error(`Unsupported VS Code target: ${target}`);
 }
 
-exec(command, (error) => {
-  if (error) {
-    throw error;
+const commandArgs = [
+  "@vscode/vsce",
+  "package",
+  "--out",
+  "./build",
+  "--no-dependencies",
+  ...(isPreRelease ? ["--pre-release"] : []),
+  ...(target ? ["--target", target] : []),
+];
+
+const child = spawn("npx", commandArgs, { stdio: "inherit" });
+child.on("close", (code) => {
+  if (code !== 0) {
+    process.exitCode = code ?? 1;
+    return;
   }
   console.log(
-    `vsce package completed - extension created at extensions/vscode/build/continue-${version}.vsix`,
+    `vsce package completed - extension created at extensions/vscode/build/ocircuit-${version}.vsix`,
   );
 });

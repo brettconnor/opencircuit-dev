@@ -1,4 +1,4 @@
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import {
   ApiRequestError,
@@ -54,9 +54,9 @@ You should use this tool to notify the user whenever the state of your work chan
       const agentId = getAgentIdFromArgs();
       if (!agentId) {
         const errorMessage =
-          "Agent ID is required. Please use the --id flag with cn serve.";
+          "Agent ID is required. Please use the --id flag with oc serve.";
         logger.error(errorMessage);
-        throw new ContinueError(ContinueErrorReason.Unspecified, errorMessage);
+        throw new OCircuitError(OCircuitErrorReason.Unspecified, errorMessage);
       }
 
       // Call the API endpoint using shared client
@@ -83,7 +83,7 @@ You should use this tool to notify the user whenever the state of your work chan
 
       return `Status set: ${args.status}`;
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
 

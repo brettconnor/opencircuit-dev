@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import * as fs from "fs";
 import os from "os";
 import path from "path";
@@ -8,15 +8,15 @@ import {
   ConfigValidationError,
   mergeConfigYamlRequestOptions,
   ModelRole,
-} from "@continuedev/config-yaml";
+} from "@opencircuit/config-yaml";
 import * as JSONC from "comment-json";
 
 import {
-  BrowserSerializedContinueConfig,
+  BrowserSerializedOCircuitConfig,
   Config,
   ContextProviderWithParams,
-  ContinueConfig,
-  ContinueRcJson,
+  OCircuitConfig,
+  OCircuitRcJson,
   CustomContextProvider,
   EmbeddingsProviderDescription,
   IDE,
@@ -29,7 +29,7 @@ import {
   LLMOptions,
   ModelDescription,
   RerankerDescription,
-  SerializedContinueConfig,
+  SerializedOCircuitConfig,
   SlashCommandWithSource,
 } from "..";
 import { getLegacyBuiltInSlashCommandFromDescription } from "../commands/slash/built-in-legacy";
@@ -52,7 +52,7 @@ import {
   getConfigJsPath,
   getConfigJsPathForRemote,
   getConfigTsPath,
-  getContinueDotEnv,
+  getOCircuitDotEnv,
   getEsbuildBinaryPath,
 } from "../util/paths";
 import { localPathToUri } from "../util/pathToUri";
@@ -73,13 +73,13 @@ import { validateConfig } from "./validation.js";
 
 export function resolveSerializedConfig(
   filepath: string,
-): SerializedContinueConfig {
+): SerializedOCircuitConfig {
   let content = fs.readFileSync(filepath, "utf8");
-  const config = JSONC.parse(content) as unknown as SerializedContinueConfig;
+  const config = JSONC.parse(content) as unknown as SerializedOCircuitConfig;
   if (config.env && Array.isArray(config.env)) {
     const env = {
       ...process.env,
-      ...getContinueDotEnv(),
+      ...getOCircuitDotEnv(),
     };
 
     config.env.forEach((envVar) => {
@@ -92,7 +92,7 @@ export function resolveSerializedConfig(
     });
   }
 
-  return JSONC.parse(content) as unknown as SerializedContinueConfig;
+  return JSONC.parse(content) as unknown as SerializedOCircuitConfig;
 }
 
 const configMergeKeys = {
@@ -110,13 +110,13 @@ const configMergeKeys = {
 };
 
 function loadSerializedConfig(
-  workspaceConfigs: ContinueRcJson[],
+  workspaceConfigs: OCircuitRcJson[],
   ideSettings: IdeSettings,
   ideType: IdeType,
-  overrideConfigJson: SerializedContinueConfig | undefined,
+  overrideConfigJson: SerializedOCircuitConfig | undefined,
   ide: IDE,
-): ConfigResult<SerializedContinueConfig> {
-  let config: SerializedContinueConfig = overrideConfigJson!;
+): ConfigResult<SerializedOCircuitConfig> {
+  let config: SerializedOCircuitConfig = overrideConfigJson!;
   if (!config) {
     try {
       config = resolveSerializedConfig(getConfigJsonPath());
@@ -167,7 +167,7 @@ function loadSerializedConfig(
 }
 
 async function serializedToIntermediateConfig(
-  initial: SerializedContinueConfig,
+  initial: SerializedOCircuitConfig,
   ide: IDE,
 ): Promise<Config> {
   // DEPRECATED - load custom slash commands
@@ -247,7 +247,7 @@ async function intermediateToFinalConfig({
   uniqueId: string;
   llmLogger: ILLMLogger;
   loadPromptFiles?: boolean;
-}): Promise<{ config: ContinueConfig; errors: ConfigValidationError[] }> {
+}): Promise<{ config: OCircuitConfig; errors: ConfigValidationError[] }> {
   const errors: ConfigValidationError[] = [];
   const workspaceDirs = await ide.getWorkspaceDirs();
   const getUriFromPath = (path: string) => {
@@ -470,7 +470,7 @@ async function intermediateToFinalConfig({
   }
   const newReranker = getRerankingILLM(config.reranker);
 
-  const continueConfig: ContinueConfig = {
+  const ocircuitConfig: OCircuitConfig = {
     ...config,
     contextProviders,
     tools: getBaseToolDefinitions(),
@@ -501,9 +501,9 @@ async function intermediateToFinalConfig({
 
   for (const cmd of config.slashCommands ?? []) {
     if ("source" in cmd) {
-      continueConfig.slashCommands.push(cmd);
+      ocircuitConfig.slashCommands.push(cmd);
     } else {
-      continueConfig.slashCommands.push({
+      ocircuitConfig.slashCommands.push({
         ...cmd,
         source: "config-ts-slash-command",
       });
@@ -511,7 +511,7 @@ async function intermediateToFinalConfig({
   }
 
   if (config.systemMessage) {
-    continueConfig.rules.unshift({
+    ocircuitConfig.rules.unshift({
       rule: config.systemMessage,
       source: "json-systemMessage",
     });
@@ -524,7 +524,7 @@ async function intermediateToFinalConfig({
     const mcpOptions: InternalMcpOptions[] = (
       config.experimental?.modelContextProtocolServers ?? []
     ).map((server, index) => ({
-      id: `continue-mcp-server-${index + 1}`,
+      id: `ocircuit-mcp-server-${index + 1}`,
       name: `MCP Server`,
       requestOptions: mergeConfigYamlRequestOptions(
         server.transport.type !== "stdio"
@@ -545,14 +545,14 @@ async function intermediateToFinalConfig({
   }
 
   // Handle experimental modelRole config values for apply and edit
-  const inlineEditModel = getModelByRole(continueConfig, "inlineEdit")?.title;
+  const inlineEditModel = getModelByRole(ocircuitConfig, "inlineEdit")?.title;
   if (inlineEditModel) {
-    const match = continueConfig.modelsByRole.chat.find(
+    const match = ocircuitConfig.modelsByRole.chat.find(
       (m) => m.title === inlineEditModel,
     );
     if (match) {
-      continueConfig.selectedModelByRole.edit = match;
-      continueConfig.modelsByRole.edit = [match]; // The only option if inlineEdit role is set
+      ocircuitConfig.selectedModelByRole.edit = match;
+      ocircuitConfig.modelsByRole.edit = [match]; // The only option if inlineEdit role is set
     } else {
       errors.push({
         fatal: false,
@@ -562,16 +562,16 @@ async function intermediateToFinalConfig({
   }
 
   const applyBlockModel = getModelByRole(
-    continueConfig,
+    ocircuitConfig,
     "applyCodeBlock",
   )?.title;
   if (applyBlockModel) {
-    const match = continueConfig.modelsByRole.chat.find(
+    const match = ocircuitConfig.modelsByRole.chat.find(
       (m) => m.title === applyBlockModel,
     );
     if (match) {
-      continueConfig.selectedModelByRole.apply = match;
-      continueConfig.modelsByRole.apply = [match]; // The only option if applyCodeBlock role is set
+      ocircuitConfig.selectedModelByRole.apply = match;
+      ocircuitConfig.modelsByRole.apply = [match]; // The only option if applyCodeBlock role is set
     } else {
       errors.push({
         fatal: false,
@@ -583,16 +583,16 @@ async function intermediateToFinalConfig({
   // Add transformers JS to the embed models list if not already added
   if (
     ideInfo.ideType === "vscode" &&
-    !continueConfig.modelsByRole.embed.find(
+    !ocircuitConfig.modelsByRole.embed.find(
       (m) => m.providerName === "transformers.js",
     )
   ) {
-    continueConfig.modelsByRole.embed.push(
+    ocircuitConfig.modelsByRole.embed.push(
       new TransformersJsEmbeddingsProvider(),
     );
   }
 
-  return { config: continueConfig, errors };
+  return { config: ocircuitConfig, errors };
 }
 
 function llmToSerializedModelDescription(llm: ILLM): ModelDescription {
@@ -623,9 +623,9 @@ function llmToSerializedModelDescription(llm: ILLM): ModelDescription {
 }
 
 async function finalToBrowserConfig(
-  final: ContinueConfig,
+  final: OCircuitConfig,
   ide: IDE,
-): Promise<BrowserSerializedContinueConfig> {
+): Promise<BrowserSerializedOCircuitConfig> {
   return {
     allowAnonymousTelemetry: final.allowAnonymousTelemetry,
     completionOptions: final.completionOptions,
@@ -660,34 +660,30 @@ async function finalToBrowserConfig(
   };
 }
 
-function escapeSpacesInPath(p: string): string {
-  return p.replace(/ /g, "\\ ");
-}
-
 async function handleEsbuildInstallation(
   ide: IDE,
   _ideType: IdeType,
 ): Promise<boolean> {
   // Only check when config.ts is going to be used; never auto-install.
-  const installCmd = "npm i esbuild@x.x.x --prefix ~/.continue";
+  const installCmd = "npm i esbuild@x.x.x --prefix ~/.ocircuit";
 
   // Try to detect a user-installed esbuild (normal resolution)
   try {
     await import("esbuild");
     return true; // available
   } catch {
-    // Try resolving from ~/.continue/node_modules as a courtesy
+    // Try resolving from ~/.ocircuit/node_modules as a courtesy
     try {
       const userEsbuild = path.join(
         os.homedir(),
-        ".continue",
+        ".ocircuit",
         "node_modules",
         "esbuild",
       );
       const candidate = require.resolve("esbuild", { paths: [userEsbuild] });
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require(candidate);
-      return true; // available via ~/.continue
+      return true; // available via ~/.ocircuit
     } catch {
       // Not available → show friendly instructions and opt out of building
       await ide.showToast(
@@ -713,17 +709,16 @@ async function tryBuildConfigTs() {
     }
   } catch (e) {
     console.log(
-      `Build error. Please check your ~/.continue/config.ts file: ${e}`,
+      `Build error. Please check your ~/.ocircuit/config.ts file: ${e}`,
     );
   }
 }
 
 async function buildConfigTsWithBinary() {
-  const cmd = [
-    escapeSpacesInPath(getEsbuildBinaryPath()),
-    escapeSpacesInPath(getConfigTsPath()),
+  execFileSync(getEsbuildBinaryPath(), [
+    getConfigTsPath(),
     "--bundle",
-    `--outfile=${escapeSpacesInPath(getConfigJsPath())}`,
+    `--outfile=${getConfigJsPath()}`,
     "--platform=node",
     "--format=cjs",
     "--sourcemap",
@@ -732,9 +727,7 @@ async function buildConfigTsWithBinary() {
     "--external:path",
     "--external:os",
     "--external:child_process",
-  ].join(" ");
-
-  execSync(cmd);
+  ]);
 }
 
 async function buildConfigTsWithNodeModule() {
@@ -788,14 +781,14 @@ async function buildConfigTsandReadConfigJs(ide: IDE, ideType: IdeType) {
   return readConfigJs();
 }
 
-async function loadContinueConfigFromJson(
+async function loadOCircuitConfigFromJson(
   ide: IDE,
   ideSettings: IdeSettings,
   ideInfo: IdeInfo,
   uniqueId: string,
   llmLogger: ILLMLogger,
-  overrideConfigJson: SerializedContinueConfig | undefined,
-): Promise<ConfigResult<ContinueConfig>> {
+  overrideConfigJson: SerializedOCircuitConfig | undefined,
+): Promise<ConfigResult<OCircuitConfig>> {
   const workspaceConfigs = await getWorkspaceRcConfigs(ide);
   // Serialized config
   let {
@@ -899,6 +892,6 @@ async function loadContinueConfigFromJson(
 
 export {
   finalToBrowserConfig,
-  loadContinueConfigFromJson,
-  type BrowserSerializedContinueConfig,
+  loadOCircuitConfigFromJson,
+  type BrowserSerializedOCircuitConfig,
 };

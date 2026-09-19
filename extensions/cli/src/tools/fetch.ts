@@ -1,6 +1,6 @@
 import type { ContextItem } from "core/index.js";
 import { fetchUrlContentImpl } from "core/tools/implementations/fetchUrlContent.js";
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import {
   parseEnvNumber,
@@ -14,7 +14,7 @@ const DEFAULT_FETCH_MAX_CHARS = 20000;
 
 function getFetchMaxChars(): number {
   return parseEnvNumber(
-    process.env.CONTINUE_CLI_FETCH_MAX_OUTPUT_LENGTH,
+    process.env.OCIRCUIT_CLI_FETCH_MAX_OUTPUT_LENGTH,
     DEFAULT_FETCH_MAX_CHARS,
   );
 }
@@ -62,8 +62,8 @@ export const fetchTool: Tool = {
       console.error = originalConsoleError;
 
       if (contextItems.length === 0) {
-        throw new ContinueError(
-          ContinueErrorReason.Unspecified,
+        throw new OCircuitError(
+          OCircuitErrorReason.Unspecified,
           `Could not fetch content from ${url}`,
         );
       }
@@ -84,7 +84,7 @@ export const fetchTool: Tool = {
 
       return truncatedOutput;
     } catch (error) {
-      if (error instanceof ContinueError) {
+      if (error instanceof OCircuitError) {
         throw error;
       }
       throw new Error(

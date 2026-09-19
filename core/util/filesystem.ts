@@ -74,7 +74,7 @@ class FileSystemIde implements IDE {
       remoteConfigServerUrl: undefined,
       remoteConfigSyncPeriod: 60,
       userToken: "",
-      continueTestEnvironment: "none",
+      ocircuitTestEnvironment: "none",
       pauseCodebaseIndexOnStart: false,
     };
   }
@@ -279,7 +279,11 @@ class FileSystemIde implements IDE {
     return Promise.resolve([]);
   }
 
-  async subprocess(command: string, cwd?: string): Promise<[string, string]> {
+  async subprocess(
+    command: string,
+    cwd?: string,
+    _args?: string[],
+  ): Promise<[string, string]> {
     return ["", ""];
   }
 }

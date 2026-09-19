@@ -11,11 +11,7 @@ body:
     attributes:
       label: Before submitting your bug report
       options:
-        - label: I've checked the [Open Circuit README](../../README.md) for relevant guidance
-          required: false
         - label: I'm not able to find an [open issue](https://github.com/brettconnor/opencircuit-dev/issues?q=is%3Aopen+is%3Aissue) that reports the same bug
-          required: false
-        - label: I've checked the repository troubleshooting guidance
           required: false
   - type: textarea
     attributes:
@@ -24,7 +20,7 @@ body:
         Feel free to omit any info that is not relevant to your issue.
 
         - **OS**: macOS
-        - **Open Circuit version**: v1.0.0
+        - **Open Circuit version**: v0.9.4
         - **IDE version**:  VSCode 1.85.1
         - Model: Claude Sonnet 4.5
         - Agent configuration
@@ -37,7 +33,7 @@ body:
           ```yaml
 
           ```
-          OR link to the relevant Open Circuit configuration or repository file:
+          OR link to agent in Open Circuit hub:
       render: Markdown
     validations:
       required: false
@@ -66,5 +62,5 @@ body:
     attributes:
       label: Log output
       description: |
-        Include the relevant lines or the last 100 lines of logs when available.
+        Include the relevant log lines or the last 100 lines when available.
       render: Shell

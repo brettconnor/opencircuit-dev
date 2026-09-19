@@ -1,10 +1,10 @@
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import * as os from "os";
 import { promisify } from "util";
 
 import { logger } from "../util/logger.js";
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export interface ResourceUsage {
   timestamp: number;
@@ -219,7 +219,7 @@ class ResourceMonitoringService {
       }
 
       // Periodically update file descriptor count to prevent lsof command leak
-      // Issue: https://github.com/continuedev/continue/issues/9422
+      // Issue: https://github.com/open-circuit-dev/open-circuit/issues/9422
       const now = Date.now();
       if (now - this.lastFdCheckTime >= this.fdCheckIntervalMs) {
         this.updateFileDescriptorCount();
@@ -275,8 +275,11 @@ class ResourceMonitoringService {
     }
 
     try {
-      const { stdout } = await execAsync(`lsof -p ${process.pid} | wc -l`);
-      return parseInt(stdout.trim(), 10) - 1; // Subtract 1 for header line
+      const { stdout } = await execFileAsync("lsof", [
+        "-p",
+        String(process.pid),
+      ]);
+      return Math.max(0, stdout.trim().split("\n").length - 1); // Subtract header line
     } catch {
       return null;
     }

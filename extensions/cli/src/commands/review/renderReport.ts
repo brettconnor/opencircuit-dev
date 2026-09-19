@@ -123,16 +123,14 @@ function renderTextReport(
   if (options.checksFromHub) {
     lines.push(
       isTTY
-        ? chalk.dim("These reviews also run on your PRs via Continue CI.")
-        : "These reviews also run on your PRs via Continue CI.",
+        ? chalk.dim("These reviews also run on your PRs via Open Circuit CI.")
+        : "These reviews also run on your PRs via Open Circuit CI.",
     );
   } else {
     lines.push(
       isTTY
-        ? chalk.dim(
-            "Tip: Run these automatically on every PR → https://continue.dev",
-          )
-        : "Tip: Run these automatically on every PR → https://continue.dev",
+        ? chalk.dim("Tip: Run these automatically on every PR → /")
+        : "Tip: Run these automatically on every PR → /",
     );
   }
 

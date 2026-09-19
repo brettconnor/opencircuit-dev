@@ -9,11 +9,10 @@ function runCommand(command, cwd, packageName) {
   return new Promise((resolve, reject) => {
     console.log(`Starting ${packageName}: ${command}`);
 
-    const [cmd, ...args] = command.split(" ");
+    const [cmd, ...args] = command;
     const child = spawn(cmd, args, {
       cwd,
       stdio: "pipe",
-      shell: true,
     });
 
     let stdout = "";
@@ -64,9 +63,17 @@ async function buildPackage(packageName, cleanNodeModules = false) {
     }
   }
 
-  await runCommand(npmInstallCmd, packagePath, `${packageName} (install)`);
+  await runCommand(
+    npmInstallCmd === "npm ci" ? ["npm", "ci"] : ["npm", "install"],
+    packagePath,
+    `${packageName} (install)`,
+  );
 
-  return runCommand("npm run build", packagePath, `${packageName} (build)`);
+  return runCommand(
+    ["npm", "run", "build"],
+    packagePath,
+    `${packageName} (build)`,
+  );
 }
 
 async function buildPackagesInParallel(packages, cleanNodeModules = false) {
@@ -87,7 +94,7 @@ async function main() {
     await buildPackagesInParallel(["fetch", "config-yaml", "llm-info"]);
 
     // Phase 3: Build packages that depend on other local packages
-    await buildPackagesInParallel(["openai-adapters", "continue-sdk"]);
+    await buildPackagesInParallel(["openai-adapters"]);
 
     console.log("🎉 All packages built successfully!");
   } catch (error) {

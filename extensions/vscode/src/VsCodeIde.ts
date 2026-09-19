@@ -1,5 +1,4 @@
 import * as child_process from "node:child_process";
-import { exec } from "node:child_process";
 
 import { Range } from "core";
 import { EXTENSION_NAME } from "core/util/constants";
@@ -243,11 +242,11 @@ class VsCodeIde implements IDE {
 
   async isTelemetryEnabled(): Promise<boolean> {
     const globalEnabled = vscode.env.isTelemetryEnabled;
-    const continueEnabled: boolean =
+    const ocircuitEnabled: boolean =
       (await vscode.workspace
         .getConfiguration(EXTENSION_NAME)
         .get("telemetryEnabled")) ?? true;
-    return globalEnabled && continueEnabled;
+    return globalEnabled && ocircuitEnabled;
   }
 
   isWorkspaceRemote(): Promise<boolean> {
@@ -485,7 +484,7 @@ class VsCodeIde implements IDE {
 
       // IMPORTANT: findFiles automatically accounts for .gitignore
       const ignoreFiles = await vscode.workspace.findFiles(
-        "**/.continueignore",
+        "**/.ocircuitignore",
         null,
       );
 
@@ -562,7 +561,7 @@ class VsCodeIde implements IDE {
           "--iglob",
           pattern,
           "--ignore-file",
-          ".continueignore",
+          ".ocircuitignore",
           "--ignore-file",
           ".gitignore",
           "--glob",
@@ -594,7 +593,7 @@ class VsCodeIde implements IDE {
       const dirResults = await this.runRipgrepQuery(dir, [
         "-i", // Case-insensitive search
         "--ignore-file",
-        ".continueignore",
+        ".ocircuitignore",
         "--ignore-file",
         ".gitignore",
         "-C",
@@ -650,15 +649,24 @@ class VsCodeIde implements IDE {
     });
   }
 
-  async subprocess(command: string, cwd?: string): Promise<[string, string]> {
+  async subprocess(
+    command: string,
+    cwd?: string,
+    args: string[] = [],
+  ): Promise<[string, string]> {
     return new Promise((resolve, reject) => {
-      exec(command, { cwd }, (error, stdout, stderr) => {
-        if (error) {
-          console.warn(error);
-          reject(stderr);
-        }
-        resolve([stdout, stderr]);
-      });
+      child_process.execFile(
+        command,
+        args,
+        { cwd },
+        (error, stdout, stderr) => {
+          if (error) {
+            console.warn(error);
+            reject(stderr);
+          }
+          resolve([stdout, stderr]);
+        },
+      );
     });
   }
 
@@ -689,7 +697,7 @@ class VsCodeIde implements IDE {
         60,
       ),
       userToken: settings.get<string>("userToken", ""),
-      continueTestEnvironment: "production",
+      ocircuitTestEnvironment: "production",
       pauseCodebaseIndexOnStart: settings.get<boolean>(
         "pauseCodebaseIndexOnStart",
         false,

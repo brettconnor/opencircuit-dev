@@ -20,6 +20,6 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["./**/*.ts", "**/*.js", "./**/*.d.ts"],
-  "exclude": ["test", "dist"]
+  "include": ["./**/*.ts", "**/*.js"],
+  "exclude": ["test", "dist", "eslint.config.js"]
 }

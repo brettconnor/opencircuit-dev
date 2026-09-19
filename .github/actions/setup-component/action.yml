@@ -1,37 +1,37 @@
-name: 'Setup Component'
-description: 'Cache and install dependencies for a specific component'
+name: "Setup Component"
+description: "Cache and install dependencies for a specific component"
 inputs:
   component:
-    description: 'Component name (core, gui, vscode, binary)'
+    description: "Component name (core, gui, vscode, binary)"
     required: true
   include-packages:
-    description: 'Whether to include packages cache (default: true)'
+    description: "Whether to include packages cache (default: true)"
     required: false
-    default: 'true'
+    default: "true"
   include-root:
-    description: 'Whether to include root cache (default: false)'
-    required: false  
-    default: 'false'
+    description: "Whether to include root cache (default: false)"
+    required: false
+    default: "false"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
       with:
         node-version-file: ".nvmrc"
-    - uses: actions/cache@v4
+    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
       with:
         path: ~/.npm
         key: ${{ runner.os }}-npm-cache-${{ inputs.component }}-${{ hashFiles(inputs.component == 'vscode' && 'extensions/vscode/package-lock.json' || format('{0}/package-lock.json', inputs.component)) }}
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
       if: inputs.include-packages == 'true'
       with:
         path: |
           packages/*/node_modules
         key: ${{ runner.os }}-packages-node-modules-${{ hashFiles('packages/*/package-lock.json') }}
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
       if: inputs.include-root == 'true'
       id: root-cache
       with:
@@ -43,7 +43,7 @@ runs:
       shell: bash
       run: npm ci
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
       id: component-cache
       with:
         path: ${{ inputs.component == 'vscode' && 'extensions/vscode/node_modules' || format('{0}/node_modules', inputs.component) }}
@@ -55,3 +55,10 @@ runs:
       run: |
         cd ${{ inputs.component == 'vscode' && 'extensions/vscode' || inputs.component }}
         npm ci
+
+    - name: Check approved install scripts
+      if: inputs.component == 'core'
+      shell: bash
+      run: |
+        cd core
+        npm run check:install-scripts

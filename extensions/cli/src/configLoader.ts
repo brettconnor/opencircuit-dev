@@ -9,8 +9,8 @@ import {
   RegistryClient,
   unrollAssistant,
   unrollAssistantFromContent,
-} from "@continuedev/config-yaml";
-import { DefaultApiInterface } from "@continuedev/sdk/dist/api/dist/index.js";
+} from "@opencircuit/config-yaml";
+import { DefaultApiInterface } from "@opencircuit/sdk/dist/api/dist/index.js";
 import chalk from "chalk";
 
 import { uriToPath, uriToSlug } from "./auth/uriUtils.js";
@@ -92,7 +92,7 @@ function determineConfigSource(
   }
 
   // Priority 2: Check for default config.yaml, then fallback to default config
-  const defaultConfigPath = path.join(env.continueHome, "config.yaml");
+  const defaultConfigPath = path.join(env.ocircuitHome, "config.yaml");
   if (fs.existsSync(defaultConfigPath)) {
     return { type: "local-config-yaml" };
   }
@@ -302,7 +302,7 @@ async function loadUserAssistantWithFallback(
 }
 
 /**
- * Loads default config.yaml from ~/.continue/config.yaml
+ * Loads default config.yaml from ~/.ocircuit/config.yaml
  */
 async function loadLocalConfigYaml(
   accessToken: string | null,
@@ -310,7 +310,7 @@ async function loadLocalConfigYaml(
   apiClient: DefaultApiInterface,
   injectBlocks: PackageIdentifier[],
 ): Promise<AssistantUnrolled> {
-  const defaultConfigPath = path.join(env.continueHome, "config.yaml");
+  const defaultConfigPath = path.join(env.ocircuitHome, "config.yaml");
   return await loadConfigYaml(
     defaultConfigPath,
     accessToken,
@@ -536,7 +536,7 @@ function getUriFromSource(source: ConfigSource): string | null {
     case "saved-uri":
       return source.uri;
     case "local-config-yaml":
-      return `file://${path.join(env.continueHome, "config.yaml")}`;
+      return `file://${path.join(env.ocircuitHome, "config.yaml")}`;
     default:
       return null;
   }

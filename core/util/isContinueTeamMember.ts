@@ -1,7 +1,7 @@
 /**
  * Utility to check if a user is a Continue team member
  */
-export function isContinueTeamMember(email?: string): boolean {
+export function isOCircuitTeamMember(email?: string): boolean {
   if (!email) return false;
-  return email.endsWith("@continue.dev");
+  return email.endsWith("@ocircuit.dev");
 }

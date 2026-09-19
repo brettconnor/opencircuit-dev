@@ -12,7 +12,10 @@ pub fn local_find_gitignores(workspace_dir: &Path) -> io::Result<HashMap<PathBuf
             gitignores.extend(local_find_gitignores(&path)?);
         } else {
             match path.file_name().and_then(|name| name.to_str()) {
-                Some(file_name) if file_name.ends_with(".gitignore") || file_name.ends_with(".continueignore") => {
+                Some(file_name)
+                    if file_name.ends_with(".gitignore")
+                        || file_name.ends_with(".ocircuitignore") =>
+                {
                     let mut contents = String::new();
                     fs::File::open(&path)?.read_to_string(&mut contents)?;
                     gitignores.insert(path, contents);
@@ -22,18 +25,6 @@ pub fn local_find_gitignores(workspace_dir: &Path) -> io::Result<HashMap<PathBuf
         }
     }
     Ok(gitignores)
-}
-
-fn main() -> io::Result<()> {
-    let workspace_dir = Path::new("path/to/workspace");
-    let gitignore_map = local_find_gitignores(workspace_dir)?;
-    
-    // Print out the result (optional)
-    for (path, contents) in gitignore_map {
-        println!("{}:\n{}", path.display(), contents);
-    }
-    
-    Ok(())
 }
 
 #[cfg(test)]
@@ -49,10 +40,10 @@ mod tests {
         let temp_dir = tempdir()?;
         let temp_path = temp_dir.path();
 
-        // Create some directories and .gitignore/.continueignore files
+        // Create some directories and .gitignore/.ocircuitignore files
         let dir_structure = [
             ("dir1", Some(".gitignore"), "node_modules/"),
-            ("dir2", Some(".continueignore"), "target/"),
+            ("dir2", Some(".ocircuitignore"), "target/"),
             ("dir3", None, ""),
         ];
 
@@ -86,7 +77,7 @@ mod tests {
     }
 
     #[test]
-    fn test_in_continue_repo() -> io::Result<()> {
+    fn test_in_ocircuit_repo() -> io::Result<()> {
         // Get the current directory
         let current_dir = std::env::current_dir()?;
         let parent_dir = current_dir.parent().unwrap();

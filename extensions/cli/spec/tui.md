@@ -1,10 +1,10 @@
-# Continue CLI Terminal UI spec
+# Open Circuit CLI Terminal UI spec
 
 This spec is incomplete.
 
 ## Stack
 
-The Continue CLI uses Ink as a react TUI library.
+The Open Circuit CLI uses Ink as a React TUI library.
 
 ## cwd/git display
 

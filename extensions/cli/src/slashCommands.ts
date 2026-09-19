@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { type AssistantConfig } from "@continuedev/sdk";
+import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
 import chalk from "chalk";
 import type { Session } from "core/index.js";
 import historyManager from "core/util/history.js";
@@ -57,7 +57,7 @@ async function handleHelp(_args: string[], _assistant: AssistantConfig) {
 async function handleFork() {
   try {
     const currentSession = getCurrentSession();
-    const forkCommand = `cn --fork ${currentSession.sessionId}`;
+    const forkCommand = `oc --fork ${currentSession.sessionId}`;
     // Try to copy to clipboard dynamically to avoid hard dependency in tests
     try {
       const clipboardy = await import("clipboardy");
@@ -116,7 +116,7 @@ async function handleSkills(): Promise<SlashCommandResult> {
     return {
       exit: false,
       output: chalk.yellow(
-        "No skills found. Add skills under .continue/skills or .claude/skills.",
+        "No skills found. Add skills under .ocircuit/skills or .claude/skills.",
       ),
     };
   }

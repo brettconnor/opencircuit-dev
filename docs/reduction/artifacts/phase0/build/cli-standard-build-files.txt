@@ -1,5 +1,0 @@
-cn.js
-index.js
-index.js.map
-meta.json
-xhr-sync-worker.js

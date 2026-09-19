@@ -57,7 +57,7 @@ pub fn text_to_embedding(text: String) -> Result<Vec<f32>, &'static str> {
 fn get_conn() -> Connection {
     let path = dirs::home_dir()
         .unwrap()
-        .join(".continue")
+        .join(".ocircuit")
         .join("index")
         .join("sync.db");
     fs::create_dir_all(path.parent().unwrap()).unwrap();
@@ -218,20 +218,36 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "performance benchmark; run with cargo test benchmark_load_vectors -- --ignored"]
     fn benchmark_load_vectors() {
-        let conn = Connection::open("sync.db").unwrap();
+        let temp_dir = tempfile::tempdir().unwrap();
+        let db_path = temp_dir.path().join("sync.db");
+        let mut conn = Connection::open(db_path).unwrap();
 
         conn.execute(
             "CREATE TABLE chunks (
             id    INTEGER PRIMARY KEY,
+            hash TEXT NOT NULL,
             content  TEXT NOT NULL,
-            embedding TEXT NOT NULL
+            embedding TEXT NOT NULL,
+            start_line INTEGER NOT NULL,
+            end_line INTEGER NOT NULL,
+            file_path TEXT NOT NULL,
+            idx INTEGER NOT NULL
         )",
             (), // empty list of parameters.
         )
         .unwrap();
 
         let time = Instant::now();
+        let transaction = conn.transaction().unwrap();
+        let mut insert = transaction
+            .prepare(
+                "INSERT INTO chunks
+                (hash, content, embedding, start_line, end_line, file_path, idx)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            )
+            .unwrap();
 
         for _ in 0..10_000 {
             let chunk = Chunk {
@@ -243,29 +259,41 @@ mod tests {
                 file_path: "test".to_string(),
                 index: 0,
             };
-            conn.execute(
-                "INSERT INTO chunks (content, embedding) VALUES (?1, ?2)",
-                (&chunk.content, &embedding_to_text(chunk.embedding)),
-            )
-            .unwrap();
+            let embedding = embedding_to_text(chunk.embedding);
+            insert
+                .execute((
+                    &chunk.hash,
+                    &chunk.content,
+                    &embedding,
+                    chunk.start_line,
+                    chunk.end_line,
+                    &chunk.file_path,
+                    chunk.index,
+                ))
+                .unwrap();
         }
+        drop(insert);
+        transaction.commit().unwrap();
 
         println!("To insert took: {:.2?}", time.elapsed());
 
         let mut stmt = conn
-            .prepare("SELECT id, content, embedding FROM chunks")
+            .prepare(
+                "SELECT hash, content, embedding, start_line, end_line, file_path, idx
+                FROM chunks",
+            )
             .unwrap();
 
         let chunk_iter = stmt
             .query_map([], |row| {
                 Ok(Chunk {
-                    hash: row.get(1)?,
-                    content: row.get(2)?,
-                    embedding: text_to_embedding(row.get(3)?).unwrap(),
-                    start_line: row.get(4)?,
-                    end_line: row.get(5)?,
-                    file_path: row.get(6)?,
-                    index: row.get(7)?,
+                    hash: row.get(0)?,
+                    content: row.get(1)?,
+                    embedding: text_to_embedding(row.get(2)?).unwrap(),
+                    start_line: row.get(3)?,
+                    end_line: row.get(4)?,
+                    file_path: row.get(5)?,
+                    index: row.get(6)?,
                 })
             })
             .unwrap();
@@ -278,6 +306,7 @@ mod tests {
             let _ = chunk.unwrap().embedding;
         }
 
+        assert_eq!(i, 10_000);
         println!("Found {} chunks", i);
         println!("To convert took: {:.2?}", time.elapsed());
     }

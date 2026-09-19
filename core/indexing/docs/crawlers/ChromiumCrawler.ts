@@ -4,11 +4,11 @@ import { URL } from "node:url";
 
 import type { Handler, HTTPResponse, Page } from "puppeteer";
 
-import { ContinueConfig, IDE } from "../../..";
+import { OCircuitConfig, IDE } from "../../..";
 import {
   editConfigFile,
   getChromiumPath,
-  getContinueUtilsPath,
+  getOCircuitUtilsPath,
 } from "../../../util/paths";
 import { PageData } from "./DocsCrawler";
 
@@ -25,7 +25,7 @@ async function resolveChromium() {
   }
 
   const cacheDir = path.join(
-    ChromiumInstaller.PCR_CONFIG.downloadPath ?? getContinueUtilsPath(),
+    ChromiumInstaller.PCR_CONFIG.downloadPath ?? getOCircuitUtilsPath(),
     ".chromium-browser-snapshots",
   );
   // Use a stable recent Chromium version
@@ -245,11 +245,11 @@ export class ChromiumCrawler {
 }
 
 export class ChromiumInstaller {
-  static PCR_CONFIG = { downloadPath: getContinueUtilsPath() };
+  static PCR_CONFIG = { downloadPath: getOCircuitUtilsPath() };
 
   constructor(
     private readonly ide: IDE,
-    private readonly config: ContinueConfig,
+    private readonly config: OCircuitConfig,
   ) {
     if (this.shouldInstallOnStartup()) {
       console.log("Installing Chromium");

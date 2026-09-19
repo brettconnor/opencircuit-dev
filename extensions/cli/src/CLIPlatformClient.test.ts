@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 
-import { FQSN, SecretResult, SecretType } from "@continuedev/config-yaml";
+import { FQSN, SecretResult, SecretType } from "@opencircuit/config-yaml";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CLIPlatformClient } from "./CLIPlatformClient.js";
@@ -14,19 +14,21 @@ vi.mock("node:fs", () => ({
 // Mock env module
 vi.mock("./env.js", () => ({
   env: {
-    continueHome: "/home/user/.continue",
+    ocircuitHome: "/home/user/.ocircuit",
   },
 }));
 
 describe("CLIPlatformClient", () => {
   let mockApiClient: {
     syncSecrets: ReturnType<typeof vi.fn>;
+    configuration: { accessToken?: string };
   };
 
   beforeEach(() => {
     vi.resetAllMocks();
     mockApiClient = {
       syncSecrets: vi.fn(),
+      configuration: { accessToken: "test-access-token" },
     };
     // Reset process.env mocks
     vi.unstubAllEnvs();
@@ -249,6 +251,27 @@ describe("CLIPlatformClient", () => {
       // Should return undefined for the unresolved secret
       expect(results).toHaveLength(1);
       expect(results[0]).toBeUndefined();
+    });
+
+    it("does not contact the hosted resolver without credentials", async () => {
+      const fqsn: FQSN = {
+        packageSlugs: [{ ownerSlug: "openai", packageSlug: "gpt-4" }],
+        secretName: "OPENAI_API_KEY",
+      };
+
+      vi.stubEnv("OPENAI_API_KEY", undefined as unknown as string);
+      vi.mocked(fs.existsSync).mockReturnValue(false);
+      mockApiClient.configuration.accessToken = undefined;
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const client = new CLIPlatformClient(null, mockApiClient as any);
+      const results = await client.resolveFQSNs([fqsn]);
+
+      expect(results).toEqual([undefined]);
+      expect(mockApiClient.syncSecrets).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalled();
+
+      warn.mockRestore();
     });
 
     it("does not call API when all secrets are found locally", async () => {

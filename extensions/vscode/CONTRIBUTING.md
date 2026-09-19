@@ -1,9 +1,9 @@
-# Continue VS Code Extension
+# Open Circuit VS Code Extension
 
-This is the Continue VS Code Extension. Its primary jobs are
+This is the Open Circuit VS Code Extension. Its primary jobs are
 
-1. Implement the IDE side of the Continue IDE protocol, allowing a Continue server to interact natively in an IDE. This happens in `src/continueIdeClient.ts`.
-2. Open the Continue React app in a side panel. The React app's source code lives in the `gui` directory. The panel is opened by the `continue.openContinueGUI` command, as defined in `src/commands.ts`.
+1. Implement the IDE side of the Open Circuit IDE protocol, allowing a Open Circuit server to interact natively in an IDE. This happens in `src/ocircuitIdeClient.ts`.
+2. Open the Open Circuit React app in a side panel. The React app's source code lives in the `gui` directory. The panel is opened by the `ocircuit.openOCircuitGUI` command, as defined in `src/commands.ts`.
 
 # How to run the extension
 

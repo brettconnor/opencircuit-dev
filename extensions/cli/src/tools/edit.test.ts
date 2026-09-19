@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-import { ContinueError, ContinueErrorReason } from "core/errors.js";
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -63,8 +63,8 @@ describe("editTool", () => {
       };
 
       const error = await editTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.EditToolFileNotRead);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.EditToolFileNotRead);
     });
 
     it("should throw error if file does not exist", async () => {
@@ -79,8 +79,8 @@ describe("editTool", () => {
       };
 
       const error = await editTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.FileNotFound);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.FileNotFound);
     });
 
     it("should throw error if old_string is not found", async () => {
@@ -94,9 +94,9 @@ describe("editTool", () => {
       };
 
       const error = await editTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
+      expect(error).toBeInstanceOf(OCircuitError);
       expect(error.reason).toBe(
-        ContinueErrorReason.FindAndReplaceOldStringNotFound,
+        OCircuitErrorReason.FindAndReplaceOldStringNotFound,
       );
     });
 
@@ -111,9 +111,9 @@ describe("editTool", () => {
       };
 
       const error = await editTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
+      expect(error).toBeInstanceOf(OCircuitError);
       expect(error.reason).toBe(
-        ContinueErrorReason.FindAndReplaceMultipleOccurrences,
+        OCircuitErrorReason.FindAndReplaceMultipleOccurrences,
       );
     });
 
@@ -127,9 +127,9 @@ describe("editTool", () => {
       };
 
       const error = await editTool.preprocess!(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
+      expect(error).toBeInstanceOf(OCircuitError);
       expect(error.reason).toBe(
-        ContinueErrorReason.FindAndReplaceIdenticalOldAndNewStrings,
+        OCircuitErrorReason.FindAndReplaceIdenticalOldAndNewStrings,
       );
     });
 
@@ -211,8 +211,8 @@ describe("editTool", () => {
       };
 
       const error = await editTool.run(args).catch((e) => e);
-      expect(error).toBeInstanceOf(ContinueError);
-      expect(error.reason).toBe(ContinueErrorReason.FileWriteError);
+      expect(error).toBeInstanceOf(OCircuitError);
+      expect(error.reason).toBe(OCircuitErrorReason.FileWriteError);
     });
   });
 

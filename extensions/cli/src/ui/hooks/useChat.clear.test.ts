@@ -1,5 +1,7 @@
 import { convertToUnifiedHistory } from "core/messageConversion.js";
+import type { ChatHistoryItem } from "core/index.js";
 import { ChatCompletionMessageParam } from "openai/resources.mjs";
+import type React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { startNewSession } from "../../session.js";
@@ -14,15 +16,18 @@ vi.mock("../../session.js", () => ({
 }));
 
 describe("useChat clear command", () => {
-  let mockSetChatHistory: ReturnType<typeof vi.fn>;
-  let mockOnClear: ReturnType<typeof vi.fn>;
+  let mockSetChatHistory: React.Dispatch<
+    React.SetStateAction<ChatHistoryItem[]>
+  >;
+  let mockOnClear: () => void;
 
   beforeEach(() => {
     // Clear all mocks to prevent call history leaking between tests
     vi.clearAllMocks();
 
-    mockSetChatHistory = vi.fn();
-    mockOnClear = vi.fn();
+    mockSetChatHistory =
+      vi.fn<React.Dispatch<React.SetStateAction<ChatHistoryItem[]>>>();
+    mockOnClear = vi.fn<() => void>();
   });
 
   it("should call onClear callback when processing clear command", () => {

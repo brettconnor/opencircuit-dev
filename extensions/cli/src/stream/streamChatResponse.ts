@@ -1,5 +1,5 @@
-import { ModelConfig } from "@continuedev/config-yaml";
-import { BaseLlmApi } from "@continuedev/openai-adapters";
+import { ModelConfig } from "@opencircuit/config-yaml";
+import { BaseLlmApi } from "@opencircuit/openai-adapters";
 import type { ChatHistoryItem } from "core/index.js";
 import { convertFromUnifiedHistoryWithSystemMessage } from "core/messageConversion.js";
 import * as dotenv from "dotenv";
@@ -561,13 +561,13 @@ export async function streamChatResponse(
 
     // If compaction happened during this turn and we're about to stop,
     // automatically send a continuation message to keep the agent going
-    const autoContinueResult = handleAutoContinuation(
+    const autoOCircuitResult = handleAutoContinuation(
       compactionOccurredThisTurn,
       shouldContinue,
       chatHistory,
     );
-    chatHistory = autoContinueResult.chatHistory;
-    const shouldAutoContinue = autoContinueResult.shouldAutoContinue;
+    chatHistory = autoOCircuitResult.chatHistory;
+    const shouldAutoContinue = autoOCircuitResult.shouldAutoContinue;
 
     // Reset flag to avoid infinite continuation
     if (shouldAutoContinue) {

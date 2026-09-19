@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Continue CLI Installer - Unix (macOS, Linux, WSL, Git Bash)
-# curl -fsSL https://continue.dev/install.sh | bash
+## Open Circuit CLI installer - Unix (macOS, Linux, WSL, Git Bash)
+# curl -fsSL //install.sh | bash
 
 REQUIRED_NODE_VERSION="24.19.0"
-PACKAGE_NAME="@continuedev/cli"
-CLI_COMMAND="cn"
+PACKAGE_NAME="@opencircuit/cli"
+PACKAGE_VERSION="1.0.0"
+CLI_COMMAND="oc"
 NETWORK_TIMEOUT=60
 FNM_INSTALL_DIR="$HOME/.local/share/fnm"
 
@@ -267,14 +268,14 @@ check_npm_permissions() {
 }
 
 install_cli() {
-    info "Installing $PACKAGE_NAME..."
+    info "Installing $PACKAGE_NAME@$PACKAGE_VERSION..."
 
     check_npm_permissions
 
     local npm_output
     local npm_exit_code=0
 
-    npm_output=$(npm install -g "$PACKAGE_NAME" 2>&1) || npm_exit_code=$?
+    npm_output=$(npm install -g "$PACKAGE_NAME@$PACKAGE_VERSION" 2>&1) || npm_exit_code=$?
 
     if [ $npm_exit_code -ne 0 ]; then
         echo "$npm_output" >&2
@@ -294,7 +295,7 @@ install_cli() {
 finalize() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    success "Continue CLI installation complete!"
+    success "Open Circuit CLI installation complete!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 
@@ -310,7 +311,7 @@ finalize() {
 main() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    printf "${BOLD}           Continue CLI Installer${NC}\n"
+    printf "${BOLD}           Open Circuit CLI Installer${NC}\n"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 

@@ -4,7 +4,7 @@ import { osModelsEditPrompt } from "../templates/edit.js";
 import OpenAI from "./OpenAI.js";
 
 // Get Continue version from package.json at build time
-const CONTINUE_VERSION = process.env.npm_package_version || "unknown";
+const OCIRCUIT_VERSION = process.env.npm_package_version || "unknown";
 
 /**
  * ClawRouter LLM Provider
@@ -44,8 +44,8 @@ class ClawRouter extends OpenAI {
   protected _getHeaders() {
     return {
       ...super._getHeaders(),
-      "User-Agent": `Continue/${CONTINUE_VERSION}`,
-      "X-Continue-Provider": "clawrouter",
+      "User-Agent": `OpenCircuit/${OCIRCUIT_VERSION}`,
+      "X-OpenCircuit-Provider": "clawrouter",
     };
   }
 }

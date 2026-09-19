@@ -1,4 +1,4 @@
-import { DevDataLogEvent } from "@continuedev/config-yaml";
+import { DevDataLogEvent } from "@opencircuit/config-yaml";
 import fs from "fs";
 import path from "path";
 import {
@@ -16,7 +16,7 @@ import { getDevDataFilePath } from "../util/paths";
 import { DataLogger } from "./log";
 
 // Only mock fetch, not fs
-vi.mock("@continuedev/fetch");
+vi.mock("@opencircuit/fetch");
 
 const TEST_EVENT: DevDataLogEvent = {
   name: "tokensGenerated",
@@ -134,7 +134,7 @@ describe("DataLogger", () => {
         eventName: "testEvent",
         timestamp: expect.any(String),
         schema: SCHEMA,
-        userAgent: "VSCode/1.0.0 (Continue/0.1.0)",
+        userAgent: "VSCode/1.0.0 (OpenCircuit/0.1.0)",
         selectedProfileId: "test-profile-id",
         userId: "test-user-token",
       });

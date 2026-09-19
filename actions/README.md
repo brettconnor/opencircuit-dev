@@ -1,6 +1,6 @@
-# Continue PR Review Actions
+# Open Circuit PR Review Actions
 
-GitHub Actions that provide automated code reviews for pull requests using Continue CLI.
+GitHub Actions that provide automated code reviews for pull requests using Open Circuit CLI.
 
 ## Available Actions
 
@@ -10,8 +10,8 @@ This repository provides a GitHub Action for automated PR reviews:
 
 Provides high-level PR assessment with overall feedback and recommendations.
 
-- **Path:** `continuedev/continue/actions/general-review@main`
-- **Trigger:** `@continue-review`
+- **Path:** `brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351`
+- **Trigger:** `@ocircuit-review`
 - **Output:** Summary comment with strengths, issues, and recommendations
 
 ## Quick Start
@@ -36,38 +36,38 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: continuedev/continue/actions/general-review@main
+      - uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351
         with:
-          continue-api-key: ${{ secrets.CONTINUE_API_KEY }}
-          continue-org: "your-org-name"
-          continue-config: "your-org-name/review-bot"
+          ocircuit-api-key: ${{ secrets.OCIRCUIT_API_KEY }}
+          ocircuit-org: "your-org-name"
+          ocircuit-agent: "your-org-name/review-bot"
 ```
 
 ## Inputs
 
 The action accepts the following inputs:
 
-| Input              | Description                            | Required |
-| ------------------ | -------------------------------------- | -------- |
-| `continue-api-key` | API key for Continue service           | Yes      |
-| `continue-org`     | Organization for Continue config       | Yes      |
-| `continue-config`  | Config path (e.g., "myorg/review-bot") | Yes      |
+| Input              | Description                           | Required |
+| ------------------ | ------------------------------------- | -------- |
+| `ocircuit-api-key` | API key for Open Circuit service      | Yes      |
+| `ocircuit-org`     | Organization for Open Circuit config  | Yes      |
+| `ocircuit-agent`   | Agent path (e.g., "myorg/review-bot") | Yes      |
 
 ## Setup Requirements
 
-### 1. Continue API Key
+### 1. Open Circuit API Key
 
-Add your Continue API key as a secret named `CONTINUE_API_KEY` in your repository:
+Add your Open Circuit API key as a secret named `OCIRCUIT_API_KEY` in your repository:
 
 1. Go to your repository's Settings
 2. Navigate to Secrets and variables → Actions
 3. Click "New repository secret"
-4. Name: `CONTINUE_API_KEY`
-5. Value: Your Continue API key
+4. Name: `OCIRCUIT_API_KEY`
+5. Value: Your Open Circuit API key
 
-### 2. Continue Configuration
+### 2. Open Circuit Configuration
 
-Set up your review bot configuration in Continue:
+Set up your review bot configuration for Open Circuit:
 
 1. Create a configuration for your organization
 2. Configure the review bot settings
@@ -94,7 +94,7 @@ The action can be triggered in two ways:
 
 Team members can trigger reviews by commenting on any pull request:
 
-- `@continue-review` - Triggers a review
+- `@ocircuit-review` - Triggers a review
 
 ## Review Output
 
@@ -110,19 +110,17 @@ The general review provides a structured comment that includes:
 1. Checks out repository code
 2. Fetches PR diff using GitHub CLI
 3. Generates a comprehensive review prompt
-4. Runs Continue CLI with specified configuration
+4. Runs Open Circuit CLI with specified configuration
 5. Posts review as a PR comment
 
 ## Versioning
 
-We recommend using the main branch:
-
-- `@main` - Uses the latest code from the main branch
+Pin the action to a reviewed commit, as shown below, so updates are explicit:
 
 Example:
 
 ```yaml
-uses: continuedev/continue/actions/general-review@main
+uses: brettconn/open-circuit-dev/actions/general-review@ac4d68177934ba4c338b7081f7859275d3d95351
 ```
 
 ## Troubleshooting
@@ -131,18 +129,18 @@ uses: continuedev/continue/actions/general-review@main
 
 - Ensure the PR author or commenter has appropriate permissions (OWNER, MEMBER, or COLLABORATOR)
 - Check that the workflow file is in the default branch
-- Verify the Continue API key is correctly set as a repository secret
+- Verify the Open Circuit API key is correctly set as a repository secret
 
 ### No review output generated
 
 - Check the action logs for any errors
-- Verify your Continue configuration is correct
-- Ensure your Continue API key is valid
+- Verify your Open Circuit configuration is correct
+- Ensure your Open Circuit API key is valid
 
 ## Support
 
 For issues or questions:
 
-- [Continue Documentation](https://docs.continue.dev)
-- [GitHub Issues](https://github.com/continuedev/continue/issues)
-- [GitHub Discussions](https://github.com/continuedev/continue/discussions)
+- [Open Circuit Documentation](/)
+- [GitHub Issues](https://github.com/open-circuit-dev/open-circuit/issues)
+- [GitHub Discussions](https://github.com/open-circuit-dev/open-circuit/discussions)

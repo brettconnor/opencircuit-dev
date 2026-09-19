@@ -20,7 +20,7 @@ describe("runTerminalCommand timeout functionality", () => {
   let mockChildProc: any;
   let mockGetIdeInfo: ReturnType<typeof vi.fn>;
   let mockGetWorkspaceDirs: ReturnType<typeof vi.fn>;
-  let mockOnPartialOutput: ReturnType<typeof vi.fn>;
+  let mockOnPartialOutput: NonNullable<ToolExtras["onPartialOutput"]>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let setTimeoutSpy: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

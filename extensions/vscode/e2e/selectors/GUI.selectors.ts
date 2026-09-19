@@ -172,7 +172,7 @@ export class GUISelectors {
     return codeBlockElement;
   }
 
-  public static getContinueExtensionBadge(view: WebView) {
+  public static getOCircuitExtensionBadge(view: WebView) {
     return SelectorUtils.getElementByAriaLabel(view, "Continue");
   }
 }

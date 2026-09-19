@@ -1,4 +1,4 @@
-name: Release @continuedev/fetch
+name: Release @opencircuit/fetch
 
 on:
   push:

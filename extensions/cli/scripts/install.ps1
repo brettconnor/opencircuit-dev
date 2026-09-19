@@ -1,11 +1,11 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Continue CLI Installer for Windows
+    Open Circuit CLI Installer for Windows
 .DESCRIPTION
-    Installs Node.js (if needed) and the Continue CLI globally
+    Installs Node.js (if needed) and the Open Circuit CLI globally
 .EXAMPLE
-    irm https://continue.dev/install.ps1 | iex
+    irm https://raw.githubusercontent.com/open-circuit-dev/open-circuit/main/extensions/cli/scripts/install.ps1 | iex
 .NOTES
     Supports Windows 10/11, Windows Server 2016+
     Requires internet connectivity
@@ -21,8 +21,9 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 
 $script:RequiredNodeVersion = [version]"24.19.0"
-$script:PackageName = "@continuedev/cli"
-$script:CliCommand = "cn"
+$script:PackageName = "@opencircuit/cli"
+$script:PackageVersion = "1.0.0"
+$script:CliCommand = "oc"
 $script:FnmInstalled = $false
 $script:FnmPath = "$env:LOCALAPPDATA\fnm"
 
@@ -257,7 +258,7 @@ function Add-ToProfile {
 }
 
 function Install-Cli {
-    Write-Info "Installing $PackageName..."
+    Write-Info "Installing $PackageName@$PackageVersion..."
 
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
         Write-Err "npm not found. Please restart PowerShell and try again."
@@ -268,7 +269,7 @@ function Install-Cli {
     $npmPrefix = npm config get prefix 2>$null
     if ($npmPrefix -and (Test-Path $npmPrefix)) {
         try {
-            $testFile = Join-Path $npmPrefix "_continue_test_write"
+            $testFile = Join-Path $npmPrefix "_ocircuit_test_write"
             [IO.File]::WriteAllText($testFile, "test")
             Remove-Item $testFile -Force
         } catch {
@@ -289,7 +290,7 @@ function Install-Cli {
         }
     }
 
-    $npmOutput = npm install -g $PackageName 2>&1
+    $npmOutput = npm install -g "$PackageName@$PackageVersion" 2>&1
     $npmExitCode = $LASTEXITCODE
 
     if ($npmExitCode -ne 0) {
@@ -310,7 +311,7 @@ function Install-Cli {
 function Show-Complete {
     Write-Host ""
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-    Write-Success "Continue CLI installation complete!"
+    Write-Success "Open Circuit CLI installation complete!"
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
     Write-Host ""
 
@@ -327,7 +328,7 @@ function Show-Complete {
 function Main {
     Write-Host ""
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-    Write-Host "           Continue CLI Installer" -ForegroundColor White
+    Write-Host "           Open Circuit CLI Installer" -ForegroundColor White
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
     Write-Host ""
 

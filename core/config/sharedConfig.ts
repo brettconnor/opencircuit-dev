@@ -1,10 +1,10 @@
 import z from "zod";
 
 import type {
-  BrowserSerializedContinueConfig,
+  BrowserSerializedOCircuitConfig,
   Config,
-  ContinueConfig,
-  SerializedContinueConfig,
+  OCircuitConfig,
+  SerializedOCircuitConfig,
 } from "../index.js";
 
 export const sharedConfigSchema = z
@@ -14,7 +14,7 @@ export const sharedConfigSchema = z
     disableIndexing: z.boolean(),
     disableSessionTitles: z.boolean(),
 
-    // `experimental` in `ContinueConfig`
+    // `experimental` in `OCircuitConfig`
     useChromiumForDocsCrawling: z.boolean(),
     readResponseTTS: z.boolean(),
     promptPath: z.string(),
@@ -24,16 +24,16 @@ export const sharedConfigSchema = z
     codebaseToolCallingOnly: z.boolean(),
     enableStaticContextualization: z.boolean(),
 
-    // `ui` in `ContinueConfig`
+    // `ui` in `OCircuitConfig`
     showSessionTabs: z.boolean(),
     codeBlockToolbarPosition: z.enum(["top", "bottom"]),
     fontSize: z.number(),
     codeWrap: z.boolean(),
     displayRawMarkdown: z.boolean(),
     showChatScrollbar: z.boolean(),
-    continueAfterToolRejection: z.boolean(),
+    ocircuitAfterToolRejection: z.boolean(),
 
-    // `tabAutocompleteOptions` in `ContinueConfig`
+    // `tabAutocompleteOptions` in `OCircuitConfig`
     useAutocompleteCache: z.boolean(),
     useAutocompleteMultilineCompletions: z.enum(["always", "never", "auto"]),
     disableAutocompleteInFiles: z.array(z.string()),
@@ -77,25 +77,25 @@ export function salvageSharedConfig(sharedConfig: object): SharedConfigSchema {
 }
 
 // Apply shared config to all forms of config
-// - SerializedContinueConfig (config.json)
+// - SerializedOCircuitConfig (config.json)
 // - Config ("intermediate") - passed to config.ts
-// - ContinueConfig
-// - BrowserSerializedContinueConfig (final converted to be passed to GUI)
+// - OCircuitConfig
+// - BrowserSerializedOCircuitConfig (final converted to be passed to GUI)
 
 // This modify function is split into two steps
 // - rectifySharedModelsFromSharedConfig - includes boolean flags like allowAnonymousTelemetry which
 //   must be added BEFORE config.ts and remote server config apply for JSON
 //   for security reasons
 // - setSharedModelsFromSharedConfig - exists because of selectedModelsByRole
-//   Which don't exist on SerializedContinueConfig/Config types, so must be added after the fact
+//   Which don't exist on SerializedOCircuitConfig/Config types, so must be added after the fact
 export function modifyAnyConfigWithSharedConfig<
   T extends
-    | ContinueConfig
-    | BrowserSerializedContinueConfig
+    | OCircuitConfig
+    | BrowserSerializedOCircuitConfig
     | Config
-    | SerializedContinueConfig,
->(continueConfig: T, sharedConfig: SharedConfigSchema): T {
-  const configCopy = { ...continueConfig };
+    | SerializedOCircuitConfig,
+>(ocircuitConfig: T, sharedConfig: SharedConfigSchema): T {
+  const configCopy = { ...ocircuitConfig };
   configCopy.tabAutocompleteOptions = {
     ...configCopy.tabAutocompleteOptions,
   };
@@ -154,9 +154,9 @@ export function modifyAnyConfigWithSharedConfig<
     configCopy.ui.showSessionTabs = sharedConfig.showSessionTabs;
   }
 
-  if (sharedConfig.continueAfterToolRejection !== undefined) {
-    configCopy.ui.continueAfterToolRejection =
-      sharedConfig.continueAfterToolRejection;
+  if (sharedConfig.ocircuitAfterToolRejection !== undefined) {
+    configCopy.ui.ocircuitAfterToolRejection =
+      sharedConfig.ocircuitAfterToolRejection;
   }
 
   configCopy.experimental = {

@@ -27,6 +27,6 @@
     // This improves issue grouping in Sentry.
     "sourceRoot": "/"
   },
-  "include": ["./**/*.ts", "./**/*.js", "./**/*.d.ts"],
-  "exclude": ["dist"]
+  "include": ["./**/*.ts", "./**/*.js"],
+  "exclude": ["dist", "eslint.config.js"]
 }

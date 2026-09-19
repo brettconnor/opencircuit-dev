@@ -233,7 +233,7 @@ export class VsCodeIdeUtils {
       .openTextDocument(
         vscode.Uri.parse(
           `${
-            VsCodeExtension.continueVirtualDocumentScheme
+            VsCodeExtension.ocircuitVirtualDocumentScheme
           }:${encodeURIComponent(name)}?${encodeURIComponent(contents)}`,
         ),
       )
