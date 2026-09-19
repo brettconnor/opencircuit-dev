@@ -40,6 +40,10 @@ npm install --global .\opencircuit-cli-1.0.0.tgz
 oc
 ```
 
+Installation also creates starter provider templates in
+`~/.ocircuit/templates/`. Existing templates are never overwritten. Copy one
+to `~/.ocircuit/config.yaml` or use it directly with `oc --config`.
+
 ### Headless Mode
 
 Headless mode (`-p` flag) runs without an interactive terminal UI, making it perfect for:

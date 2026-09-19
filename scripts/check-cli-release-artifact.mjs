@@ -42,6 +42,11 @@ const requiredFiles = [
   "dist/oc.js",
   "dist/index.js",
   "dist/meta.json",
+  "scripts/install-templates.mjs",
+  "templates/config-openai.yaml",
+  "templates/config-anthropic.yaml",
+  "templates/config-gemini.yaml",
+  "templates/config-byom.yaml",
 ];
 const missingFiles = requiredFiles.filter((file) => !files.includes(file));
 const forbiddenFiles = files.filter(

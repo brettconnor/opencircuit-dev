@@ -181,6 +181,12 @@ models:
       - chat
 ```
 
+The CLI package installs these four starter templates automatically in
+`~/.ocircuit/templates/` without overwriting existing files:
+`config-openai.yaml`, `config-anthropic.yaml`, `config-gemini.yaml`, and
+`config-byom.yaml`. Copy one to `~/.ocircuit/config.yaml` or pass its path with
+`--config`.
+
 For Anthropic, use:
 
 ```yaml
