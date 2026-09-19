@@ -16,7 +16,8 @@ New to Open Circuit? Follow the beginner guide:
 
 **[Read QUICKSTART.md](QUICKSTART.md)**
 
-> Open Circuit CLI 1.0.0 is currently distributed as a GitHub Release asset.
+> Open Circuit CLI 1.0.0 is currently distributed as a
+> [GitHub Release asset](https://github.com/open-circuit-dev/open-circuit/releases/tag/v1.0.0).
 > npm publication is planned but not yet available.
 
 ## What is included
