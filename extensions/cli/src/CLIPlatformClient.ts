@@ -18,6 +18,13 @@ export class CLIPlatformClient implements PlatformClient {
     private readonly apiClient: DefaultApiInterface,
   ) {}
 
+  private hasRemoteCredentials(): boolean {
+    const client = this.apiClient as DefaultApiInterface & {
+      configuration?: { accessToken?: string };
+    };
+    return Boolean(client.configuration?.accessToken);
+  }
+
   private findSecretInEnvFile(
     filePath: string,
     secretName: string,
@@ -105,12 +112,14 @@ export class CLIPlatformClient implements PlatformClient {
       }
     }
 
-    // For secrets not found locally, try to resolve through the API
+    // For secrets not found locally, try to resolve through the API only when
+    // the client is authenticated. Local CLI config should remain completely
+    // offline when the hosted resolver is unavailable or disabled.
     const unresolvedIndices = results
       .map((r, i) => (r === undefined ? i : -1))
       .filter((i) => i !== -1);
 
-    if (unresolvedIndices.length > 0) {
+    if (unresolvedIndices.length > 0 && this.hasRemoteCredentials()) {
       try {
         const unresolvedFqsns = unresolvedIndices.map((i) => fqsns[i]);
         const apiResults: any = await this.apiClient.syncSecrets({

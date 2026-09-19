@@ -14,14 +14,14 @@ ${mind.multiline(`  ██████╗ ██████╗ ███╗   �
   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝`)}
                                                     ${d("v" + getVersion())}`;
 
-// ASCII art for just "CN" (first two letters)
-const CN_ASCII_ART = `
-${mind.multiline(`  ██████╗███╗   ██╗
- ██╔════╝████╗  ██║
- ██║     ██╔██╗ ██║
- ██║     ██║╚██╗██║
- ╚██████╗██║ ╚████║
-  ╚═════╝╚═╝  ╚═══╝`)}
+// ASCII art for just "OC" (the Open Circuit initials)
+const OC_ASCII_ART = `
+${mind.multiline(` ██████╗  ██████╗
+██╔════╝ ██╔════╝
+██║      ██║
+██║      ██║
+╚██████╗ ╚██████╗
+ ╚═════╝  ╚═════╝`)}
   ${d("v" + getVersion())}`;
 
 // Minimum terminal width required to display ASCII art properly
@@ -38,8 +38,8 @@ export function getDisplayableAsciiArt(): string {
     return OCIRCUIT_ASCII_ART;
   }
 
-  // If terminal is too narrow, show just "CN" ASCII art
-  return CN_ASCII_ART;
+  // If terminal is too narrow, show just "OC" ASCII art
+  return OC_ASCII_ART;
 }
 
 export const OCIRCUIT_LOGO_ASCII_ART = `

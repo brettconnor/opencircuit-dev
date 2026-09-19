@@ -112,6 +112,31 @@ Open Circuit stores user-owned configuration and session data under the
 `.ocircuit` convention. Keep API keys and other secrets in environment
 variables or approved secret storage; do not commit them to a repository.
 
+The default global configuration path is:
+
+```text
+~/.ocircuit/config.yaml
+```
+
+On Ubuntu1 for the `sysadmin` user, that expands to:
+
+```text
+/home/sysadmin/.ocircuit/config.yaml
+```
+
+The CLI also looks for its local environment file at:
+
+```text
+~/.ocircuit/.env
+```
+
+Override the global directory when you need an isolated configuration:
+
+```bash
+export OCIRCUIT_GLOBAL_DIR="$HOME/.ocircuit-test"
+oc --config "$OCIRCUIT_GLOBAL_DIR/config.yaml"
+```
+
 ## 6. Run without an interactive terminal
 
 This is useful for scripts and CI:
