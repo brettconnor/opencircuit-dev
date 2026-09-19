@@ -6,25 +6,32 @@ import { getVersion } from "./version.js";
 const d = chalk.dim;
 
 export const OCIRCUIT_ASCII_ART = `
-${mind.multiline(` ██████╗   ██████╗  ██╗ ██████╗  ██████╗  ██████╗ ██╗   ██╗██╗████████╗
-██╔═══██╗ ██╔════╝  ██║██╔═══██╗ ██╔══██╗██╔════╝ ██║   ██║██║╚══██╔══╝
-██║   ██║ ██║       ██║██║   ██║ ██║  ██║██║      ██║   ██║██║   ██║
-██║   ██║ ██║       ██║██║   ██║ ██║  ██║██║      ██║   ██║██║   ██║
-╚██████╔╝ ╚██████╗  ██║╚██████╔╝ ██████╔╝╚██████╗ ╚██████╔╝██║   ██║
- ╚═════╝   ╚═════╝  ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝   ╚═╝`)}
+${mind.multiline(`
+  ██████╗  ██████╗ ██╗ ██████╗   ██████╗ ██████╗ ██╗   ██╗ ██╗████████╗
+██╔═══██╗ ██╔════╝ ██║ ██  ██║  ██╔════╝   ██╔═╝ ██║   ██║ ██║╚══██╔══╝
+██║   ██║ ██║      ██║ ██████║  ██║        ██║   ██║   ██║ ██║   ██║
+██║   ██║ ██║      ██║ ██╔══██╗ ██║        ██║   ██║   ██║ ██║   ██║
+╚██████╔╝ ╚██████╗ ██║ ██║   ██╗╚██████╗ ██████╗ ╚██████╔╝ ██║   ██║
+ ╚═════╝   ╚═════╝ ╚═╝ ╚═╝   ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═╝   ╚═╝`)}
                                                     ${d("v" + getVersion())}`;
 
 // Compact gradient mark for narrow terminals.
 const OC_ASCII_ART = `
-${mind("OC")}
+${mind.multiline(`
+ ██████╗  ██████╗
+██╔═══██╗██╔════╝
+██║   ██║██║
+██║   ██║██║
+╚██████╔╝╚██████╗
+ ╚═════╝  ╚═════╝`)}
   ${d("v" + getVersion())}`;
 
 // The full block wordmark is 84 columns wide at its longest line.
 const MIN_WIDTH_FOR_ASCII_ART = 84;
 
 /**
- * Returns the ASCII art only if the terminal is wide enough to display it properly.
- * If terminal is too narrow, returns just the version string.
+ * Uses the full block wordmark only when the terminal can contain it without wrapping.
+ * Narrow terminals receive the compact OC mark instead.
  */
 export function getDisplayableAsciiArt(): string {
   const terminalWidth = process.stdout.columns || 80;
