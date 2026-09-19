@@ -9,13 +9,13 @@
 
 ## Checklist
 
-- [] I've read the [contributing guide](https://github.com/open-circuit-dev/open-circuit/blob/main/CONTRIBUTING.md)
+- [] I've read the [contributing guide](https://github.com/brettconnor/opencircuit-dev/blob/main/CONTRIBUTING.md)
 - [] The relevant docs, if any, have been updated or created
 - [] The relevant tests, if any, have been updated or created
 
 ## Screen recording or screenshot
 
-[ When applicable, please include a short screen recording or screenshot - this makes it much easier for us as contributors to review and understand your changes. See [this PR](https://github.com/open-circuit-dev/open-circuit/pull/6455) as a good example. ]
+[ When applicable, please include a short screen recording or screenshot to help reviewers understand the change. ]
 
 ## Tests
 

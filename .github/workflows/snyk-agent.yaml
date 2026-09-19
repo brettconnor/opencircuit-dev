@@ -9,8 +9,8 @@ on:
 jobs:
   run-oc-task:
     runs-on: ubuntu-latest
-    # Only run this workflow on the main repository (open-circuit-dev/open-circuit)
-    if: github.repository == 'open-circuit-dev/open-circuit'
+    # Only run this workflow on the canonical repository.
+    if: github.repository == 'brettconnor/opencircuit-dev'
     steps:
       - name: Checkout repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
