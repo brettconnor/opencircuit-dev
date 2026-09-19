@@ -5,15 +5,18 @@ import * as path from "path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import type { AuthConfig } from "./auth/workos.js";
+import { env } from "./env.js";
 import { initializeWithOnboarding } from "./onboarding.js";
 
 describe("onboarding config flag handling", () => {
   let tempDir: string;
   let mockAuthConfig: AuthConfig;
+  const originalOcircuitHome = env.ocircuitHome;
 
   beforeEach(() => {
     // Create a temporary directory for test config files
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "ocircuit-test-"));
+    env.ocircuitHome = tempDir;
 
     // Auth config is always null after Hub removal
     mockAuthConfig = null;
@@ -24,6 +27,7 @@ describe("onboarding config flag handling", () => {
     if (fs.existsSync(tempDir)) {
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
+    env.ocircuitHome = originalOcircuitHome;
   });
 
   test("should fail loudly when --config points to non-existent file", async () => {
@@ -152,6 +156,39 @@ name: "Incomplete Config"
       // This should NOT have our "Failed to load config from" prefix
       expect(errorMessage).not.toMatch(/^Failed to load config from "/);
     }
+  });
+
+  test("accepts a valid existing local config without prompting", async () => {
+    fs.writeFileSync(
+      path.join(tempDir, "config.yaml"),
+      `name: Local OpenAI
+version: 1.0.0
+schema: v1
+models:
+  - name: OpenAI model
+    provider: openai
+    model: gpt-4o-mini
+    apiKey: local-test-key
+    roles:
+      - chat
+`,
+    );
+
+    await initializeWithOnboarding(mockAuthConfig, undefined);
+
+    expect(fs.existsSync(path.join(tempDir, ".onboarding_complete"))).toBe(
+      true,
+    );
+  });
+
+  test("does not accept an invalid existing local config", async () => {
+    fs.writeFileSync(path.join(tempDir, "config.yaml"), "invalid: [yaml");
+
+    await initializeWithOnboarding(mockAuthConfig, undefined);
+
+    expect(fs.existsSync(path.join(tempDir, ".onboarding_complete"))).toBe(
+      false,
+    );
   });
 });
 
