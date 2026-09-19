@@ -2,8 +2,6 @@
 
 The Open Circuit CLI (`oc`) is a customizable command line coding agent.
 
-![Open Circuit CLI Demo](./media/demo.gif)
-
 ## Installation
 
 ### macOS and Linux
