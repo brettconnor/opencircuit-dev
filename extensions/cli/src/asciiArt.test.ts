@@ -20,42 +20,36 @@ describe("asciiArt", () => {
   describe("getDisplayableAsciiArt", () => {
     it("should return full ASCII art when terminal is wide enough", () => {
       // Set process.stdout.columns to simulate wide terminal
-      process.stdout.columns = 80;
+      process.stdout.columns = 84;
 
       const result = getDisplayableAsciiArt();
 
       expect(result).toBe(OCIRCUIT_ASCII_ART);
+      expect(result).toContain("██████╗   ██████╗");
+      expect(result).not.toContain("████████╗██╗███╗");
     });
 
-    it("should return OC ASCII art version when terminal is too narrow", () => {
+    it("should return the compact OC mark when terminal is too narrow", () => {
       // Set process.stdout.columns to simulate narrow terminal
       process.stdout.columns = 60;
 
       const result = getDisplayableAsciiArt();
 
-      expect(result).toContain("██████╗");
-      expect(result).toContain("╚██████╗");
-
+      expect(result).toContain("OC");
       expect(result).not.toBe(OCIRCUIT_ASCII_ART);
-      // Should be much shorter than the full ASCII art
-      expect(result.length).toBeLessThan(OCIRCUIT_ASCII_ART.length / 2);
     });
 
-    it("should return OC ASCII art version when terminal is below threshold", () => {
-      // Test the edge case at exactly 74 columns (below our threshold of 75)
-      process.stdout.columns = 74;
+    it("should return the compact OC mark below the full-banner width", () => {
+      process.stdout.columns = 83;
 
       const result = getDisplayableAsciiArt();
 
-      expect(result).toContain("██████╗");
-      expect(result).toContain("╚██████╗");
-
+      expect(result).toContain("OC");
       expect(result).not.toBe(OCIRCUIT_ASCII_ART);
     });
 
     it("should return full ASCII art when terminal is exactly at threshold", () => {
-      // Test the edge case at exactly 75 columns (our threshold)
-      process.stdout.columns = 75;
+      process.stdout.columns = 84;
 
       const result = getDisplayableAsciiArt();
 
@@ -63,12 +57,13 @@ describe("asciiArt", () => {
     });
 
     it("should default to full ASCII art when columns is undefined", () => {
-      // Set process.stdout.columns to undefined (should default to 80)
+      // Set process.stdout.columns to undefined (should default to compact width)
       delete (process.stdout as any).columns;
 
       const result = getDisplayableAsciiArt();
 
-      expect(result).toBe(OCIRCUIT_ASCII_ART);
+      expect(result).not.toBe(OCIRCUIT_ASCII_ART);
+      expect(result).toContain("OC");
     });
   });
 });

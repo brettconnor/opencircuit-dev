@@ -6,26 +6,21 @@ import { getVersion } from "./version.js";
 const d = chalk.dim;
 
 export const OCIRCUIT_ASCII_ART = `
-${mind.multiline(`  ██████╗ ██████╗ ███╗   ██╗████████╗██╗███╗   ██╗██╗   ██╗███████╗
- ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██║████╗  ██║██║   ██║██╔════╝
- ██║     ██║   ██║██╔██╗ ██║   ██║   ██║██╔██╗ ██║██║   ██║█████╗
- ██║     ██║   ██║██║╚██╗██║   ██║   ██║██║╚██╗██║██║   ██║██╔══╝
- ╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║██║ ╚████║╚██████╔╝███████╗
-  ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝`)}
+${mind.multiline(` ██████╗   ██████╗  ██╗ ██████╗  ██████╗  ██████╗ ██╗   ██╗██╗████████╗
+██╔═══██╗ ██╔════╝  ██║██╔═══██╗ ██╔══██╗██╔════╝ ██║   ██║██║╚══██╔══╝
+██║   ██║ ██║       ██║██║   ██║ ██║  ██║██║      ██║   ██║██║   ██║
+██║   ██║ ██║       ██║██║   ██║ ██║  ██║██║      ██║   ██║██║   ██║
+╚██████╔╝ ╚██████╗  ██║╚██████╔╝ ██████╔╝╚██████╗ ╚██████╔╝██║   ██║
+ ╚═════╝   ╚═════╝  ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝   ╚═╝`)}
                                                     ${d("v" + getVersion())}`;
 
-// ASCII art for just "OC" (the Open Circuit initials)
+// Compact gradient mark for narrow terminals.
 const OC_ASCII_ART = `
-${mind.multiline(` ██████╗  ██████╗
-██╔════╝ ██╔════╝
-██║      ██║
-██║      ██║
-╚██████╗ ╚██████╗
- ╚═════╝  ╚═════╝`)}
+${mind("OC")}
   ${d("v" + getVersion())}`;
 
-// Minimum terminal width required to display ASCII art properly
-const MIN_WIDTH_FOR_ASCII_ART = 75;
+// The full block wordmark is 84 columns wide at its longest line.
+const MIN_WIDTH_FOR_ASCII_ART = 84;
 
 /**
  * Returns the ASCII art only if the terminal is wide enough to display it properly.
@@ -34,12 +29,9 @@ const MIN_WIDTH_FOR_ASCII_ART = 75;
 export function getDisplayableAsciiArt(): string {
   const terminalWidth = process.stdout.columns || 80;
 
-  if (terminalWidth >= MIN_WIDTH_FOR_ASCII_ART) {
-    return OCIRCUIT_ASCII_ART;
-  }
-
-  // If terminal is too narrow, show just "OC" ASCII art
-  return OC_ASCII_ART;
+  return terminalWidth >= MIN_WIDTH_FOR_ASCII_ART
+    ? OCIRCUIT_ASCII_ART
+    : OC_ASCII_ART;
 }
 
 export const OCIRCUIT_LOGO_ASCII_ART = `
