@@ -5,7 +5,7 @@ vulnerabilities in a public issue.
 
 ## Reporting a vulnerability
 
-Report security bugs privately to `oss-security@cisco.com` with:
+Report security bugs privately to `opencircuit-dev@proton.me` with:
 
 - a description of the issue;
 - affected versions or commit;
@@ -15,6 +15,8 @@ Report security bugs privately to `oss-security@cisco.com` with:
 
 Do not include real credentials, tokens, private keys, or customer data in the
 report.
+
+Do not report security vulnerabilities through public issues or discussions.
 
 The security team will acknowledge the report and coordinate verification,
 remediation, and disclosure with the reporter.
