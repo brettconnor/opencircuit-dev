@@ -25,4 +25,19 @@ describe("OpenAI Adapter Tests", () => {
       accept: "application/json",
     },
   });
+
+  createAdapterTests({
+    providerName: "openai-compatible",
+    config: {
+      provider: "openai-compatible",
+      apiKey: "test-api-key",
+      apiBase: "http://127.0.0.1:8000/v1/",
+    },
+    expectedApiBase: "http://127.0.0.1:8000/v1/",
+    customHeaders: {
+      authorization: "Bearer test-api-key",
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+  });
 });

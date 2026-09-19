@@ -16,7 +16,7 @@ import type {
   ResponseStreamEvent,
 } from "openai/resources/responses/responses.js";
 import { z } from "zod";
-import { OpenAIConfigSchema } from "../types.js";
+import { OpenAICompatibleConfig, OpenAIConfigSchema } from "../types.js";
 import { customFetch } from "../util.js";
 import {
   BaseLlmApi,
@@ -36,7 +36,11 @@ export class OpenAIApi implements BaseLlmApi {
   openai: OpenAI;
   apiBase: string = "https://api.openai.com/v1/";
 
-  constructor(protected config: z.infer<typeof OpenAIConfigSchema>) {
+  constructor(
+    protected config:
+      | z.infer<typeof OpenAIConfigSchema>
+      | OpenAICompatibleConfig,
+  ) {
     this.apiBase = config.apiBase ?? this.apiBase;
 
     // Always create the original OpenAI client for fallback

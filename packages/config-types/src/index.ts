@@ -44,6 +44,7 @@ export const modelDescriptionSchema = z.object({
   title: z.string(),
   provider: z.enum([
     "openai",
+    "openai-compatible",
     "anthropic",
     "cohere",
     "ollama",

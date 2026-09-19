@@ -186,6 +186,28 @@ models:
       - chat
 ```
 
+For a self-hosted or otherwise custom OpenAI-compatible LLM/SLM API, use the
+explicit `openai-compatible` provider. The endpoint must implement the OpenAI
+Chat Completions contract:
+
+```yaml
+name: Local BYOM
+version: 1.0.0
+schema: v1
+models:
+  - name: Local model
+    provider: openai-compatible
+    model: my-model
+    apiBase: http://127.0.0.1:8000/v1/
+    apiKey: ${{ secrets.BYOM_API_KEY }}
+    roles:
+      - chat
+```
+
+Use `https://` for remote endpoints. Keep API keys in environment-backed
+secrets; custom request headers, timeouts, and proxy settings can be supplied
+through `requestOptions` when the endpoint requires them.
+
 Run with the selected configuration:
 
 ```bash
@@ -199,8 +221,8 @@ oc --config ./config.yaml -p "Summarize the current directory."
 ```
 
 The CLI currently auto-detects `ANTHROPIC_API_KEY` during headless onboarding,
-but explicit `--config` files are the reliable path for OpenAI, Anthropic, and
-Gemini provider selection.
+but explicit `--config` files are the reliable path for OpenAI, Anthropic,
+Gemini, and OpenAI-compatible provider selection.
 
 ## 8. Maintainer: Stage a Local Release Asset
 

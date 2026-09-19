@@ -31,41 +31,58 @@ export const BasePlusConfig = BaseConfig.extend({
 // OpenAI and compatible
 export const OpenAIConfigSchema = BasePlusConfig.extend({
   useResponsesApi: z.boolean().optional(),
-  provider: z.union([
-    z.literal("openai"),
-    z.literal("mistral"),
-    z.literal("voyage"),
-    z.literal("deepinfra"),
-    z.literal("groq"),
-    z.literal("nvidia"),
-    z.literal("ovhcloud"),
-    z.literal("fireworks"),
-    z.literal("together"),
-    z.literal("novita"),
-    z.literal("nebius"),
-    z.literal("function-network"),
-    z.literal("llama.cpp"),
-    z.literal("llamafile"),
-    z.literal("lmstudio"),
-    z.literal("ollama"),
-    z.literal("cerebras"),
-    z.literal("kindo"),
-    z.literal("msty"),
-    z.literal("openrouter"),
-    z.literal("clawrouter"),
-    z.literal("sambanova"),
-    z.literal("text-gen-webui"),
-    z.literal("vllm"),
-    z.literal("xAI"),
-    z.literal("zAI"),
-    z.literal("scaleway"),
-    z.literal("tensorix"),
-    z.literal("ncompass"),
-    z.literal("relace"),
-    z.literal("huggingface-inference-api"),
+  provider: z.enum([
+    "openai",
+    "openai-compatible",
+    "mistral",
+    "voyage",
+    "deepinfra",
+    "groq",
+    "nvidia",
+    "ovhcloud",
+    "fireworks",
+    "together",
+    "novita",
+    "nebius",
+    "function-network",
+    "llama.cpp",
+    "llamafile",
+    "lmstudio",
+    "ollama",
+    "cerebras",
+    "kindo",
+    "msty",
+    "openrouter",
+    "clawrouter",
+    "sambanova",
+    "text-gen-webui",
+    "vllm",
+    "xAI",
+    "zAI",
+    "scaleway",
+    "tensorix",
+    "ncompass",
+    "relace",
+    "huggingface-inference-api",
   ]),
 });
 export type OpenAIConfig = z.infer<typeof OpenAIConfigSchema>;
+
+/**
+ * Configuration for an arbitrary service implementing the OpenAI Chat
+ * Completions API.
+ *
+ * This stays separate from the legacy provider discriminator because Zod v3
+ * cannot extract a discriminator from the existing provider-literal union.
+ */
+export const OpenAICompatibleConfigSchema = BasePlusConfig.extend({
+  provider: z.literal("openai-compatible"),
+  apiBase: z.string().url(),
+  useResponsesApi: z.boolean().optional(),
+});
+export type OpenAICompatibleConfig = z.infer<
+  typeof OpenAICompatibleConfigSchema
+>;
 
 export const MoonshotConfigSchema = OpenAIConfigSchema.extend({
   provider: z.literal("moonshot"),
