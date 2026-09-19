@@ -29,8 +29,29 @@ New to Open Circuit? Follow the beginner guide:
 | Packages   | `packages/`             | Fetching, model information, adapters, and security         |
 | Validation | `tests/` and `scripts/` | Builds, smoke tests, release checks, and runtime boundaries |
 
-The VS Code extension and other UI surfaces are maintained separately from the
-CLI-first release path. A VSIX is not required for the first CLI iteration.
+The retained product path is the CLI and Core runtime. The VS Code extension,
+binary packaging, and other UI surfaces are maintained separately and have
+separate validation requirements.
+
+## Architecture
+
+Open Circuit follows this runtime path:
+
+`oc` CLI -> CLI services and streaming -> Core runtime -> model providers and tools
+
+The CLI owns command-line behavior, interactive and headless execution, session
+management, and terminal presentation. Core provides reusable agent capabilities
+for the CLI and IDE integrations, including model providers, configuration,
+codebase indexing, editing, autocomplete, MCP tools, and protocol communication.
+
+A typical CLI request works as follows:
+
+1. `extensions/cli/src/index.ts` parses commands and options.
+2. `extensions/cli/src/commands/chat.ts` selects interactive or headless execution.
+3. CLI services load configuration, the selected model, permissions, and agent files.
+4. `extensions/cli/src/session.ts` creates, resumes, or persists the conversation.
+5. `extensions/cli/src/stream/` streams the model response and handles tool calls, retries, compaction, and continuation.
+6. Core and CLI tools read files, edit code, search the repository, run commands, and connect to MCP servers.
 
 ## Requirements
 
@@ -143,6 +164,29 @@ Upload both files manually to the GitHub `v1.0.0` release. The staging
 directory is ignored by Git and is not an installation path for end users.
 
 CI automation and npm publication are intentionally deferred.
+
+## Development map
+
+Start changes in the layer that owns the behavior:
+
+| Change                                | Location                                                         |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| CLI commands and flags                | `extensions/cli/src/index.ts` and `extensions/cli/src/commands/` |
+| Chat streaming and tool calls         | `extensions/cli/src/stream/`                                     |
+| Session creation, resume, and forking | `extensions/cli/src/session.ts`                                  |
+| Shared agent runtime                  | `core/`                                                          |
+| Model providers and LLM behavior      | `core/llm/`                                                      |
+| Codebase indexing and search          | `core/indexing/`                                                 |
+| File editing and diffs                | `core/edit/` and `core/diff/`                                    |
+| Tools and permissions                 | `core/tools/` and `packages/terminal-security/`                  |
+| Configuration                         | `core/config/` and `packages/config-yaml/`                       |
+| VS Code integration                   | `extensions/vscode/`                                             |
+| Binary packaging                      | `binary/`                                                        |
+
+Read the neighboring tests before changing behavior. Run Core validation for
+Core changes and CLI validation for CLI changes. Use the retained-closure
+profile when changing package boundaries, generated declarations, workspace
+configuration, or runtime resolution.
 
 ## Project guides
 
