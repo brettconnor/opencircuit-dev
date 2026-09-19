@@ -186,9 +186,28 @@ models:
       - chat
 ```
 
-For a self-hosted or otherwise custom OpenAI-compatible LLM/SLM API, use the
-explicit `openai-compatible` provider. The endpoint must implement the OpenAI
-Chat Completions contract:
+### Bring your own model (BYOM)
+
+Use BYOM when you run a local or remote model server that exposes the OpenAI
+Chat Completions API. The server must provide:
+
+```text
+POST /v1/chat/completions
+```
+
+If the server requires authentication, export its key before launching `oc`:
+
+```bash
+export BYOM_API_KEY="your-byom-key"
+```
+
+For an unauthenticated local server, use an empty value instead:
+
+```bash
+export BYOM_API_KEY=""
+```
+
+Create `config.yaml` with the `openai-compatible` provider:
 
 ```yaml
 name: Local BYOM
@@ -204,9 +223,21 @@ models:
       - chat
 ```
 
-Use `https://` for remote endpoints. Keep API keys in environment-backed
-secrets; custom request headers, timeouts, and proxy settings can be supplied
-through `requestOptions` when the endpoint requires them.
+For a remote server, replace `apiBase` with its HTTPS endpoint:
+
+```yaml
+apiBase: https://your-model-host.example/v1/
+```
+
+Keep API keys in environment-backed secrets. Custom request headers, timeouts,
+and proxy settings can be supplied through `requestOptions` when the endpoint
+requires them.
+
+Test the BYOM connection with a one-shot request:
+
+```bash
+oc --config ./config.yaml -p "Reply with exactly OK." --silent
+```
 
 Run with the selected configuration:
 
