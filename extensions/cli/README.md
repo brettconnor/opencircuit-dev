@@ -101,6 +101,8 @@ oc ls --json
 
 - `oc`: Start an interactive chat session
 - `oc ls`: List recent sessions with TUI selector to choose one to resume
+- `/init`: In an interactive session, inspect the current repository and
+  generate `AGENTS.md` plus a review rule
 - `oc login`: Authenticate with Open Circuit
 - `oc logout`: Sign out of current session
 - `oc remote`: Launch a remote instance

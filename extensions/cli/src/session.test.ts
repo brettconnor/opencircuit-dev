@@ -9,6 +9,7 @@ import {
   clearSession,
   createSession,
   getCurrentSession,
+  getRemoteSessions,
   hasSession,
   loadOrCreateSessionById,
   loadSession,
@@ -453,6 +454,22 @@ describe("SessionManager", () => {
       expect(session.title).toBe("Test Title");
       expect(session.history).toHaveLength(1);
       expect(session.history[0].message.content).toBe("Test message");
+    });
+  });
+
+  describe("remote session handling", () => {
+    it("should warn to stderr and return an empty list when remote sessions are unsupported", async () => {
+      const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const remoteSessions = await getRemoteSessions();
+
+      expect(remoteSessions).toEqual([]);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Warning: Unable to load remote sessions"),
+      );
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("continuing without remote history"),
+      );
     });
   });
 

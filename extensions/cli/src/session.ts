@@ -438,10 +438,20 @@ function getSessionMetadataWithPreview(
   }
 }
 
+let hasWarnedRemoteSessions = false;
+
 /**
- * Remote sessions are no longer available (Hub integration removed).
+ * Remote sessions are intentionally unsupported in this CLI build.
  */
 export async function getRemoteSessions(): Promise<ExtendedSessionMetadata[]> {
+  if (!hasWarnedRemoteSessions) {
+    const message =
+      "Warning: Unable to load remote sessions; continuing without remote history. Reason: remote session support is not available in this build.";
+    hasWarnedRemoteSessions = true;
+    logger.warn(message);
+    console.error(message);
+  }
+
   return [];
 }
 

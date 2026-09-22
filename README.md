@@ -12,6 +12,11 @@ headlessly in scripts and CI.
 
 ## Start here
 
+Choose the path that matches your goal before you install anything:
+
+- Use Open Circuit as a user: follow the packaged CLI install path below.
+- Contribute to Open Circuit itself: follow the source-build path later in this file.
+
 New to Open Circuit? Follow the beginner guide:
 
 **[Read QUICKSTART.md](QUICKSTART.md)**
@@ -19,6 +24,9 @@ New to Open Circuit? Follow the beginner guide:
 > Open Circuit CLI 1.0.0 is currently distributed as a
 > [GitHub Release asset](https://github.com/open-circuit-dev/open-circuit/releases/tag/v1.0.0).
 > npm publication is planned but not yet available.
+>
+> The release tarball is the default install path for end users. The source-build
+> flow is intended for local development and contributor workflows.
 
 ## What is included
 
@@ -59,7 +67,33 @@ A typical CLI request works as follows:
 - npm
 - Git
 
-## Install the CLI
+If you use `nvm`, set the Node version as your default so a fresh shell still resolves the correct global binaries:
+
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+nvm install 24.19.0
+nvm alias default 24.19.0
+nvm use 24.19.0
+
+node --version
+npm --version
+```
+
+If `oc` is not found in a new shell, reload NVM and select the same version again:
+
+```bash
+source "$NVM_DIR/nvm.sh"
+nvm use 24.19.0
+command -v oc
+```
+
+## Install the CLI (default for end users)
+
+This is the default path for trying Open Circuit or using it as a CLI user.
+If you are contributing to the project itself, skip to the source-build section
+below.
 
 Download these files from the GitHub `v1.0.0` release:
 
@@ -92,9 +126,9 @@ command will be:
 npm install --global @opencircuit/cli@1.0.0
 ```
 
-## Build from source
+## Build from source (contributor workflow)
 
-Use this path when developing Open Circuit itself:
+Use this path only when developing Open Circuit itself:
 
 ```bash
 cd core
@@ -191,8 +225,14 @@ configuration, or runtime resolution.
 ## Project guides
 
 - [Beginner quickstart](QUICKSTART.md)
+- [Frequently asked questions](FAQ.md)
+- [Test architecture](TESTING.md)
+- [Documentation map](DOCUMENTATION.md)
+- [Large-file contribution policy](LARGE_FILES.md)
 - [CLI reference](extensions/cli/README.md)
 - [Contributor workflow](CONTRIBUTING.md)
+- [Contributor License Agreement](CLA.md)
+- [Release changelog](CHANGELOG.md)
 - [Build dependencies](BUILD_DEPENDENCIES.md)
 - [Security policy](SECURITY.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
