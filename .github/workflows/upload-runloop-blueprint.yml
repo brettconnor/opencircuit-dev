@@ -17,7 +17,7 @@ jobs:
     name: Upload Blueprints to Runloop
     runs-on: ubuntu-latest
     # Only run this workflow on the canonical repository.
-    if: github.repository == 'brettconnor/opencircuit-dev'
+    if: github.repository == 'open-circuit-dev/open-circuit'
     strategy:
       matrix:
         include:

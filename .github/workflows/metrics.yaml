@@ -17,7 +17,7 @@ jobs:
     name: issue metrics
     runs-on: ubuntu-latest
     # Only run this workflow on the canonical repository.
-    if: github.repository == 'brettconnor/opencircuit-dev'
+    if: github.repository == 'open-circuit-dev/open-circuit'
     permissions:
       issues: write
       pull-requests: read
@@ -39,7 +39,7 @@ jobs:
         uses: github/issue-metrics@a7dc2fb675661e208d4fc6fa321a6b95fc4a06f9
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEARCH_QUERY: 'repo:brettconnor/opencircuit-dev created:${{ env.last_month }} -reason:"not planned"'
+          SEARCH_QUERY: 'repo:open-circuit-dev/open-circuit created:${{ env.last_month }} -reason:"not planned"'
 
       - name: Read metrics file content
         id: read-metrics
