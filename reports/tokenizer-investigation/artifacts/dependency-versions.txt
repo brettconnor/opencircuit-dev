@@ -1,3 +1,0 @@
-{"file":"core/package-lock.json","node_modules/js-tiktoken":{"version":"1.0.21","resolved":"https://registry.npmjs.org/js-tiktoken/-/js-tiktoken-1.0.21.tgz","integrity":"sha512-biOj/6M5qdgx5TKjDnFT1ymSpM5tbd3ylwDtrQvFQSu0Z7bBYko2dF+W/aUkXUPuk6IVpRxk/3Q2sHOzGlS36g=="}}
-{"file":"extensions/cli/package-lock.json","node_modules/gpt-tokenizer":{"version":"3.0.1","resolved":"https://registry.npmjs.org/gpt-tokenizer/-/gpt-tokenizer-3.0.1.tgz","integrity":"sha512-5jdaspBq/w4sWw322SvQj1Fku+CN4OAfYZeeEg8U7CWtxBz+zkxZ3h0YOHD43ee+nZYZ5Ud70HRN0ANcdIj4qg=="}}
-{"file":"package-lock.json"}
