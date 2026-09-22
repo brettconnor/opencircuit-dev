@@ -1,6 +1,6 @@
 {
   "name": "@opencircuit/fetch",
-  "version": "1.1.0",
+  "version": "1.6.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,9 +11,6 @@
   },
   "author": "Nate Sesti and Ty Dunn",
   "license": "Apache-2.0",
-  "allowScripts": {
-    "esbuild@0.25.5": true
-  },
   "dependencies": {
     "@opencircuit/config-types": "^1.0.14",
     "follow-redirects": "^1.15.6",

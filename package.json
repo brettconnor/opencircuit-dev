@@ -26,5 +26,14 @@
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^2.0.20"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "allowScripts": {
+    "esbuild@0.27.4": true,
+    "esbuild@0.25.5": true,
+    "protobufjs@7.5.4": true,
+    "unrs-resolver@1.11.1": true
   }
 }
