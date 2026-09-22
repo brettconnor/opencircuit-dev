@@ -1,0 +1,15 @@
+repository_root=/Users/brettcon/git/opencircuit/opencircuit-dev-personal
+commit=fef82a17b119a1f5a69f7739d203ae5060cf0414
+branch=default/main-20260922T1937Z
+status_begin=
+ M core/package-lock.json
+ M core/package.json
+?? reports/tokenizer-investigation/artifacts/baseline.txt
+status_end=
+node=v26.7.0
+npm=12.0.2
+uname=Darwin BRETTCON-M-6F0C 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:48 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T6041 arm64
+timestamp=2026-09-22T23:02:25Z
+investigator=brettcon
+guidance_node=24.19.0
+environment_note=Observed Node version differs from repository guidance; no build/package validation will rely on this mismatch.

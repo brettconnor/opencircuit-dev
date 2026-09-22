@@ -65,6 +65,7 @@
     "@aws-sdk/client-bedrock-runtime": "^3.931.0",
     "@aws-sdk/client-sagemaker-runtime": "^3.894.0",
     "@aws-sdk/credential-providers": "^3.974.0",
+    "@huggingface/jinja": "^0.5.10",
     "@opencircuit/config-types": "^1.0.14",
     "@opencircuit/config-yaml": "file:../packages/config-yaml",
     "@opencircuit/fetch": "file:../packages/fetch",

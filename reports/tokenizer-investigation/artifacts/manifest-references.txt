@@ -1,0 +1,1136 @@
+.vscode/settings.json:28:    "core/llm/llamaTokenizer.js": true,
+.vscode/settings.json:29:    "core/llm/llamaTokenizer.mjs": true,
+binary/build.js:58:      "llamaTokenizerWorkerPool.mjs",
+binary/build.js:59:      "tiktokenWorkerPool.mjs",
+binary/build.js:168:    "../core/llm/llamaTokenizerWorkerPool.mjs",
+binary/build.js:169:    "../core/llm/llamaTokenizer.mjs",
+binary/build.js:170:    "../core/llm/tiktokenWorkerPool.mjs",
+binary/build.js:194:  fs.cpSync("../core/llm/tiktokenWorkerPool.mjs", "out/tiktokenWorkerPool.mjs");
+binary/build.js:196:    "../core/llm/llamaTokenizerWorkerPool.mjs",
+binary/build.js:197:    "out/llamaTokenizerWorkerPool.mjs",
+binary/build.js:228:  pathsToVerify.push("out/llamaTokenizerWorkerPool.mjs");
+binary/build.js:229:  pathsToVerify.push("out/tiktokenWorkerPool.mjs");
+binary/package-lock.json:84:        "js-tiktoken": "^1.0.8",
+binary/package-lock.json:163:    "node_modules/@75lb/deep-merge": {
+binary/package-lock.json:165:      "resolved": "https://registry.npmjs.org/@75lb/deep-merge/-/deep-merge-1.1.4.tgz",
+binary/package-lock.json:185:    "node_modules/@75lb/deep-merge/node_modules/typical": {
+binary/package-lock.json:3147:    "node_modules/deepmerge": {
+binary/package-lock.json:3149:      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz",
+binary/package-lock.json:3415:        "merge-stream": "^2.0.0",
+binary/package-lock.json:3474:        "merge2": "^1.3.0",
+binary/package-lock.json:3861:        "merge2": "^1.4.1",
+binary/package-lock.json:4431:        "deepmerge": "^4.2.2",
+binary/package-lock.json:4883:        "merge-stream": "^2.0.0",
+binary/package-lock.json:5132:    "node_modules/merge-stream": {
+binary/package-lock.json:5134:      "resolved": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+binary/package-lock.json:5139:    "node_modules/merge2": {
+binary/package-lock.json:5141:      "resolved": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+binary/package-lock.json:5785:        "encoding": "^0.1.0"
+binary/package-lock.json:5788:        "encoding": {
+binary/package-lock.json:6617:        "@75lb/deep-merge": "^1.1.1",
+binary/pkgJson/darwin-arm64/package.json:15:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/darwin-arm64/package.json:16:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/darwin-arm64/package.json:17:      "../../out/tiktokenWorkerPool.mjs",
+binary/pkgJson/darwin-x64/package.json:15:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/darwin-x64/package.json:16:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/darwin-x64/package.json:17:      "../../out/tiktokenWorkerPool.mjs",
+binary/pkgJson/linux-arm64/package.json:15:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/linux-arm64/package.json:16:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/linux-arm64/package.json:17:      "../../out/tiktokenWorkerPool.mjs",
+binary/pkgJson/linux-x64/package.json:15:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/linux-x64/package.json:16:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/linux-x64/package.json:17:      "../../out/tiktokenWorkerPool.mjs",
+binary/pkgJson/win32-arm64/package.json:18:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/win32-arm64/package.json:19:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/win32-arm64/package.json:20:      "../../out/tiktokenWorkerPool.mjs",
+binary/pkgJson/win32-x64/package.json:18:      "../../out/llamaTokenizer.mjs",
+binary/pkgJson/win32-x64/package.json:19:      "../../out/llamaTokenizerWorkerPool.mjs",
+binary/pkgJson/win32-x64/package.json:20:      "../../out/tiktokenWorkerPool.mjs",
+core/llm/llamaTokenizer.js:6: * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+core/llm/llamaTokenizer.js:107:export class LlamaTokenizer {
+core/llm/llamaTokenizer.js:108:  vocabById;
+core/llm/llamaTokenizer.js:109:  vocabByString;
+core/llm/llamaTokenizer.js:110:  merges;
+core/llm/llamaTokenizer.js:115:  constructor(vocab_base64, merges_binary) {
+core/llm/llamaTokenizer.js:117:    this.vocabById = this.decodeVocabulary(vocab_base64 || llama_vocab_base64);
+core/llm/llamaTokenizer.js:119:    this.vocabByString = new Map();
+core/llm/llamaTokenizer.js:120:    this.vocabById.forEach((tokenString, tokenId) => {
+core/llm/llamaTokenizer.js:121:      this.vocabByString.set(tokenString, tokenId);
+core/llm/llamaTokenizer.js:123:    // Map where key identifies token pair, value represents merge priority
+core/llm/llamaTokenizer.js:124:    this.merges = this.decompressMerges(merges_binary || llama_merges_binary);
+core/llm/llamaTokenizer.js:127:  getMergeIdentifierString(firstTokenId, secondTokenId) {
+core/llm/llamaTokenizer.js:128:    return this.vocabById[firstTokenId] + " " + this.vocabById[secondTokenId];
+core/llm/llamaTokenizer.js:131:  decompressMerges(merges_binary) {
+core/llm/llamaTokenizer.js:133:    const byteArrayString = base64decode(merges_binary);
+core/llm/llamaTokenizer.js:151:    // Each pair of tokenIds represents a merge.
+core/llm/llamaTokenizer.js:152:    const merges = new Map();
+core/llm/llamaTokenizer.js:156:      const mergeIdentifierString = this.getMergeIdentifierString(id1, id2);
+core/llm/llamaTokenizer.js:157:      // Key identifies token pair, value represents merge priority
+core/llm/llamaTokenizer.js:158:      merges.set(mergeIdentifierString, i + 1);
+core/llm/llamaTokenizer.js:160:    return merges;
+core/llm/llamaTokenizer.js:164:   * Helper function to decode the vocabulary.
+core/llm/llamaTokenizer.js:166:   * vocab_base64 is base64-encoded string of tokens delimited by '\n' (line break) in utf-8.
+core/llm/llamaTokenizer.js:167:   * The row number of the token (indexing from 0) represents the id of the token in LLaMA tokenizer.
+core/llm/llamaTokenizer.js:172:   * This helper function returns the vocabulary as an array that contains Strings representing tokens:
+core/llm/llamaTokenizer.js:189:  decodeVocabulary(vocab_base64) {
+core/llm/llamaTokenizer.js:190:    const byteArray = Uint8Array.from(base64decode(vocab_base64), (c) =>
+core/llm/llamaTokenizer.js:208:    const promptAltered = prompt.replaceAll(" ", this.vocabById[29871]);
+core/llm/llamaTokenizer.js:214:      if (this.vocabByString.has(c)) {
+core/llm/llamaTokenizer.js:216:        tokenIds.push(this.vocabByString.get(c));
+core/llm/llamaTokenizer.js:221:          const hex = this.vocabByString.get(utf8ByteToHex(bytes[j]));
+core/llm/llamaTokenizer.js:224:            // This is not supposed to happen because the LLaMA vocabulary has a token corresponding to each byte,
+core/llm/llamaTokenizer.js:254:    if (!this.vocabById || !this.vocabByString || !this.merges) {
+core/llm/llamaTokenizer.js:255:      console.log("Tokenizer not initialized properly!");
+core/llm/llamaTokenizer.js:261:    // Initially each character is transformed to a tokenId, later there will be merges of these.
+core/llm/llamaTokenizer.js:268:    // Set up priority queue to efficiently iterate merge possibilities in priority order
+core/llm/llamaTokenizer.js:269:    const mergeQueue = new PriorityQueue((a, b) => {
+core/llm/llamaTokenizer.js:270:      return a.mergePrio < b.mergePrio;
+core/llm/llamaTokenizer.js:273:    const addToMergeQueue = (leftNode) => {
+core/llm/llamaTokenizer.js:274:      const mergeIdentifierString = this.getMergeIdentifierString(
+core/llm/llamaTokenizer.js:278:      // Merge priority is primarily determined by the location of the merge in the "merges" data,
+core/llm/llamaTokenizer.js:280:      // (We want to perform equal merges from left to right)
+core/llm/llamaTokenizer.js:281:      const mergePrio =
+core/llm/llamaTokenizer.js:282:        this.merges.get(mergeIdentifierString) +
+core/llm/llamaTokenizer.js:284:      if (mergePrio) {
+core/llm/llamaTokenizer.js:285:        // If mergePrio not found in merges, that means this merge is not possible according to vocabulary.
+core/llm/llamaTokenizer.js:286:        leftNode.mergePrio = mergePrio;
+core/llm/llamaTokenizer.js:287:        leftNode.mergeToString = mergeIdentifierString.replace(" ", "");
+core/llm/llamaTokenizer.js:288:        mergeQueue.push(leftNode);
+core/llm/llamaTokenizer.js:292:    // Fill merge queue from initial merge possibilities and construct linked list
+core/llm/llamaTokenizer.js:308:      addToMergeQueue(prevTokenNode);
+core/llm/llamaTokenizer.js:312:    // Perform merges in priority order
+core/llm/llamaTokenizer.js:313:    while (!mergeQueue.isEmpty()) {
+core/llm/llamaTokenizer.js:314:      const leftOfMerge = mergeQueue.pop();
+core/llm/llamaTokenizer.js:315:      // Check that this merge is still possible
+core/llm/llamaTokenizer.js:316:      if (leftOfMerge.deleted) continue;
+core/llm/llamaTokenizer.js:317:      if (!leftOfMerge.next) continue;
+core/llm/llamaTokenizer.js:318:      if (leftOfMerge.next.deleted) continue;
+core/llm/llamaTokenizer.js:320:      // Mark leftOfMerge and rightOfMerge as being deleted, because they are actually being replaced by a merged token.
+core/llm/llamaTokenizer.js:321:      leftOfMerge.deleted = true;
+core/llm/llamaTokenizer.js:322:      leftOfMerge.next.deleted = true;
+core/llm/llamaTokenizer.js:323:      // It's a little bit more complicated to fix the prev of leftOfMerge.
+core/llm/llamaTokenizer.js:324:      if (leftOfMerge.prev) {
+core/llm/llamaTokenizer.js:325:        const oldPrev = leftOfMerge.prev;
+core/llm/llamaTokenizer.js:326:        // Mark oldPrev as deleted, to avoid erroneous merges later (ref to this node might exist in priorityqueue)
+core/llm/llamaTokenizer.js:335:        leftOfMerge.prev = newPrev;
+core/llm/llamaTokenizer.js:344:      // Create node representing merge result
+core/llm/llamaTokenizer.js:345:      const resultOfMerge = {
+core/llm/llamaTokenizer.js:346:        origPos: leftOfMerge.origPos,
+core/llm/llamaTokenizer.js:347:        tokenId: this.vocabByString.get(leftOfMerge.mergeToString),
+core/llm/llamaTokenizer.js:348:        prev: leftOfMerge.prev,
+core/llm/llamaTokenizer.js:349:        next: leftOfMerge.next.next,
+core/llm/llamaTokenizer.js:351:      // Consider adding to merge queue: prev--resultOfMerge
+core/llm/llamaTokenizer.js:352:      if (resultOfMerge.prev) {
+core/llm/llamaTokenizer.js:353:        resultOfMerge.prev.next = resultOfMerge;
+core/llm/llamaTokenizer.js:354:        resultOfMerge.prev;
+core/llm/llamaTokenizer.js:355:        addToMergeQueue(resultOfMerge.prev);
+core/llm/llamaTokenizer.js:358:        firstTokenNode = resultOfMerge;
+core/llm/llamaTokenizer.js:360:      // Consider adding to merge queue: resultOfMerge--next
+core/llm/llamaTokenizer.js:361:      if (resultOfMerge.next) {
+core/llm/llamaTokenizer.js:362:        resultOfMerge.next.prev = resultOfMerge;
+core/llm/llamaTokenizer.js:363:        addToMergeQueue(resultOfMerge);
+core/llm/llamaTokenizer.js:368:    const mergedTokenIds = [];
+core/llm/llamaTokenizer.js:374:      mergedTokenIds.push(currTokenNode.tokenId);
+core/llm/llamaTokenizer.js:380:        "Tokenizer running time: " + (endTime - startTime) + " milliseconds",
+core/llm/llamaTokenizer.js:384:    return mergedTokenIds;
+core/llm/llamaTokenizer.js:392:      const tokenString = this.vocabById[tokenId];
+core/llm/llamaTokenizer.js:405:    const spacesFixed = decodedString.replaceAll(this.vocabById[29871], " ");
+core/llm/llamaTokenizer.js:410:  defaultTests(tokenizer) {
+core/llm/llamaTokenizer.js:421:      const actualTokens = tokenizer.encode(inputString, true, true, true);
+core/llm/llamaTokenizer.js:423:        throw `Test failed. LLaMA Tokenizer Encoder returned unexpected result: expected tokenize(${inputString}) === ${expectedTokenIds}, actual was: ${actualTokens}`;
+core/llm/llamaTokenizer.js:425:      if (inputString !== tokenizer.decode(actualTokens)) {
+core/llm/llamaTokenizer.js:426:        throw `Test failed. LLaMA Tokenizer Decoder returned unexpected result: expected decode(${actualTokens}) === ${inputString}, actual was: ${decode(actualTokens)}`;
+core/llm/llamaTokenizer.js:436:    // Naive implementation uses incorrect merge order for multiple consecutive space merges, making this a good test case
+core/llm/llamaTokenizer.js:444:    // Equal prio merges are performed left-to-right (fixed in 1.1.1)
+core/llm/llamaTokenizer.js:447:    // UTF-8 multipoint character that should be found in vocabulary
+core/llm/llamaTokenizer.js:450:    // UTF-8 multipoint character that should NOT be found in vocabulary, fallback to MULTIPLE byte tokens
+core/llm/llamaTokenizer.js:453:    // Consecutive UTF-8 multipoint characters that are NOT found in a vocabulary and use DIFFERENT number of bytes
+core/llm/llamaTokenizer.js:500:    console.log("LLaMA Tokenizer tests passed successfully.");
+core/llm/llamaTokenizer.js:509:const llama_vocab_base64 =
+core/llm/llamaTokenizer.js:512:const llama_merges_binary =
+core/llm/llamaTokenizer.js:515:const llamaTokenizer = new LlamaTokenizer();
+core/llm/llamaTokenizer.js:518:  window.llamaTokenizer = llamaTokenizer;
+core/llm/llamaTokenizer.js:521:export default llamaTokenizer;
+core/llm/llamaTokenizer.mjs:6: * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+core/llm/llamaTokenizer.mjs:107:export class LlamaTokenizer {
+core/llm/llamaTokenizer.mjs:108:  vocabById;
+core/llm/llamaTokenizer.mjs:109:  vocabByString;
+core/llm/llamaTokenizer.mjs:110:  merges;
+core/llm/llamaTokenizer.mjs:115:  constructor(vocab_base64, merges_binary) {
+core/llm/llamaTokenizer.mjs:117:    this.vocabById = this.decodeVocabulary(vocab_base64 || llama_vocab_base64);
+core/llm/llamaTokenizer.mjs:119:    this.vocabByString = new Map();
+core/llm/llamaTokenizer.mjs:120:    this.vocabById.forEach((tokenString, tokenId) => {
+core/llm/llamaTokenizer.mjs:121:      this.vocabByString.set(tokenString, tokenId);
+core/llm/llamaTokenizer.mjs:123:    // Map where key identifies token pair, value represents merge priority
+core/llm/llamaTokenizer.mjs:124:    this.merges = this.decompressMerges(merges_binary || llama_merges_binary);
+core/llm/llamaTokenizer.mjs:127:  getMergeIdentifierString(firstTokenId, secondTokenId) {
+core/llm/llamaTokenizer.mjs:128:    return this.vocabById[firstTokenId] + " " + this.vocabById[secondTokenId];
+core/llm/llamaTokenizer.mjs:131:  decompressMerges(merges_binary) {
+core/llm/llamaTokenizer.mjs:133:    const byteArrayString = base64decode(merges_binary);
+core/llm/llamaTokenizer.mjs:151:    // Each pair of tokenIds represents a merge.
+core/llm/llamaTokenizer.mjs:152:    const merges = new Map();
+core/llm/llamaTokenizer.mjs:156:      const mergeIdentifierString = this.getMergeIdentifierString(id1, id2);
+core/llm/llamaTokenizer.mjs:157:      // Key identifies token pair, value represents merge priority
+core/llm/llamaTokenizer.mjs:158:      merges.set(mergeIdentifierString, i + 1);
+core/llm/llamaTokenizer.mjs:160:    return merges;
+core/llm/llamaTokenizer.mjs:164:   * Helper function to decode the vocabulary.
+core/llm/llamaTokenizer.mjs:166:   * vocab_base64 is base64-encoded string of tokens delimited by '\n' (line break) in utf-8.
+core/llm/llamaTokenizer.mjs:167:   * The row number of the token (indexing from 0) represents the id of the token in LLaMA tokenizer.
+core/llm/llamaTokenizer.mjs:172:   * This helper function returns the vocabulary as an array that contains Strings representing tokens:
+core/llm/llamaTokenizer.mjs:189:  decodeVocabulary(vocab_base64) {
+core/llm/llamaTokenizer.mjs:190:    const byteArray = Uint8Array.from(base64decode(vocab_base64), (c) =>
+core/llm/llamaTokenizer.mjs:208:    const promptAltered = prompt.replaceAll(" ", this.vocabById[29871]);
+core/llm/llamaTokenizer.mjs:214:      if (this.vocabByString.has(c)) {
+core/llm/llamaTokenizer.mjs:216:        tokenIds.push(this.vocabByString.get(c));
+core/llm/llamaTokenizer.mjs:221:          const hex = this.vocabByString.get(utf8ByteToHex(bytes[j]));
+core/llm/llamaTokenizer.mjs:224:            // This is not supposed to happen because the LLaMA vocabulary has a token corresponding to each byte,
+core/llm/llamaTokenizer.mjs:254:    if (!this.vocabById || !this.vocabByString || !this.merges) {
+core/llm/llamaTokenizer.mjs:255:      console.log("Tokenizer not initialized properly!");
+core/llm/llamaTokenizer.mjs:261:    // Initially each character is transformed to a tokenId, later there will be merges of these.
+core/llm/llamaTokenizer.mjs:268:    // Set up priority queue to efficiently iterate merge possibilities in priority order
+core/llm/llamaTokenizer.mjs:269:    const mergeQueue = new PriorityQueue((a, b) => {
+core/llm/llamaTokenizer.mjs:270:      return a.mergePrio < b.mergePrio;
+core/llm/llamaTokenizer.mjs:273:    const addToMergeQueue = (leftNode) => {
+core/llm/llamaTokenizer.mjs:274:      const mergeIdentifierString = this.getMergeIdentifierString(
+core/llm/llamaTokenizer.mjs:278:      // Merge priority is primarily determined by the location of the merge in the "merges" data,
+core/llm/llamaTokenizer.mjs:280:      // (We want to perform equal merges from left to right)
+core/llm/llamaTokenizer.mjs:281:      const mergePrio =
+core/llm/llamaTokenizer.mjs:282:        this.merges.get(mergeIdentifierString) +
+core/llm/llamaTokenizer.mjs:284:      if (mergePrio) {
+core/llm/llamaTokenizer.mjs:285:        // If mergePrio not found in merges, that means this merge is not possible according to vocabulary.
+core/llm/llamaTokenizer.mjs:286:        leftNode.mergePrio = mergePrio;
+core/llm/llamaTokenizer.mjs:287:        leftNode.mergeToString = mergeIdentifierString.replace(" ", "");
+core/llm/llamaTokenizer.mjs:288:        mergeQueue.push(leftNode);
+core/llm/llamaTokenizer.mjs:292:    // Fill merge queue from initial merge possibilities and construct linked list
+core/llm/llamaTokenizer.mjs:308:      addToMergeQueue(prevTokenNode);
+core/llm/llamaTokenizer.mjs:312:    // Perform merges in priority order
+core/llm/llamaTokenizer.mjs:313:    while (!mergeQueue.isEmpty()) {
+core/llm/llamaTokenizer.mjs:314:      const leftOfMerge = mergeQueue.pop();
+core/llm/llamaTokenizer.mjs:315:      // Check that this merge is still possible
+core/llm/llamaTokenizer.mjs:316:      if (leftOfMerge.deleted) continue;
+core/llm/llamaTokenizer.mjs:317:      if (!leftOfMerge.next) continue;
+core/llm/llamaTokenizer.mjs:318:      if (leftOfMerge.next.deleted) continue;
+core/llm/llamaTokenizer.mjs:320:      // Mark leftOfMerge and rightOfMerge as being deleted, because they are actually being replaced by a merged token.
+core/llm/llamaTokenizer.mjs:321:      leftOfMerge.deleted = true;
+core/llm/llamaTokenizer.mjs:322:      leftOfMerge.next.deleted = true;
+core/llm/llamaTokenizer.mjs:323:      // It's a little bit more complicated to fix the prev of leftOfMerge.
+core/llm/llamaTokenizer.mjs:324:      if (leftOfMerge.prev) {
+core/llm/llamaTokenizer.mjs:325:        const oldPrev = leftOfMerge.prev;
+core/llm/llamaTokenizer.mjs:326:        // Mark oldPrev as deleted, to avoid erroneous merges later (ref to this node might exist in priorityqueue)
+core/llm/llamaTokenizer.mjs:335:        leftOfMerge.prev = newPrev;
+core/llm/llamaTokenizer.mjs:344:      // Create node representing merge result
+core/llm/llamaTokenizer.mjs:345:      const resultOfMerge = {
+core/llm/llamaTokenizer.mjs:346:        origPos: leftOfMerge.origPos,
+core/llm/llamaTokenizer.mjs:347:        tokenId: this.vocabByString.get(leftOfMerge.mergeToString),
+core/llm/llamaTokenizer.mjs:348:        prev: leftOfMerge.prev,
+core/llm/llamaTokenizer.mjs:349:        next: leftOfMerge.next.next,
+core/llm/llamaTokenizer.mjs:351:      // Consider adding to merge queue: prev--resultOfMerge
+core/llm/llamaTokenizer.mjs:352:      if (resultOfMerge.prev) {
+core/llm/llamaTokenizer.mjs:353:        resultOfMerge.prev.next = resultOfMerge;
+core/llm/llamaTokenizer.mjs:354:        resultOfMerge.prev;
+core/llm/llamaTokenizer.mjs:355:        addToMergeQueue(resultOfMerge.prev);
+core/llm/llamaTokenizer.mjs:358:        firstTokenNode = resultOfMerge;
+core/llm/llamaTokenizer.mjs:360:      // Consider adding to merge queue: resultOfMerge--next
+core/llm/llamaTokenizer.mjs:361:      if (resultOfMerge.next) {
+core/llm/llamaTokenizer.mjs:362:        resultOfMerge.next.prev = resultOfMerge;
+core/llm/llamaTokenizer.mjs:363:        addToMergeQueue(resultOfMerge);
+core/llm/llamaTokenizer.mjs:368:    const mergedTokenIds = [];
+core/llm/llamaTokenizer.mjs:374:      mergedTokenIds.push(currTokenNode.tokenId);
+core/llm/llamaTokenizer.mjs:380:        "Tokenizer running time: " + (endTime - startTime) + " milliseconds",
+core/llm/llamaTokenizer.mjs:384:    return mergedTokenIds;
+core/llm/llamaTokenizer.mjs:392:      const tokenString = this.vocabById[tokenId];
+core/llm/llamaTokenizer.mjs:405:    const spacesFixed = decodedString.replaceAll(this.vocabById[29871], " ");
+core/llm/llamaTokenizer.mjs:410:  defaultTests(tokenizer) {
+core/llm/llamaTokenizer.mjs:421:      const actualTokens = tokenizer.encode(inputString, true, true, true);
+core/llm/llamaTokenizer.mjs:423:        throw `Test failed. LLaMA Tokenizer Encoder returned unexpected result: expected tokenize(${inputString}) === ${expectedTokenIds}, actual was: ${actualTokens}`;
+core/llm/llamaTokenizer.mjs:425:      if (inputString !== tokenizer.decode(actualTokens)) {
+core/llm/llamaTokenizer.mjs:426:        throw `Test failed. LLaMA Tokenizer Decoder returned unexpected result: expected decode(${actualTokens}) === ${inputString}, actual was: ${decode(actualTokens)}`;
+core/llm/llamaTokenizer.mjs:436:    // Naive implementation uses incorrect merge order for multiple consecutive space merges, making this a good test case
+core/llm/llamaTokenizer.mjs:444:    // Equal prio merges are performed left-to-right (fixed in 1.1.1)
+core/llm/llamaTokenizer.mjs:447:    // UTF-8 multipoint character that should be found in vocabulary
+core/llm/llamaTokenizer.mjs:450:    // UTF-8 multipoint character that should NOT be found in vocabulary, fallback to MULTIPLE byte tokens
+core/llm/llamaTokenizer.mjs:453:    // Consecutive UTF-8 multipoint characters that are NOT found in a vocabulary and use DIFFERENT number of bytes
+core/llm/llamaTokenizer.mjs:500:    console.log("LLaMA Tokenizer tests passed successfully.");
+core/llm/llamaTokenizer.mjs:509:const llama_vocab_base64 =
+core/llm/llamaTokenizer.mjs:512:const llama_merges_binary =
+core/llm/llamaTokenizer.mjs:515:const llamaTokenizer = new LlamaTokenizer();
+core/llm/llamaTokenizer.mjs:518:  window.llamaTokenizer = llamaTokenizer;
+core/llm/llamaTokenizer.mjs:521:export default llamaTokenizer;
+core/llm/llamaTokenizerWorkerPool.mjs:2:import llamaTokenizer from "./llamaTokenizer.mjs";
+core/llm/llamaTokenizerWorkerPool.mjs:5:  return llamaTokenizer.encode(segment);
+core/llm/llamaTokenizerWorkerPool.mjs:9:  return llamaTokenizer.decode(tokens);
+core/llm/tiktokenWorkerPool.mjs:2:import { encodingForModel as _encodingForModel } from "js-tiktoken";
+core/llm/tiktokenWorkerPool.mjs:4:const tiktokenEncoding = _encodingForModel("gpt-4");
+core/llm/tiktokenWorkerPool.mjs:7:  return tiktokenEncoding.encode(text, "all", []);
+core/llm/tiktokenWorkerPool.mjs:11:  return tiktokenEncoding.decode(tokens);
+core/package-lock.json:47:        "js-tiktoken": "^1.0.8",
+core/package-lock.json:247:    "node_modules/@75lb/deep-merge": {
+core/package-lock.json:249:      "resolved": "https://registry.npmjs.org/@75lb/deep-merge/-/deep-merge-1.1.4.tgz",
+core/package-lock.json:269:    "node_modules/@75lb/deep-merge/node_modules/typical": {
+core/package-lock.json:297:        "@csstools/css-tokenizer": "^3.0.3",
+core/package-lock.json:3069:        "@csstools/css-tokenizer": "^3.0.4"
+core/package-lock.json:3096:        "@csstools/css-tokenizer": "^3.0.4"
+core/package-lock.json:3118:        "@csstools/css-tokenizer": "^3.0.4"
+core/package-lock.json:3121:    "node_modules/@csstools/css-tokenizer": {
+core/package-lock.json:3123:      "resolved": "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-3.0.4.tgz",
+core/package-lock.json:7233:        "lodash.merge": "^4.6.2",
+core/package-lock.json:8569:        "encoding-sniffer": "^0.2.1",
+core/package-lock.json:9202:    "node_modules/deepmerge": {
+core/package-lock.json:9204:      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz",
+core/package-lock.json:9555:    "node_modules/encoding": {
+core/package-lock.json:9557:      "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.13.tgz",
+core/package-lock.json:9565:    "node_modules/encoding-sniffer": {
+core/package-lock.json:9567:      "resolved": "https://registry.npmjs.org/encoding-sniffer/-/encoding-sniffer-0.2.1.tgz",
+core/package-lock.json:9572:        "whatwg-encoding": "^3.1.1"
+core/package-lock.json:9575:        "url": "https://github.com/fb55/encoding-sniffer?sponsor=1"
+core/package-lock.json:10421:        "merge-stream": "^2.0.0",
+core/package-lock.json:10499:        "merge-descriptors": "^2.0.0",
+core/package-lock.json:11598:    "node_modules/html-encoding-sniffer": {
+core/package-lock.json:11600:      "resolved": "https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-4.0.0.tgz",
+core/package-lock.json:11604:        "whatwg-encoding": "^3.1.1"
+core/package-lock.json:12709:        "deepmerge": "^4.2.2",
+core/package-lock.json:12876:    "node_modules/jest-environment-jsdom/node_modules/html-encoding-sniffer": {
+core/package-lock.json:12878:      "resolved": "https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-3.0.0.tgz",
+core/package-lock.json:12883:        "whatwg-encoding": "^2.0.0"
+core/package-lock.json:12935:        "html-encoding-sniffer": "^3.0.0",
+core/package-lock.json:12946:        "whatwg-encoding": "^2.0.0",
+core/package-lock.json:12990:    "node_modules/jest-environment-jsdom/node_modules/whatwg-encoding": {
+core/package-lock.json:12992:      "resolved": "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-2.0.0.tgz",
+core/package-lock.json:13440:        "merge-stream": "^2.0.0",
+core/package-lock.json:13487:    "node_modules/js-tiktoken": {
+core/package-lock.json:13489:      "resolved": "https://registry.npmjs.org/js-tiktoken/-/js-tiktoken-1.0.21.tgz",
+core/package-lock.json:13536:        "html-encoding-sniffer": "^4.0.0",
+core/package-lock.json:13548:        "whatwg-encoding": "^3.1.1",
+core/package-lock.json:14167:    "node_modules/lodash.merge": {
+core/package-lock.json:14169:      "resolved": "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz",
+core/package-lock.json:14500:    "node_modules/merge-descriptors": {
+core/package-lock.json:14502:      "resolved": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-2.0.0.tgz",
+core/package-lock.json:14512:    "node_modules/merge-stream": {
+core/package-lock.json:14514:      "resolved": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+core/package-lock.json:14749:        "encoding": "^0.1.12"
+core/package-lock.json:18083:        "@75lb/deep-merge": "^1.1.1",
+core/package-lock.json:19387:    "node_modules/whatwg-encoding": {
+core/package-lock.json:19389:      "resolved": "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-3.1.1.tgz",
+core/package-lock.json:19655:        "wink-tokenizer": "^5.2.3"
+core/package-lock.json:19664:    "node_modules/wink-tokenizer": {
+core/package-lock.json:19666:      "resolved": "https://registry.npmjs.org/wink-tokenizer/-/wink-tokenizer-5.3.0.tgz",
+core/package-lock.json:19673:    "node_modules/wink-tokenizer/node_modules/emoji-regex": {
+core/package.json:98:    "js-tiktoken": "^1.0.8",
+core/vendor/modules/@xenova/transformers/src/configs.js:17: * //   "vocab_size": 30522
+core/vendor/modules/@xenova/transformers/src/configs.js:59:   * Create a new PreTrainedTokenizer instance.
+core/vendor/modules/@xenova/transformers/src/env.js:70: * If set to `false`, it will have the same effect as setting `local_files_only=true` when loading pipelines, models, tokenizers, processors, etc.
+core/vendor/modules/@xenova/transformers/src/models.js:7: * import { AutoModel, AutoTokenizer } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:9: * let tokenizer = await AutoTokenizer.from_pretrained('Xenova/bert-base-uncased');
+core/vendor/modules/@xenova/transformers/src/models.js:12: * let inputs = await tokenizer('I love transformers!');
+core/vendor/modules/@xenova/transformers/src/models.js:26: * import { AutoModelForSeq2SeqLM, AutoTokenizer } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:28: * let tokenizer = await AutoTokenizer.from_pretrained('Xenova/t5-small');
+core/vendor/modules/@xenova/transformers/src/models.js:31: * let { input_ids } = await tokenizer('translate English to German: I love transformers!');
+core/vendor/modules/@xenova/transformers/src/models.js:33: * let decoded = tokenizer.decode(outputs[0], { skip_special_tokens: true });
+core/vendor/modules/@xenova/transformers/src/models.js:46:  mergeArrays,
+core/vendor/modules/@xenova/transformers/src/models.js:378:  if (self.decoder_merged_session.inputNames.includes("use_cache_branch")) {
+core/vendor/modules/@xenova/transformers/src/models.js:383:    self.decoder_merged_session.inputNames.includes("encoder_attention_mask")
+core/vendor/modules/@xenova/transformers/src/models.js:389:    self.decoder_merged_session,
+core/vendor/modules/@xenova/transformers/src/models.js:396:    self.decoder_merged_session,
+core/vendor/modules/@xenova/transformers/src/models.js:544:    // but they weren't created by the tokenizer.
+core/vendor/modules/@xenova/transformers/src/models.js:799:          options.model_file_name ?? "decoder_model_merged",
+core/vendor/modules/@xenova/transformers/src/models.js:822:          "decoder_model_merged",
+core/vendor/modules/@xenova/transformers/src/models.js:856:          "decoder_model_merged",
+core/vendor/modules/@xenova/transformers/src/models.js:1081:   * This function merges multiple generation configs together to form a final generation config to be used by the model for text generation.
+core/vendor/modules/@xenova/transformers/src/models.js:1241:        // Logits are of the form [batch_size, out_seq_length, vocab_size]
+core/vendor/modules/@xenova/transformers/src/models.js:1242:        // In most cases, this will be [batch_size, 1, vocab_size]
+core/vendor/modules/@xenova/transformers/src/models.js:2453:   * @param {any} decoder_merged_session session for the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2456:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2458:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2492:   * @param {any} decoder_merged_session session for the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2495:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2497:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2525:   * @param {any} decoder_merged_session The ONNX session containing the merged decoder weights.
+core/vendor/modules/@xenova/transformers/src/models.js:2528:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2530:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2561:   * @param {Object} decoder_merged_session The ONNX session used to execute the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2564:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2566:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2613:   * @param {Object} decoder_merged_session The ONNX session used to execute the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2616:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2618:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2650:   * @param {Object} decoder_merged_session ONNX Session object for the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2653:  constructor(config, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2654:    super(config, decoder_merged_session);
+core/vendor/modules/@xenova/transformers/src/models.js:2685:   * @param {any} decoder_merged_session The ONNX session containing the merged decoder weights.
+core/vendor/modules/@xenova/transformers/src/models.js:2688:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2690:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2721:   * @param {any} decoder_merged_session The ONNX session containing the merged decoder weights.
+core/vendor/modules/@xenova/transformers/src/models.js:2724:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2726:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:2981:   * @param {Object} decoder_merged_session ONNX Session object for the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:2984:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:2986:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:3004:   * timestamps, use the tokenizer to group the tokens into words.
+core/vendor/modules/@xenova/transformers/src/models.js:3186:      let jumps = mergeArrays([1], diffs).map((x) => !!x); // convert to boolean
+core/vendor/modules/@xenova/transformers/src/models.js:3214:   * @param {any} decoder_merged_session The ONNX session containing the merged decoder model.
+core/vendor/modules/@xenova/transformers/src/models.js:3217:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:3219:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:3252:      decoder_merged_session,
+core/vendor/modules/@xenova/transformers/src/models.js:3286: * import { AutoTokenizer, AutoProcessor, CLIPModel, RawImage } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:3288: * // Load tokenizer, processor, and model
+core/vendor/modules/@xenova/transformers/src/models.js:3289: * let tokenizer = await AutoTokenizer.from_pretrained('Xenova/clip-vit-base-patch16');
+core/vendor/modules/@xenova/transformers/src/models.js:3295: * let text_inputs = tokenizer(texts, { padding: true, truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:3331: * import { AutoTokenizer, CLIPTextModelWithProjection } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:3333: * // Load tokenizer and text model
+core/vendor/modules/@xenova/transformers/src/models.js:3334: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/clip-vit-base-patch16');
+core/vendor/modules/@xenova/transformers/src/models.js:3339: * let text_inputs = tokenizer(texts, { padding: true, truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:3406: * import { AutoTokenizer, AutoProcessor, SiglipModel, RawImage } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:3408: * // Load tokenizer, processor, and model
+core/vendor/modules/@xenova/transformers/src/models.js:3409: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/siglip-base-patch16-224');
+core/vendor/modules/@xenova/transformers/src/models.js:3415: * const text_inputs = tokenizer(texts, { padding: 'max_length', truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:3451: * import { AutoTokenizer, SiglipTextModel } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:3453: * // Load tokenizer and text model
+core/vendor/modules/@xenova/transformers/src/models.js:3454: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/siglip-base-patch16-224');
+core/vendor/modules/@xenova/transformers/src/models.js:3459: * const text_inputs = tokenizer(texts, { padding: 'max_length', truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:3533: * import { AutoTokenizer, AutoProcessor, CLIPSegForImageSegmentation, RawImage } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:3535: * // Load tokenizer, processor, and model
+core/vendor/modules/@xenova/transformers/src/models.js:3536: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/clipseg-rd64-refined');
+core/vendor/modules/@xenova/transformers/src/models.js:3542: * const text_inputs = tokenizer(texts, { padding: true, truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:4304: * import { AutoProcessor, AutoTokenizer, AutoModelForVision2Seq, RawImage } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:4316: * const tokenizer = await AutoTokenizer.from_pretrained(model_id);
+core/vendor/modules/@xenova/transformers/src/models.js:4318: * const decoder_input_ids = tokenizer(task_prompt, {
+core/vendor/modules/@xenova/transformers/src/models.js:4332: * const decoded = tokenizer.batch_decode(output)[0];
+core/vendor/modules/@xenova/transformers/src/models.js:4339: * import { AutoProcessor, AutoTokenizer, AutoModelForVision2Seq, RawImage } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:4351: * const tokenizer = await AutoTokenizer.from_pretrained(model_id);
+core/vendor/modules/@xenova/transformers/src/models.js:4354: * const decoder_input_ids = tokenizer(task_prompt, {
+core/vendor/modules/@xenova/transformers/src/models.js:4368: * const decoded = tokenizer.batch_decode(output)[0];
+core/vendor/modules/@xenova/transformers/src/models.js:4628:   * @param {any} decoder_merged_session
+core/vendor/modules/@xenova/transformers/src/models.js:4631:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:4633:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:4658:   * @param {any} decoder_merged_session
+core/vendor/modules/@xenova/transformers/src/models.js:4661:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:4663:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:4873: * import { AutoTokenizer, AutoProcessor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Tensor } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:4875: * // Load the tokenizer and processor
+core/vendor/modules/@xenova/transformers/src/models.js:4876: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/speecht5_tts');
+core/vendor/modules/@xenova/transformers/src/models.js:4895: * const { input_ids } = tokenizer('Hello, my dog is cute');
+core/vendor/modules/@xenova/transformers/src/models.js:4918:   * @param {any} decoder_merged_session session for the decoder.
+core/vendor/modules/@xenova/transformers/src/models.js:4921:  constructor(config, session, decoder_merged_session, generation_config) {
+core/vendor/modules/@xenova/transformers/src/models.js:4923:    this.decoder_merged_session = decoder_merged_session;
+core/vendor/modules/@xenova/transformers/src/models.js:4946:   * @param {Tensor} input_values Indices of input sequence tokens in the vocabulary.
+core/vendor/modules/@xenova/transformers/src/models.js:5011:        this.decoder_merged_session,
+core/vendor/modules/@xenova/transformers/src/models.js:5154: * import { AutoTokenizer, ClapTextModelWithProjection } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:5156: * // Load tokenizer and text model
+core/vendor/modules/@xenova/transformers/src/models.js:5157: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/clap-htsat-unfused');
+core/vendor/modules/@xenova/transformers/src/models.js:5162: * const text_inputs = tokenizer(texts, { padding: true, truncation: true });
+core/vendor/modules/@xenova/transformers/src/models.js:5228: * import { AutoTokenizer, VitsModel } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/models.js:5230: * // Load the tokenizer and model
+core/vendor/modules/@xenova/transformers/src/models.js:5231: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/mms-tts-eng');
+core/vendor/modules/@xenova/transformers/src/models.js:5235: * const inputs = tokenizer('I love transformers');
+core/vendor/modules/@xenova/transformers/src/models.js:6108:   * @param {Tensor} output.logits Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+core/vendor/modules/@xenova/transformers/src/models.js:6138:   * @param {Tensor} output.logits Prediction scores of the language modeling head (scores for each vocabulary token before softmax).
+core/vendor/modules/@xenova/transformers/src/models.js:6152:   * @param {Tensor} output.logits Prediction scores of the language modeling head (scores for each vocabulary token before softmax).
+core/vendor/modules/@xenova/transformers/src/pipelines.js:41:import { AutoTokenizer, PreTrainedTokenizer } from "./tokenizers.js";
+core/vendor/modules/@xenova/transformers/src/pipelines.js:142:   * @param {PreTrainedTokenizer} [options.tokenizer=null] The tokenizer used by the pipeline (if any).
+core/vendor/modules/@xenova/transformers/src/pipelines.js:145:  constructor({ task, model, tokenizer = null, processor = null }) {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:149:    this.tokenizer = tokenizer;
+core/vendor/modules/@xenova/transformers/src/pipelines.js:160: * @typedef {Object} ModelTokenizerConstructorArgs
+core/vendor/modules/@xenova/transformers/src/pipelines.js:163: * @property {PreTrainedTokenizer} tokenizer The tokenizer used by the pipeline.
+core/vendor/modules/@xenova/transformers/src/pipelines.js:165: * @typedef {ModelTokenizerConstructorArgs} TextPipelineConstructorArgs An object used to instantiate a text-based pipeline.
+core/vendor/modules/@xenova/transformers/src/pipelines.js:179: * @typedef {Object} ModelTokenizerProcessorConstructorArgs
+core/vendor/modules/@xenova/transformers/src/pipelines.js:182: * @property {PreTrainedTokenizer} tokenizer The tokenizer used by the pipeline.
+core/vendor/modules/@xenova/transformers/src/pipelines.js:185: * @typedef {ModelTokenizerProcessorConstructorArgs} TextAudioPipelineConstructorArgs An object used to instantiate a text- and audio-based pipeline.
+core/vendor/modules/@xenova/transformers/src/pipelines.js:186: * @typedef {ModelTokenizerProcessorConstructorArgs} TextImagePipelineConstructorArgs An object used to instantiate a text- and image-based pipeline.
+core/vendor/modules/@xenova/transformers/src/pipelines.js:259:    const model_inputs = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:365:    const model_inputs = this.tokenizer(isBatched ? texts : [texts], {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:396:        const word = this.tokenizer.decode([ids[j].item()], {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:473:    const inputs = this.tokenizer(question, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:485:      const sepIndex = ids.indexOf(this.tokenizer.sep_token_id);
+core/vendor/modules/@xenova/transformers/src/pipelines.js:504:        const answer = this.tokenizer.decode(answer_tokens, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:583:    const model_inputs = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:595:      const mask_token_index = ids.indexOf(this.tokenizer.mask_token_id);
+core/vendor/modules/@xenova/transformers/src/pipelines.js:599:          `Mask token (${this.tokenizer.mask_token}) not found in text.`,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:615:            token_str: this.tokenizer.model.vocab[x[0]],
+core/vendor/modules/@xenova/transformers/src/pipelines.js:616:            sequence: this.tokenizer.decode(sequence, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:690:    const tokenizer = this.tokenizer;
+core/vendor/modules/@xenova/transformers/src/pipelines.js:691:    const tokenizer_options = {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:698:      "_build_translation_inputs" in tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:703:      input_ids = tokenizer._build_translation_inputs(
+core/vendor/modules/@xenova/transformers/src/pipelines.js:705:        tokenizer_options,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:709:      input_ids = tokenizer(texts, tokenizer_options).input_ids;
+core/vendor/modules/@xenova/transformers/src/pipelines.js:717:    return tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:940:    this.tokenizer.padding_side = "left";
+core/vendor/modules/@xenova/transformers/src/pipelines.js:941:    const { input_ids, attention_mask } = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:956:    const decoded = this.tokenizer.batch_decode(outputTokenIds, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1096:        const inputs = this.tokenizer(premise, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1202:    const model_inputs = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1406:    const text_inputs = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1610:      const predicted_sentences = this.tokenizer.decode(predicted_ids);
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1641:      const decoder_prompt_ids = this.tokenizer.get_decoder_prompt_ids({
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1734:      // Merge text chunks
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1736:      const [full_text, optional] = this.tokenizer._decode_asr(chunks, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:1804:      const decoded = this.tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2140:    const text_inputs = this.tokenizer(texts, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2380:    const text_inputs = this.tokenizer(candidate_labels, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2476:    const decoder_input_ids = this.tokenizer(task_prompt, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2490:    const decoded = this.tokenizer.batch_decode(output)[0];
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2591:    const inputs = this.tokenizer(text_inputs, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2638:    const { input_ids } = this.tokenizer(text_inputs, {
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2797:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2808:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2819:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2831:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2842:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2853:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2864:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2875:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2886:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2908:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2920:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2932:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2944:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2957:    // no tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2970:    // no tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2983:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:2996:    // no tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3008:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3020:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3032:    // no tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3044:    // no tokenizer
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3058:    tokenizer: AutoTokenizer,
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3165:    ["tokenizer", pipelineInfo.tokenizer],
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3170:  // Load model, tokenizer, and processor (if they exist)
+core/vendor/modules/@xenova/transformers/src/pipelines.js:3185: * Helper function to get applicable model, tokenizer, or processor classes for a given model.
+core/vendor/modules/@xenova/transformers/src/processors.js:555:    // For efficiency reasons, it might be best to merge the resize and center crop operations into one.
+core/vendor/modules/@xenova/transformers/src/processors.js:1074:   * @param {number} [overlap_mask_area_threshold=0.8] The overlap mask area threshold to merge or discard small disconnected parts within each binary instance mask.
+core/vendor/modules/@xenova/transformers/src/processors.js:1848:    // TODO use tokenizer here?
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2: * @file Tokenizers are used to prepare textual inputs for a model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4: * **Example:** Create an `AutoTokenizer` and use it to tokenize a sentence.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:5: * This will automatically detect the tokenizer type based on the tokenizer class defined in `tokenizer.json`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:7: * import { AutoTokenizer } from '@xenova/transformers';
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:9: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/bert-base-uncased');
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:10: * const { input_ids } = await tokenizer('I love transformers!');
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:19: * @module tokenizers
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:27:  mergeArrays,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:44: * @typedef {Object} TokenizerProperties Additional tokenizer-specific properties.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:45: * @property {boolean} [legacy=false] Whether or not the `legacy` behavior of the tokenizer should be used.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:46: * @typedef {import('./utils/hub.js').PretrainedOptions & TokenizerProperties} PretrainedTokenizerOptions
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:50: * Loads a tokenizer from the specified path.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:51: * @param {string} pretrained_model_name_or_path The path to the tokenizer directory.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:52: * @param {PretrainedTokenizerOptions} options Additional options for loading the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:53: * @returns {Promise<any[]>} A promise that resolves with information about the loaded tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:55:async function loadTokenizer(pretrained_model_name_or_path, options) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:59:      "tokenizer.json",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:65:      "tokenizer_config.json",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:152:          "Unable to decode tensor with `batch size !== 1`. Use `tokenizer.batch_decode(...)` for batched inputs.",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:239: * Represent a token added by the user on top of the existing Model vocabulary.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:268: * Abstract base class for tokenizer models.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:272:export class TokenizerModel extends Callable {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:274:   * Creates a new instance of TokenizerModel.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:275:   * @param {Object} config The configuration object for the TokenizerModel.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:282:    this.vocab = [];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:294:    /** @type {boolean} Whether to fuse unknown tokens when encoding. Defaults to false. */
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:299:   * Instantiates a new TokenizerModel instance based on the configuration object provided.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:300:   * @param {Object} config The configuration object for the TokenizerModel.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:301:   * @param {...*} args Optional arguments to pass to the specific TokenizerModel constructor.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:302:   * @returns {TokenizerModel} A new instance of a TokenizerModel.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:303:   * @throws Will throw an error if the TokenizerModel type in the config is not recognized.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:308:        return new WordPieceTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:317:        if (config.vocab) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:319:          return new LegacyTokenizerModel(config, ...args);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:321:        throw new Error(`Unknown TokenizerModel type: ${config.type}`);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:326:   * Internal function to call the TokenizerModel instance.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:364:    return ids.map((i) => this.vocab[i] ?? this.unk_token);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:369: * A subclass of TokenizerModel that uses WordPiece encoding to encode tokens.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:370: * @extends TokenizerModel
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:372:class WordPieceTokenizer extends TokenizerModel {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:375:   * @param {Object} config.vocab A mapping of tokens to ids.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:386:    this.tokens_to_ids = objectToMap(config.vocab);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:410:    this.vocab = new Array(this.tokens_to_ids.size);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:412:      this.vocab[value] = key;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:417:   * Encodes an array of tokens using WordPiece encoding.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:469: * Class representing a Unigram tokenizer model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:470: * @extends TokenizerModel
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:472:class Unigram extends TokenizerModel {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:474:   * Create a new Unigram tokenizer model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:477:   * @param {any[][]} config.vocab A 2D array representing a mapping of tokens to scores.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:483:    const vocabSize = config.vocab.length;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:484:    this.vocab = new Array(vocabSize);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:485:    this.scores = new Array(vocabSize);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:486:    for (let i = 0; i < vocabSize; ++i) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:487:      const piece = config.vocab[i];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:488:      this.vocab[i] = piece[0];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:493:    this.unk_token = this.vocab[config.unk_id];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:495:    this.tokens_to_ids = new Map(this.vocab.map((x, i) => [x, i]));
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:502:    this.unkToken = this.vocab[this.unk_token_id];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:510:    this.trie.extend(this.vocab);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:513:    // See: https://github.com/huggingface/tokenizers/blob/b58227c7f1ccf8b73ee2268354336da56d91e492/tokenizers/src/models/unigram/model.rs#L119
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:553:   * @returns {string[]} An array of subtokens obtained by encoding the input tokens using the unigram model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:566:   * Encodes an array of tokens using Unigram encoding.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:629: * BPE class for encoding text into Byte-Pair-Encoding (BPE) tokens.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:630: * @extends TokenizerModel
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:632:class BPE extends TokenizerModel {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:636:   * @param {Object} config.vocab A mapping of tokens to ids.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:637:   * @param {string} config.unk_token The unknown token used for out of vocabulary words.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:640:   * @param {Array} config.merges An array of BPE merges as strings.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:648:    this.tokens_to_ids = objectToMap(config.vocab);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:653:    this.vocab = new Array(this.tokens_to_ids.size);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:655:      this.vocab[value] = key;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:658:    this.bpe_ranks = new Map(config.merges.map((x, i) => [x, i]));
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:659:    this.merges = config.merges.map((x) => x.split(this.BPE_SPLIT_TOKEN));
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:663:    // NOTE: `continuing_subword_suffix` is custom (to support `BlenderbotSmallTokenizer`)
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:677:   * Apply Byte-Pair-Encoding (BPE) to a given token. Efficient heap-based priority
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:678:   * queue implementation adapted from https://github.com/belladoreai/llama-tokenizer-js.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:699:      // Create a priority queue to store the nodes that will be merged.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:730:        // Check that this merge is still possible
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:733:        // Here, we mark the current node (left side of the merge) and the next node (right side of the merge) as deleted.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:734:        // This is because they will both be replaced by a new node representing the merge result.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:738:        // Next, we fix the node that comes before the current node (i.e., left side of the merge).
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:743:          // Mark the old previous node as deleted. This avoids erroneous merges later,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:758:        // Create a new node which represents the result of the merge.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:759:        const merged = {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:766:        // We now consider where we can add the new merged node to the priority queue:
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:767:        // 1. prev <-> merged
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:768:        if (merged.prev) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:769:          merged.prev.next = merged;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:770:          this._add_node(queue, merged.prev);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:772:          // If `merged.prev` does not exist, then `merged` must be the new `startingNode`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:773:          startingNode = merged;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:776:        // 2. merged <-> next
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:777:        if (merged.next) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:778:          merged.next.prev = merged;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:779:          this._add_node(queue, merged);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:816:    // `score` is a measure of the merge priority: lower means higher priority
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:817:    // We use the BPE rank as a measure of priority (i.e., the local of the merge in the merges list)
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:861: * Legacy tokenizer class for tokenizers with only a vocabulary.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:863:class LegacyTokenizerModel extends TokenizerModel {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:865:   * Create a LegacyTokenizerModel instance.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:866:   * @param {Object} config The configuration object for LegacyTokenizerModel.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:867:   * @param {Object} config.vocab A (possibly nested) mapping of tokens to ids.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:868:   * @param {Object} moreConfig Additional configuration object for the LegacyTokenizerModel model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:876:        ? config.vocab[moreConfig.target_lang]
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:877:        : config.vocab,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:892:    this.vocab = new Array(this.tokens_to_ids.size);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:894:      this.vocab[value] = key;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1276: * A callable class representing a pre-tokenizer used in tokenization. Subclasses
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1280:class PreTokenizer extends Callable {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1282:   * Factory method that returns an instance of a subclass of `PreTokenizer` based on the provided configuration.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1285:   * @param {Object} config A configuration object for the pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1286:   * @returns {PreTokenizer} An instance of a subclass of `PreTokenizer`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1287:   * @throws {Error} If the provided configuration object does not correspond to any known pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1293:      case "BertPreTokenizer":
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1294:        return new BertPreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1296:        return new PreTokenizerSequence(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1300:        return new MetaspacePreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1303:        return new ByteLevelPreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1305:        return new SplitPreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1307:        return new PunctuationPreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1309:        return new DigitsPreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1311:        return new ReplacePreTokenizer(config);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1313:        throw new Error(`Unknown PreTokenizer type: ${config.type}`);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1345:   * Alias for {@link PreTokenizer#pre_tokenize}.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1356: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1358:class BertPreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1360:   * A PreTokenizer that splits text into wordpieces using a basic tokenization scheme
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1368:    // https://github.com/huggingface/tokenizers/blob/b4fcc9ce6e4ad5806e82826f816acfdfdc4fcc67/tokenizers/src/pre_tokenizers/bert.rs#L11
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1388: * A pre-tokenizer that splits text into Byte-Pair-Encoding (BPE) subwords.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1389: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1391:class ByteLevelPreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1393:   * Creates a new instance of the `ByteLevelPreTokenizer` class.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1451: * @typedef {'removed'|'isolated'|'mergedWithPrevious'|'mergedWithNext'|'contiguous'} SplitDelimiterBehavior
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1456: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1458:class SplitPreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1460:   * @param {Object} config The configuration options for the pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1496: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1498:class PunctuationPreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1500:   * @param {Object} config The configuration options for the pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1525: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1527:class DigitsPreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1529:   * @param {Object} config The configuration options for the pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1559: * @typedef {Object} EncodingSingle
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1651:      tokens = mergeArrays([this.cls], tokens, [this.sep]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1657:      // https://github.com/huggingface/tokenizers/issues/983
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1664:      tokens = mergeArrays(tokens, middle, tokens_pair, after);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1665:      token_type_ids = mergeArrays(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1712:          processedTokens = mergeArrays(processedTokens, tokens);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1713:          types = mergeArrays(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1718:          processedTokens = mergeArrays(processedTokens, tokens_pair);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1719:          types = mergeArrays(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1743:      tokens = mergeArrays(tokens, tokens_pair);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:1955:   * @param {string} config.prefix The prefix used for WordPiece encoding.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2056: * See https://github.com/huggingface/tokenizers/blob/bb38f390a61883fc2f29d659af696f428d1cda6b/tokenizers/src/decoders/ctc.rs
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2154: * This PreTokenizer replaces spaces with the given replacement character, adds a prefix space if requested,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2156: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2158:class MetaspacePreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2160:   * @param {Object} config The configuration object for the MetaspacePreTokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2260:    // As stated in the sentencepiece normalization docs (https://github.com/google/sentencepiece/blob/master/doc/normalization.md#use-pre-defined-normalization-rule),
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2269:    // See https://raw.githubusercontent.com/google/sentencepiece/master/data/nmt_nfkc.tsv for the full list of rules.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2282:      // To match the sentencepiece implementation 100%, we must handle a very strange edge-case.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2297: * A pre-tokenizer that applies a sequence of pre-tokenizers to the input text.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2298: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2300:class PreTokenizerSequence extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2302:   * Creates an instance of PreTokenizerSequence.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2303:   * @param {Object} config The configuration object for the pre-tokenizer sequence.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2304:   * @param {Object[]} config.pretokenizers An array of pre-tokenizer configurations.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2308:    this.tokenizers = config.pretokenizers.map((x) =>
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2309:      PreTokenizer.fromConfig(x),
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2314:   * Applies each pre-tokenizer in the sequence to the input text in turn.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2320:    // Use reduce to apply each tokenizer to the text
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2321:    return this.tokenizers.reduce(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2322:      (preTokenizedText, tokenizer) => {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2323:        return tokenizer.pre_tokenize(preTokenizedText, options);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2332: * @extends PreTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2334:class WhitespaceSplit extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2337:   * @param {Object} config The configuration object for the pre-tokenizer sequence.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2353:// NOTE: `ReplacePreTokenizer` is custom (to support `BlenderbotSmallTokenizer`)
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2354:class ReplacePreTokenizer extends PreTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2356:   * @param {Object} config The configuration options for the pre-tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2410:        ? mergeArrays(item[key], padData)
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2411:        : mergeArrays(padData, item[key]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2430:export class PreTrainedTokenizer extends Callable {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2436:   * Create a new PreTrainedTokenizer instance.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2437:   * @param {Object} tokenizerJSON The JSON of the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2438:   * @param {Object} tokenizerConfig The config of the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2440:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2443:    this._tokenizer_config = tokenizerConfig;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2445:    // Construct parts of the tokenizer from the JSON
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2446:    this.normalizer = Normalizer.fromConfig(tokenizerJSON.normalizer);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2447:    this.pre_tokenizer = PreTokenizer.fromConfig(tokenizerJSON.pre_tokenizer);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2448:    this.model = TokenizerModel.fromConfig(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2449:      tokenizerJSON.model,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2450:      tokenizerConfig,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2453:      tokenizerJSON.post_processor,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2455:    this.decoder = Decoder.fromConfig(tokenizerJSON.decoder);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2463:    for (const addedToken of tokenizerJSON.added_tokens) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2468:      this.model.vocab[token.id] = token.content;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2478:      tokenizerConfig.additional_special_tokens ?? [];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2515:    this.unk_token = this.getToken(tokenizerConfig, "unk_token");
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2518:    this.model_max_length = tokenizerConfig.model_max_length;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2521:    this.remove_space = tokenizerConfig.remove_space;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2524:      tokenizerConfig.clean_up_tokenization_spaces ?? true;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2526:      tokenizerConfig.do_lowercase_and_remove_accent ?? false;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2534:    this.chat_template = tokenizerConfig.chat_template ?? null;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2539:   * Returns the value of the first matching key in the tokenizer config object.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2540:   * @param {...string} keys One or more keys to search for in the tokenizer config object.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2546:      const item = this._tokenizer_config[key];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2564:   * Loads a pre-trained tokenizer from the given `pretrained_model_name_or_path`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2566:   * @param {string} pretrained_model_name_or_path The path to the pre-trained tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2567:   * @param {PretrainedTokenizerOptions} options Additional options for loading the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2569:   * @throws {Error} Throws an error if the tokenizer.json or tokenizer_config.json files are not found in the `pretrained_model_name_or_path`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2570:   * @returns {Promise<PreTrainedTokenizer>} A new instance of the `PreTrainedTokenizer` class.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2583:    const info = await loadTokenizer(pretrained_model_name_or_path, {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2597:   * @typedef {number[]|number[][]|Tensor} BatchEncodingItem
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2599:   * @typedef {Object} BatchEncoding Holds the output of the tokenizer's call function.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2600:   * @property {BatchEncodingItem} input_ids List of token ids to be fed to a model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2601:   * @property {BatchEncodingItem} attention_mask List of indices specifying which tokens should be attended to by the model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2602:   * @property {BatchEncodingItem} [token_type_ids] List of token type ids to be fed to a model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2615:   * @returns {BatchEncoding} Object to be passed to the model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2633:    /** @type {EncodingSingle[]} */
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2768:    return /** @type {BatchEncoding} */ (result);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2772:   * Encodes a single text using the preprocessor pipeline of the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2780:    // Actual function which does encoding, for a single text
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2806:            this.pre_tokenizer !== null
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2807:              ? this.pre_tokenizer(x, {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2823:   * Encodes a single text or a pair of texts using the model's tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2829:   * @returns {EncodingSingle} An object containing the encoded text.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2839:      : { tokens: mergeArrays(tokens ?? [], tokens2 ?? []) };
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2854:   * Encodes a single text or a pair of texts using the model's tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2928:    // https://github.com/huggingface/tokenizers/blob/8edec536a737cb04494b454805be16c020abb14f/tokenizers/src/tokenizer/mod.rs#L835
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2951:        "No chat template is defined for this tokenizer - using a default chat template " +
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2953:          "your model, please set `tokenizer.chat_template` to an appropriate template. " +
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2970:   * ids. This method is intended for use with chat models, and will read the tokenizer's chat_template attribute to
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2979:   * import { AutoTokenizer } from "@xenova/transformers";
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2981:   * const tokenizer = await AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.1");
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2989:   * const text = tokenizer.apply_chat_template(chat, { tokenize: false });
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:2992:   * const input_ids = tokenizer.apply_chat_template(chat, { tokenize: true, return_tensor: false });
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3008:   * If not specified, the tokenizer's `max_length` attribute will be used as a default.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3063: * BertTokenizer is a class used to tokenize text for BERT models.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3064: * @extends PreTrainedTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3066:export class BertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3070: * Albert tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3071: * @extends PreTrainedTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3073:export class AlbertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3076:export class MobileBertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3079:export class SqueezeBertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3082:export class DebertaTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3085:export class DebertaV2Tokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3088:export class HerbertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3091:export class ConvBertTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3094:export class RoFormerTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3097:export class DistilBertTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3098:export class CamembertTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3099:export class XLMTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3102:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3103:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3105:      'WARNING: `XLMTokenizer` is not yet supported by Hugging Face\'s "fast" tokenizers library. Therefore, you may experience slightly inaccurate results.',
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3109:export class ElectraTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3113:export class T5Tokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3114:export class GPT2Tokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3117:export class BartTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3118:export class MBartTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3119:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3120:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3130:   * Helper function to build translation inputs for an `MBartTokenizer`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3132:   * @param {Object} tokenizer_options Options to be sent to the tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3136:  _build_translation_inputs(raw_inputs, tokenizer_options, generate_kwargs) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3140:      tokenizer_options,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3145:export class MBart50Tokenizer extends MBartTokenizer {} // NOTE: extends MBartTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3147:export class RobertaTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3149:export class BloomTokenizer extends GPT2Tokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3150:  // NOTE: `GPT2Tokenizer` to get the correct chat template
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3152:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3153:    // Override the default (invalid) regex of the pretokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3157:      tokenizerJSON.pre_tokenizer?.pretokenizers[0]?.pattern;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3164:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3170:export class LlamaTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3180:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3181:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3183:      tokenizerConfig.use_default_system_prompt ?? false;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3185:    this.legacy = tokenizerConfig.legacy ?? true;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3189:      this.pre_tokenizer = new MetaspacePreTokenizer({
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3198:   * Helper function to handle legacy encoding of SPM tokenizers.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3238:export class CodeLlamaTokenizer extends LlamaTokenizer {} // NOTE: `LlamaTokenizer` to get the correct chat template
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3240:export class XLMRobertaTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3241:export class MPNetTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3243:export class FalconTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3245:export class GPTNeoXTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3247:export class EsmTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3250: * Helper function to build translation inputs for an `NllbTokenizer` or `M2M100Tokenizer`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3251: * @param {PreTrainedTokenizer} self The tokenizer instance.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3253: * @param {Object} tokenizer_options Options to be sent to the tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3261:  tokenizer_options,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3266:      "Tokenizer must have `language_codes` attribute set and it should be an array of language ids.",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3271:      "Tokenizer must have `languageRegex` attribute set and it should be a regular expression.",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3276:      "Tokenizer must have `lang_to_token` attribute set and it should be a function.",
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3289:  // Allow `src_lang` to be optional. If not set, we'll use the tokenizer's default.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3317:  return self._call(raw_inputs, tokenizer_options);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3321: * The NllbTokenizer class is used to tokenize text for NLLB ("No Language Left Behind") models.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3333:export class NllbTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3334:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3335:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3345:   * Helper function to build translation inputs for an `NllbTokenizer`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3347:   * @param {Object} tokenizer_options Options to be sent to the tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3351:  _build_translation_inputs(raw_inputs, tokenizer_options, generate_kwargs) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3355:      tokenizer_options,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3362: * The M2M100Tokenizer class is used to tokenize text for M2M100 ("Many-to-Many") models.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3371:export class M2M100Tokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3372:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3373:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3383:   * Helper function to build translation inputs for an `M2M100Tokenizer`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3385:   * @param {Object} tokenizer_options Options to be sent to the tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3389:  _build_translation_inputs(raw_inputs, tokenizer_options, generate_kwargs) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3393:      tokenizer_options,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3522: * WhisperTokenizer tokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3523: * @extends PreTrainedTokenizer
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3525:export class WhisperTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3705:              // Handling merges
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3741:          // merges later and decode into text.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:3993:    return this.mergePunctuations(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4002:  /** @type {PreTrainedTokenizer['decode']} */
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4143:   * Merges punctuation tokens with neighboring words.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4151:  mergePunctuations(words, tokens, indices, prepended, appended) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4166:        newTokens[j] = mergeArrays(newTokens[i], newTokens[j]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4167:        newIndices[j] = mergeArrays(newIndices[i], newIndices[j]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4183:        newTokens[i] = mergeArrays(newTokens[i], newTokens[j]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4184:        newIndices[i] = mergeArrays(newIndices[i], newIndices[j]);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4202:   * Helper function to build translation inputs for a `WhisperTokenizer`,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4209:   * // instantiate the tokenizer and set the prefix token to Spanish
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4210:   * const tokenizer = await WhisperTokenizer.from_pretrained('Xenova/whisper-tiny');
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4211:   * const forced_decoder_ids = tokenizer.get_decoder_prompt_ids({ language: 'spanish' });
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4266:          `Unable to find language "${language_code}" in model vocabulary. Please report this issue at https://github.com/xenova/transformers.js/issues/new/choose.`,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4287:          `Unable to find task "${task}" in model vocabulary. Please report this issue at https://github.com/xenova/transformers.js/issues/new/choose.`,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4301:          'Unable to find "<|notimestamps|>" in model vocabulary. Please report this issue at https://github.com/xenova/transformers.js/issues/new/choose.',
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4313:export class CodeGenTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4314:export class CLIPTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4315:export class SiglipTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4318: * @todo This model is not yet supported by Hugging Face's "fast" tokenizers library (https://github.com/huggingface/tokenizers).
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4319: * Therefore, this implementation (which is based on fast tokenizers) may produce slightly inaccurate results.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4321:export class MarianTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4323:   * Create a new MarianTokenizer instance.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4324:   * @param {Object} tokenizerJSON The JSON of the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4325:   * @param {Object} tokenizerConfig The config of the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4327:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4328:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4332:    this.supported_language_codes = this.model.vocab.filter((x) =>
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4337:      'WARNING: `MarianTokenizer` is not yet supported by Hugging Face\'s "fast" tokenizers library. Therefore, you may experience slightly inaccurate results.',
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4343:   * must be removed before encoding with sentencepiece model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4359:      // Text starts with language code, so we do not encode it with sentencepiece.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4367:      return mergeArrays([language], super._encode_text(text));
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4372:export class Wav2Vec2CTCTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4374:export class BlenderbotTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4377:export class BlenderbotSmallTokenizer extends BlenderbotTokenizer {} // NOTE `BlenderbotTokenizer` to get the correct chat template
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4379:export class SpeechT5Tokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4381:export class NougatTokenizer extends PreTrainedTokenizer {}
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4383:export class VitsTokenizer extends PreTrainedTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4384:  constructor(tokenizerJSON, tokenizerConfig) {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4385:    super(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4392: * Helper class which is used to instantiate pretrained tokenizers with the `from_pretrained` function.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4393: * The chosen tokenizer class is determined by the type specified in the tokenizer config.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4396: * const tokenizer = await AutoTokenizer.from_pretrained('Xenova/bert-base-uncased');
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4398:export class AutoTokenizer {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4399:  static TOKENIZER_CLASS_MAPPING = {
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4400:    T5Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4401:    DistilBertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4402:    CamembertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4403:    DebertaTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4404:    DebertaV2Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4405:    BertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4406:    HerbertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4407:    ConvBertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4408:    RoFormerTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4409:    XLMTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4410:    ElectraTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4411:    MobileBertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4412:    SqueezeBertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4413:    AlbertTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4414:    GPT2Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4415:    BartTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4416:    MBartTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4417:    MBart50Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4418:    RobertaTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4419:    WhisperTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4420:    CodeGenTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4421:    CLIPTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4422:    SiglipTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4423:    MarianTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4424:    BloomTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4425:    NllbTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4426:    M2M100Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4427:    LlamaTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4428:    CodeLlamaTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4429:    XLMRobertaTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4430:    MPNetTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4431:    FalconTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4432:    GPTNeoXTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4433:    EsmTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4434:    Wav2Vec2CTCTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4435:    BlenderbotTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4436:    BlenderbotSmallTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4437:    SpeechT5Tokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4438:    NougatTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4439:    VitsTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4442:    PreTrainedTokenizer,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4446:   * Instantiate one of the tokenizer classes of the library from a pretrained model.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4448:   * The tokenizer class to instantiate is selected based on the `tokenizer_class` property of the config object
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4452:   * - A string, the *model id* of a pretrained tokenizer hosted inside a model repo on huggingface.co.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4455:   * - A path to a *directory* containing tokenizer files, e.g., `./my_model_directory/`.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4456:   * @param {PretrainedTokenizerOptions} options Additional options for loading the tokenizer.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4458:   * @returns {Promise<PreTrainedTokenizer>} A new instance of the PreTrainedTokenizer class.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4472:    const [tokenizerJSON, tokenizerConfig] = await loadTokenizer(
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4485:    // Some tokenizers are saved with the "Fast" suffix, so we remove that if present.
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4486:    const tokenizerName =
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4487:      tokenizerConfig.tokenizer_class?.replace(/Fast$/, "") ??
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4488:      "PreTrainedTokenizer";
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4490:    let cls = this.TOKENIZER_CLASS_MAPPING[tokenizerName];
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4493:        `Unknown tokenizer class "${tokenizerName}", attempting to construct from base class.`,
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4495:      cls = PreTrainedTokenizer;
+core/vendor/modules/@xenova/transformers/src/tokenizers.js:4497:    return new cls(tokenizerJSON, tokenizerConfig);
+core/vendor/modules/@xenova/transformers/src/transformers.js:8: * 4. [Tokenizers](./tokenizers)
+core/vendor/modules/@xenova/transformers/src/transformers.js:17:// export * from './tokenizers.js';
+core/vendor/modules/@xenova/transformers/src/utils/core.js:148: * Efficiently merge arrays, creating a new copy.
+core/vendor/modules/@xenova/transformers/src/utils/core.js:150: * @param  {Array[]} arrs Arrays to merge.
+core/vendor/modules/@xenova/transformers/src/utils/core.js:151: * @returns {Array} The merged array.
+core/vendor/modules/@xenova/transformers/src/utils/core.js:153:export function mergeArrays(...arrs) {
+core/vendor/modules/@xenova/transformers/src/utils/data-structures.js:17: * - https://github.com/belladoreai/llama-tokenizer-js (minor improvements)
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:579: * @property {number} [top_k=50] The number of highest probability vocabulary tokens to keep for top-k-filtering.
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:589: * @property {number[][]} [bad_words_ids=null] List of token ids that are not allowed to be generated. In order to get the token ids of the words that should not appear in the generated text, use `(await tokenizer(bad_words, {add_prefix_space: true, add_special_tokens: false})).input_ids`.
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:713:    // Sample from logits, of dims [batch, sequence_length, vocab_size].
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:714:    // If index is specified, sample from [batch, index, vocab_size].
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:735:    let vocabSize = logits.dims.at(-1);
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:740:      logs = logs.slice(-vocabSize);
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:742:      let startIndex = index * vocabSize;
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:743:      logs = logs.slice(startIndex, startIndex + vocabSize);
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:836:    let k = logits.dims.at(-1); // defaults to vocab size
+core/vendor/modules/@xenova/transformers/src/utils/generation.js:872:    let k = logits.dims.at(-1); // defaults to vocab size
+extensions/cli/package-lock.json:71:        "gpt-tokenizer": "^3.0.1",
+extensions/cli/package-lock.json:154:        "js-tiktoken": "^1.0.8",
+extensions/cli/package-lock.json:384:        "@csstools/css-tokenizer": "^3.0.3",
+extensions/cli/package-lock.json:512:        "@csstools/css-tokenizer": "^3.0.4"
+extensions/cli/package-lock.json:540:        "@csstools/css-tokenizer": "^3.0.4"
+extensions/cli/package-lock.json:563:        "@csstools/css-tokenizer": "^3.0.4"
+extensions/cli/package-lock.json:566:    "node_modules/@csstools/css-tokenizer": {
+extensions/cli/package-lock.json:568:      "resolved": "https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-3.0.4.tgz",
+extensions/cli/package-lock.json:3180:        "merge-stream": "^2.0.0",
+extensions/cli/package-lock.json:3573:    "node_modules/@sindresorhus/merge-streams": {
+extensions/cli/package-lock.json:3575:      "resolved": "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-4.0.0.tgz",
+extensions/cli/package-lock.json:5552:        "merge-stream": "^2.0.0",
+extensions/cli/package-lock.json:6580:        "merge-stream": "^2.0.0",
+extensions/cli/package-lock.json:7321:        "@sindresorhus/merge-streams": "^4.0.0",
+extensions/cli/package-lock.json:7372:        "merge-descriptors": "^2.0.0",
+extensions/cli/package-lock.json:7449:        "merge2": "^1.3.0",
+extensions/cli/package-lock.json:8029:        "@sindresorhus/merge-streams": "^2.1.0",
+extensions/cli/package-lock.json:8043:    "node_modules/globby/node_modules/@sindresorhus/merge-streams": {
+extensions/cli/package-lock.json:8045:      "resolved": "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-2.3.0.tgz",
+extensions/cli/package-lock.json:8082:    "node_modules/gpt-tokenizer": {
+extensions/cli/package-lock.json:8084:      "resolved": "https://registry.npmjs.org/gpt-tokenizer/-/gpt-tokenizer-3.0.1.tgz",
+extensions/cli/package-lock.json:8291:    "node_modules/html-encoding-sniffer": {
+extensions/cli/package-lock.json:8293:      "resolved": "https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-4.0.0.tgz",
+extensions/cli/package-lock.json:8298:        "whatwg-encoding": "^3.1.1"
+extensions/cli/package-lock.json:8956:        "html-encoding-sniffer": "^4.0.0",
+extensions/cli/package-lock.json:8968:        "whatwg-encoding": "^3.1.1",
+extensions/cli/package-lock.json:9653:    "node_modules/merge-descriptors": {
+extensions/cli/package-lock.json:9655:      "resolved": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-2.0.0.tgz",
+extensions/cli/package-lock.json:9666:    "node_modules/merge-stream": {
+extensions/cli/package-lock.json:9668:      "resolved": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+extensions/cli/package-lock.json:9673:    "node_modules/merge2": {
+extensions/cli/package-lock.json:9675:      "resolved": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+extensions/cli/package-lock.json:12116:        "encoding": "^0.1.0"
+extensions/cli/package-lock.json:12119:        "encoding": {
+extensions/cli/package-lock.json:15383:    "node_modules/whatwg-encoding": {
+extensions/cli/package-lock.json:15385:      "resolved": "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-3.1.1.tgz",
+extensions/cli/package.json:117:    "gpt-tokenizer": "^3.0.1",
+extensions/cli/smoke-test.mjs:37:    encoding: "utf8",
+extensions/vscode/config_schema.json:158:          "description": "This object will be merged with the body when making the HTTP requests",
+extensions/vscode/models/all-MiniLM-L6-v2/config.json:20:  "type_vocab_size": 2,
+extensions/vscode/models/all-MiniLM-L6-v2/config.json:22:  "vocab_size": 30522
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:73:  "pre_tokenizer": {
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:74:    "type": "BertPreTokenizer"
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:153:    "vocab": {
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:5211:      "emergency": 5057,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:5468:      "merged": 5314,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:6157:      "emerged": 6003,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:7814:      "merger": 7660,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:12790:      "emerge": 12636,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:13717:      "submerged": 13563,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:13744:      "merge": 13590,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:14207:      "emergence": 14053,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:16342:      "vocabulary": 16188,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:17335:      "encoding": 17181,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:19545:      "emerges": 19391,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:26514:      "emergencies": 26360,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer.json:28739:      "mergers": 28585,
+extensions/vscode/models/all-MiniLM-L6-v2/tokenizer_config.json:13:  "tokenizer_class": "BertTokenizer",
+extensions/vscode/ocircuit_rc_schema.json:158:          "description": "This object will be merged with the body when making the HTTP requests",
+extensions/vscode/ocircuit_rc_schema.json:3538:        "mergeBehavior": {
+extensions/vscode/ocircuit_rc_schema.json:3540:          "enum": ["merge", "overwrite"],
+extensions/vscode/ocircuit_rc_schema.json:3541:          "default": "merge",
+extensions/vscode/ocircuit_rc_schema.json:3542:          "title": "Merge behavior",
+extensions/vscode/ocircuit_rc_schema.json:3543:          "markdownDescription": "If set to 'merge', .ocircuitrc.json will be applied on top of config.json (arrays and objects are merged). If set to 'overwrite', then every top-level property of .ocircuitrc.json will overwrite that property from config.json.",
+extensions/vscode/ocircuit_rc_schema.json:3544:          "x-intellij-html-description": "<p>If set to <code>merge</code>, <code>.ocircuitrc.json</code> will be applied on top of <code>config.json</code> (arrays and objects are merged). If set to <code>overwrite</code>, then every top-level property of <code>.ocircuitrc.json</code> will overwrite that property from <code>config.json</code>.</p>"
+extensions/vscode/package-lock.json:134:        "js-tiktoken": "^1.0.8",
+extensions/vscode/package-lock.json:247:    "node_modules/@75lb/deep-merge": {
+extensions/vscode/package-lock.json:249:      "resolved": "https://registry.npmjs.org/@75lb/deep-merge/-/deep-merge-1.1.2.tgz",
+extensions/vscode/package-lock.json:260:    "node_modules/@75lb/deep-merge/node_modules/typical": {
+extensions/vscode/package-lock.json:1782:        "encoding": "^0.1.0"
+extensions/vscode/package-lock.json:1785:        "encoding": {
+extensions/vscode/package-lock.json:2430:    "node_modules/@tokenizer/inflate": {
+extensions/vscode/package-lock.json:2432:      "resolved": "https://registry.npmjs.org/@tokenizer/inflate/-/inflate-0.2.7.tgz",
+extensions/vscode/package-lock.json:2449:    "node_modules/@tokenizer/inflate/node_modules/debug": {
+extensions/vscode/package-lock.json:2467:    "node_modules/@tokenizer/token": {
+extensions/vscode/package-lock.json:2469:      "resolved": "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz",
+extensions/vscode/package-lock.json:4409:        "encoding-sniffer": "^0.2.0",
+extensions/vscode/package-lock.json:4592:        "merge-stream": "^2.0.0",
+extensions/vscode/package-lock.json:5578:    "node_modules/encoding": {
+extensions/vscode/package-lock.json:5580:      "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.13.tgz",
+extensions/vscode/package-lock.json:5587:    "node_modules/encoding-sniffer": {
+extensions/vscode/package-lock.json:5589:      "resolved": "https://registry.npmjs.org/encoding-sniffer/-/encoding-sniffer-0.2.0.tgz",
+extensions/vscode/package-lock.json:5594:        "whatwg-encoding": "^3.1.1"
+extensions/vscode/package-lock.json:5597:        "url": "https://github.com/fb55/encoding-sniffer?sponsor=1"
+extensions/vscode/package-lock.json:5975:        "lodash.merge": "^4.6.2",
+extensions/vscode/package-lock.json:6226:        "merge-stream": "^2.0.0",
+extensions/vscode/package-lock.json:6282:        "merge-descriptors": "1.0.3",
+extensions/vscode/package-lock.json:6296:        "utils-merge": "1.0.1",
+extensions/vscode/package-lock.json:6348:        "merge2": "^1.3.0",
+extensions/vscode/package-lock.json:6475:        "@tokenizer/inflate": "^0.2.7",
+extensions/vscode/package-lock.json:7035:        "merge2": "^1.4.1",
+extensions/vscode/package-lock.json:7257:    "node_modules/html-encoding-sniffer": {
+extensions/vscode/package-lock.json:7259:      "resolved": "https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-4.0.0.tgz",
+extensions/vscode/package-lock.json:7262:        "whatwg-encoding": "^3.1.1"
+extensions/vscode/package-lock.json:7997:        "html-encoding-sniffer": "^4.0.0",
+extensions/vscode/package-lock.json:8009:        "whatwg-encoding": "^3.1.1",
+extensions/vscode/package-lock.json:8390:    "node_modules/lodash.merge": {
+extensions/vscode/package-lock.json:8392:      "resolved": "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz",
+extensions/vscode/package-lock.json:8678:    "node_modules/merge-descriptors": {
+extensions/vscode/package-lock.json:8680:      "resolved": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.3.tgz",
+extensions/vscode/package-lock.json:8686:    "node_modules/merge-stream": {
+extensions/vscode/package-lock.json:8688:      "resolved": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+extensions/vscode/package-lock.json:8691:    "node_modules/merge2": {
+extensions/vscode/package-lock.json:8693:      "resolved": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+extensions/vscode/package-lock.json:9242:        "encoding": "^0.1.13"
+extensions/vscode/package-lock.json:9928:        "encoding": "^0.1.12"
+extensions/vscode/package-lock.json:12351:        "@tokenizer/token": "^0.3.0"
+extensions/vscode/package-lock.json:12475:        "@75lb/deep-merge": "^1.1.1",
+extensions/vscode/package-lock.json:13028:        "@tokenizer/token": "^0.3.0",
+extensions/vscode/package-lock.json:13528:    "node_modules/utils-merge": {
+extensions/vscode/package-lock.json:13530:      "resolved": "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz",
+extensions/vscode/package-lock.json:14816:    "node_modules/whatwg-encoding": {
+extensions/vscode/package-lock.json:14818:      "resolved": "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-3.1.1.tgz",
+extensions/vscode/scripts/generate-copy-config.js:29:  schema.$defs.SerializedOCircuitConfig.properties.mergeBehavior = {
+extensions/vscode/scripts/generate-copy-config.js:31:    enum: ["merge", "overwrite"],
+extensions/vscode/scripts/generate-copy-config.js:32:    default: "merge",
+extensions/vscode/scripts/generate-copy-config.js:33:    title: "Merge behavior",
+extensions/vscode/scripts/generate-copy-config.js:35:      "If set to 'merge', .ocircuitrc.json will be applied on top of config.json (arrays and objects are merged). If set to 'overwrite', then every top-level property of .ocircuitrc.json will overwrite that property from config.json.",
+extensions/vscode/scripts/generate-copy-config.js:37:      "<p>If set to <code>merge</code>, <code>.ocircuitrc.json</code> will be applied on top of <code>config.json</code> (arrays and objects are merged). If set to <code>overwrite</code>, then every top-level property of <code>.ocircuitrc.json</code> will overwrite that property from <code>config.json</code>.</p>",
+extensions/vscode/scripts/package.js:5:  fs.readFileSync("./package.json", { encoding: "utf-8" }),
+extensions/vscode/scripts/prepackage-cross-platform.js:28:  copyTokenizers,
+extensions/vscode/scripts/prepackage-cross-platform.js:95:  // copy llama tokenizers to out
+extensions/vscode/scripts/prepackage-cross-platform.js:96:  copyTokenizers();
+extensions/vscode/scripts/prepackage-cross-platform.js:160:    "models/all-MiniLM-L6-v2/tokenizer_config.json",
+extensions/vscode/scripts/prepackage-cross-platform.js:161:    "models/all-MiniLM-L6-v2/tokenizer.json",
+extensions/vscode/scripts/prepackage-cross-platform.js:162:    "models/all-MiniLM-L6-v2/vocab.txt",
+extensions/vscode/scripts/prepackage.js:209:    "../../../core/llm/llamaTokenizerWorkerPool.mjs",
+extensions/vscode/scripts/prepackage.js:210:    "../../../core/llm/llamaTokenizer.mjs",
+extensions/vscode/scripts/prepackage.js:211:    "../../../core/llm/tiktokenWorkerPool.mjs",
+extensions/vscode/scripts/prepackage.js:429:    "models/all-MiniLM-L6-v2/tokenizer_config.json",
+extensions/vscode/scripts/prepackage.js:430:    "models/all-MiniLM-L6-v2/tokenizer.json",
+extensions/vscode/scripts/prepackage.js:431:    "models/all-MiniLM-L6-v2/vocab.txt",
+extensions/vscode/scripts/utils.js:11:function copyTokenizers() {
+extensions/vscode/scripts/utils.js:13:    path.join(__dirname, "../../../core/llm/llamaTokenizerWorkerPool.mjs"),
+extensions/vscode/scripts/utils.js:14:    path.join(__dirname, "../out/llamaTokenizerWorkerPool.mjs"),
+extensions/vscode/scripts/utils.js:16:  console.log("[info] Copied llamaTokenizerWorkerPool");
+extensions/vscode/scripts/utils.js:19:    path.join(__dirname, "../../../core/llm/llamaTokenizer.mjs"),
+extensions/vscode/scripts/utils.js:20:    path.join(__dirname, "../out/llamaTokenizer.mjs"),
+extensions/vscode/scripts/utils.js:22:  console.log("[info] Copied llamaTokenizer");
+extensions/vscode/scripts/utils.js:352:  copyTokenizers,
+extensions/vscode/textmate-syntaxes/JavaScript.tmLanguage.json:2143:          "match": "(?x) (?<!\\.|\\$) \\b (?:\n  (document|event|navigator|performance|screen|window) \n  |\n  (AnalyserNode|ArrayBufferView|Attr|AudioBuffer|AudioBufferSourceNode|AudioContext|AudioDestinationNode|AudioListener\n  |AudioNode|AudioParam|BatteryManager|BeforeUnloadEvent|BiquadFilterNode|Blob|BufferSource|ByteString|CSS|CSSConditionRule\n  |CSSCounterStyleRule|CSSGroupingRule|CSSMatrix|CSSMediaRule|CSSPageRule|CSSPrimitiveValue|CSSRule|CSSRuleList|CSSStyleDeclaration\n  |CSSStyleRule|CSSStyleSheet|CSSSupportsRule|CSSValue|CSSValueList|CanvasGradient|CanvasImageSource|CanvasPattern\n  |CanvasRenderingContext2D|ChannelMergerNode|ChannelSplitterNode|CharacterData|ChromeWorker|CloseEvent|Comment|CompositionEvent\n  |Console|ConvolverNode|Coordinates|Credential|CredentialsContainer|Crypto|CryptoKey|CustomEvent|DOMError|DOMException\n  |DOMHighResTimeStamp|DOMImplementation|DOMString|DOMStringList|DOMStringMap|DOMTimeStamp|DOMTokenList|DataTransfer\n  |DataTransferItem|DataTransferItemList|DedicatedWorkerGlobalScope|DelayNode|DeviceProximityEvent|DirectoryEntry\n  |DirectoryEntrySync|DirectoryReader|DirectoryReaderSync|Document|DocumentFragment|DocumentTouch|DocumentType|DragEvent\n  |DynamicsCompressorNode|Element|Entry|EntrySync|ErrorEvent|Event|EventListener|EventSource|EventTarget|FederatedCredential\n  |FetchEvent|File|FileEntry|FileEntrySync|FileException|FileList|FileReader|FileReaderSync|FileSystem|FileSystemSync\n  |FontFace|FormData|GainNode|Gamepad|GamepadButton|GamepadEvent|Geolocation|GlobalEventHandlers|HTMLAnchorElement\n  |HTMLAreaElement|HTMLAudioElement|HTMLBRElement|HTMLBaseElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement\n  |HTMLCollection|HTMLContentElement|HTMLDListElement|HTMLDataElement|HTMLDataListElement|HTMLDialogElement|HTMLDivElement\n  |HTMLDocument|HTMLElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormControlsCollection|HTMLFormElement\n  |HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement\n  |HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMediaElement\n  |HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement\n  |HTMLOptionsCollection|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement\n  |HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement\n  |HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement\n  |HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTimeElement|HTMLTitleElement|HTMLTrackElement\n  |HTMLUListElement|HTMLUnknownElement|HTMLVideoElement|HashChangeEvent|History|IDBCursor|IDBCursorWithValue|IDBDatabase\n  |IDBEnvironment|IDBFactory|IDBIndex|IDBKeyRange|IDBMutableFile|IDBObjectStore|IDBOpenDBRequest|IDBRequest|IDBTransaction\n  |IDBVersionChangeEvent|IIRFilterNode|IdentityManager|ImageBitmap|ImageBitmapFactories|ImageData|Index|InputDeviceCapabilities\n  |InputEvent|InstallEvent|InstallTrigger|KeyboardEvent|LinkStyle|LocalFileSystem|LocalFileSystemSync|Location|MIDIAccess\n  |MIDIConnectionEvent|MIDIInput|MIDIInputMap|MIDIOutputMap|MediaElementAudioSourceNode|MediaError|MediaKeyMessageEvent\n  |MediaKeySession|MediaKeyStatusMap|MediaKeySystemAccess|MediaKeySystemConfiguration|MediaKeys|MediaRecorder|MediaStream\n  |MediaStreamAudioDestinationNode|MediaStreamAudioSourceNode|MessageChannel|MessageEvent|MessagePort|MouseEvent\n  |MutationObserver|MutationRecord|NamedNodeMap|Navigator|NavigatorConcurrentHardware|NavigatorGeolocation|NavigatorID\n  |NavigatorLanguage|NavigatorOnLine|Node|NodeFilter|NodeIterator|NodeList|NonDocumentTypeChildNode|Notification\n  |OfflineAudioCompletionEvent|OfflineAudioContext|OscillatorNode|PageTransitionEvent|PannerNode|ParentNode|PasswordCredential\n  |Path2D|PaymentAddress|PaymentRequest|PaymentResponse|Performance|PerformanceEntry|PerformanceFrameTiming|PerformanceMark\n  |PerformanceMeasure|PerformanceNavigation|PerformanceNavigationTiming|PerformanceObserver|PerformanceObserverEntryList\n  |PerformanceResourceTiming|PerformanceTiming|PeriodicSyncEvent|PeriodicWave|Plugin|Point|PointerEvent|PopStateEvent\n  |PortCollection|Position|PositionError|PositionOptions|PresentationConnectionClosedEvent|PresentationConnectionList\n  |PresentationReceiver|ProcessingInstruction|ProgressEvent|PromiseRejectionEvent|PushEvent|PushRegistrationManager\n  |RTCCertificate|RTCConfiguration|RTCPeerConnection|RTCSessionDescriptionCallback|RTCStatsReport|RadioNodeList|RandomSource\n  |Range|ReadableByteStream|RenderingContext|SVGAElement|SVGAngle|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement\n  |SVGAnimateTransformElement|SVGAnimatedAngle|SVGAnimatedBoolean|SVGAnimatedEnumeration|SVGAnimatedInteger|SVGAnimatedLength\n  |SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGAnimatedPoints|SVGAnimatedPreserveAspectRatio\n  |SVGAnimatedRect|SVGAnimatedString|SVGAnimatedTransformList|SVGAnimationElement|SVGCircleElement|SVGClipPathElement\n  |SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGEvent|SVGFilterElement|SVGFontElement\n  |SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement\n  |SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGradientElement|SVGHKernElement|SVGImageElement|SVGLength\n  |SVGLengthList|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMaskElement|SVGMatrix|SVGMissingGlyphElement\n  |SVGNumber|SVGNumberList|SVGPathElement|SVGPatternElement|SVGPoint|SVGPolygonElement|SVGPolylineElement|SVGPreserveAspectRatio\n  |SVGRadialGradientElement|SVGRect|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStringList\n  |SVGStylable|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTRefElement|SVGTSpanElement|SVGTests|SVGTextElement\n  |SVGTextPositioningElement|SVGTitleElement|SVGTransform|SVGTransformList|SVGTransformable|SVGUseElement|SVGVKernElement\n  |SVGViewElement|ServiceWorker|ServiceWorkerContainer|ServiceWorkerGlobalScope|ServiceWorkerRegistration|ServiceWorkerState\n  |ShadowRoot|SharedWorker|SharedWorkerGlobalScope|SourceBufferList|StereoPannerNode|Storage|StorageEvent|StyleSheet\n  |StyleSheetList|SubtleCrypto|SyncEvent|Text|TextMetrics|TimeEvent|TimeRanges|Touch|TouchEvent|TouchList|Transferable\n  |TreeWalker|UIEvent|USVString|VRDisplayCapabilities|ValidityState|WaveShaperNode|WebGL|WebGLActiveInfo|WebGLBuffer\n  |WebGLContextEvent|WebGLFramebuffer|WebGLProgram|WebGLRenderbuffer|WebGLRenderingContext|WebGLShader|WebGLShaderPrecisionFormat\n  |WebGLTexture|WebGLTimerQueryEXT|WebGLTransformFeedback|WebGLUniformLocation|WebGLVertexArrayObject|WebGLVertexArrayObjectOES\n  |WebSocket|WebSockets|WebVTT|WheelEvent|Window|WindowBase64|WindowEventHandlers|WindowTimers|Worker|WorkerGlobalScope\n  |WorkerLocation|WorkerNavigator|XMLHttpRequest|XMLHttpRequestEventTarget|XMLSerializer|XPathExpression|XPathResult\n  |XSLTProcessor))\\b(?!\\$)",
+extensions/vscode/textmate-syntaxes/JavaScript.tmLanguage.json:2154:          "match": "(?x) (\\.) \\s* (?:\n  (ATTRIBUTE_NODE|CDATA_SECTION_NODE|COMMENT_NODE|DOCUMENT_FRAGMENT_NODE|DOCUMENT_NODE|DOCUMENT_TYPE_NODE\n  |DOMSTRING_SIZE_ERR|ELEMENT_NODE|ENTITY_NODE|ENTITY_REFERENCE_NODE|HIERARCHY_REQUEST_ERR|INDEX_SIZE_ERR\n  |INUSE_ATTRIBUTE_ERR|INVALID_CHARACTER_ERR|NO_DATA_ALLOWED_ERR|NO_MODIFICATION_ALLOWED_ERR|NOT_FOUND_ERR\n  |NOT_SUPPORTED_ERR|NOTATION_NODE|PROCESSING_INSTRUCTION_NODE|TEXT_NODE|WRONG_DOCUMENT_ERR)\n  |\n  (_content|[xyz]|abbr|above|accept|acceptCharset|accessKey|action|align|[av]Link(?:color)?|all|alt|anchors|appCodeName\n  |appCore|applets|appMinorVersion|appName|appVersion|archive|areas|arguments|attributes|availHeight|availLeft|availTop\n  |availWidth|axis|background|backgroundColor|backgroundImage|below|bgColor|body|border|borderBottomWidth|borderColor\n  |borderLeftWidth|borderRightWidth|borderStyle|borderTopWidth|borderWidth|bottom|bufferDepth|callee|caller|caption\n  |cellPadding|cells|cellSpacing|ch|characterSet|charset|checked|childNodes|chOff|cite|classes|className|clear\n  |clientInformation|clip|clipBoardData|closed|code|codeBase|codeType|color|colorDepth|cols|colSpan|compact|complete\n  |components|content|controllers|cookie|cookieEnabled|cords|cpuClass|crypto|current|data|dateTime|declare|defaultCharset\n  |defaultChecked|defaultSelected|defaultStatus|defaultValue|defaultView|defer|description|dialogArguments|dialogHeight\n  |dialogLeft|dialogTop|dialogWidth|dir|directories|disabled|display|docmain|doctype|documentElement|elements|embeds\n  |enabledPlugin|encoding|enctype|entities|event|expando|external|face|fgColor|filename|firstChild|fontFamily|fontSize\n  |fontWeight|form|formName|forms|frame|frameBorder|frameElement|frames|hasFocus|hash|headers|height|history|host\n  |hostname|href|hreflang|hspace|htmlFor|httpEquiv|id|ids|ignoreCase|images|implementation|index|innerHeight|innerWidth\n  |input|isMap|label|lang|language|lastChild|lastIndex|lastMatch|lastModified|lastParen|layer[sXY]|left|leftContext\n  |lineHeight|link|linkColor|links|listStyleType|localName|location|locationbar|longDesc|lowsrc|lowSrc|marginBottom\n  |marginHeight|marginLeft|marginRight|marginTop|marginWidth|maxLength|media|menubar|method|mimeTypes|multiline|multiple\n  |name|nameProp|namespaces|namespaceURI|next|nextSibling|nodeName|nodeType|nodeValue|noHref|noResize|noShade|notationName\n  |notations|noWrap|object|offscreenBuffering|onLine|onreadystatechange|opener|opsProfile|options|oscpu|outerHeight\n  |outerWidth|ownerDocument|paddingBottom|paddingLeft|paddingRight|paddingTop|page[XY]|page[XY]Offset|parent|parentLayer\n  |parentNode|parentWindow|pathname|personalbar|pixelDepth|pkcs11|platform|plugins|port|prefix|previous|previousDibling\n  |product|productSub|profile|profileend|prompt|prompter|protocol|publicId|readOnly|readyState|referrer|rel|responseText\n  |responseXML|rev|right|rightContext|rowIndex|rows|rowSpan|rules|scheme|scope|screen[XY]|screenLeft|screenTop|scripts\n  |scrollbars|scrolling|sectionRowIndex|security|securityPolicy|selected|selectedIndex|selection|self|shape|siblingAbove\n  |siblingBelow|size|source|specified|standby|start|status|statusbar|statusText|style|styleSheets|suffixes|summary\n  |systemId|systemLanguage|tagName|tags|target|tBodies|text|textAlign|textDecoration|textIndent|textTransform|tFoot|tHead\n  |title|toolbar|top|type|undefined|uniqueID|updateInterval|URL|URLUnencoded|useMap|userAgent|userLanguage|userProfile\n  |vAlign|value|valueType|vendor|vendorSub|version|visibility|vspace|whiteSpace|width|X[MS]LDocument|zIndex))\\b(?!\\$|\\s*(<([^<>]|\\<[^<>]+\\>)+>\\s*)?\\()",
+extensions/vscode/textmate-syntaxes/JavaScript.tmLanguage.json:2214:          "match": "(?x) (\\.) \\s* \n(?:\n (on(?:Rowsinserted|Rowsdelete|Rowenter|Rowexit|Resize|Resizestart|Resizeend|Reset|\n   Readystatechange|Mouseout|Mouseover|Mousedown|Mouseup|Mousemove|\n   Before(?:cut|deactivate|unload|update|paste|print|editfocus|activate)|\n   Blur|Scrolltop|Submit|Select|Selectstart|Selectionchange|Hover|Help|\n   Change|Contextmenu|Controlselect|Cut|Cellchange|Clock|Close|Deactivate|\n   Datasetchanged|Datasetcomplete|Dataavailable|Drop|Drag|Dragstart|Dragover|\n   Dragdrop|Dragenter|Dragend|Dragleave|Dblclick|Unload|Paste|Propertychange|Error|\n   Errorupdate|Keydown|Keyup|Keypress|Focus|Load|Activate|Afterupdate|Afterprint|Abort)\n ) |\n (shift|showModelessDialog|showModalDialog|showHelp|scroll|scrollX|scrollByPages|\n   scrollByLines|scrollY|scrollTo|stop|strike|sizeToContent|sidebar|signText|sort|\n   sup|sub|substr|substring|splice|split|send|set(?:Milliseconds|Seconds|Minutes|Hours|\n   Month|Year|FullYear|Date|UTC(?:Milliseconds|Seconds|Minutes|Hours|Month|FullYear|Date)|\n   Time|Hotkeys|Cursor|ZOptions|Active|Resizable|RequestHeader)|search|slice|\n   savePreferences|small|home|handleEvent|navigate|char|charCodeAt|charAt|concat|\n   contextual|confirm|compile|clear|captureEvents|call|createStyleSheet|createPopup|\n   createEventObject|to(?:GMTString|UTCString|String|Source|UpperCase|LowerCase|LocaleString)|\n   test|taint|taintEnabled|indexOf|italics|disableExternalCapture|dump|detachEvent|unshift|\n   untaint|unwatch|updateCommands|join|javaEnabled|pop|push|plugins.refresh|paddings|parse|\n   print|prompt|preference|enableExternalCapture|exec|execScript|valueOf|UTC|find|file|\n   fileModifiedDate|fileSize|fileCreatedDate|fileUpdatedDate|fixed|fontsize|fontcolor|\n   forward|fromCharCode|watch|link|load|lastIndexOf|anchor|attachEvent|atob|apply|alert|\n   abort|routeEvents|resize|resizeBy|resizeTo|recalc|returnValue|replace|reverse|reload|\n   releaseCapture|releaseEvents|go|get(?:Milliseconds|Seconds|Minutes|Hours|Month|Day|Year|FullYear|\n   Time|Date|TimezoneOffset|UTC(?:Milliseconds|Seconds|Minutes|Hours|Day|Month|FullYear|Date)|\n   Attention|Selection|ResponseHeader|AllResponseHeaders)|moveBy|moveBelow|moveTo|\n   moveToAbsolute|moveAbove|mergeAttributes|match|margins|btoa|big|bold|borderWidths|blink|back\n ) |\n (acceptNode|add|addEventListener|addTextTrack|adoptNode|after|animate|append|\n   appendChild|appendData|before|blur|canPlayType|captureStream|\n   caretPositionFromPoint|caretRangeFromPoint|checkValidity|clear|click|\n   cloneContents|cloneNode|cloneRange|close|closest|collapse|\n   compareBoundaryPoints|compareDocumentPosition|comparePoint|contains|\n   convertPointFromNode|convertQuadFromNode|convertRectFromNode|createAttribute|\n   createAttributeNS|createCaption|createCDATASection|createComment|\n   createContextualFragment|createDocument|createDocumentFragment|\n   createDocumentType|createElement|createElementNS|createEntityReference|\n   createEvent|createExpression|createHTMLDocument|createNodeIterator|\n   createNSResolver|createProcessingInstruction|createRange|createShadowRoot|\n   createTBody|createTextNode|createTFoot|createTHead|createTreeWalker|delete|\n   deleteCaption|deleteCell|deleteContents|deleteData|deleteRow|deleteTFoot|\n   deleteTHead|detach|disconnect|dispatchEvent|elementFromPoint|elementsFromPoint|\n   enableStyleSheetsForSet|entries|evaluate|execCommand|exitFullscreen|\n   exitPointerLock|expand|extractContents|fastSeek|firstChild|focus|forEach|get|\n   getAll|getAnimations|getAttribute|getAttributeNames|getAttributeNode|\n   getAttributeNodeNS|getAttributeNS|getBoundingClientRect|getBoxQuads|\n   getClientRects|getContext|getDestinationInsertionPoints|getElementById|\n   getElementsByClassName|getElementsByName|getElementsByTagName|\n   getElementsByTagNameNS|getItem|getNamedItem|getSelection|getStartDate|\n   getVideoPlaybackQuality|has|hasAttribute|hasAttributeNS|hasAttributes|\n   hasChildNodes|hasFeature|hasFocus|importNode|initEvent|insertAdjacentElement|\n   insertAdjacentHTML|insertAdjacentText|insertBefore|insertCell|insertData|\n   insertNode|insertRow|intersectsNode|isDefaultNamespace|isEqualNode|\n   isPointInRange|isSameNode|item|key|keys|lastChild|load|lookupNamespaceURI|\n   lookupPrefix|matches|move|moveAttribute|moveAttributeNode|moveChild|\n   moveNamedItem|namedItem|nextNode|nextSibling|normalize|observe|open|\n   parentNode|pause|play|postMessage|prepend|preventDefault|previousNode|\n   previousSibling|probablySupportsContext|queryCommandEnabled|\n   queryCommandIndeterm|queryCommandState|queryCommandSupported|queryCommandValue|\n   querySelector|querySelectorAll|registerContentHandler|registerElement|\n   registerProtocolHandler|releaseCapture|releaseEvents|remove|removeAttribute|\n   removeAttributeNode|removeAttributeNS|removeChild|removeEventListener|\n   removeItem|replace|replaceChild|replaceData|replaceWith|reportValidity|\n   requestFullscreen|requestPointerLock|reset|scroll|scrollBy|scrollIntoView|\n   scrollTo|seekToNextFrame|select|selectNode|selectNodeContents|set|setAttribute|\n   setAttributeNode|setAttributeNodeNS|setAttributeNS|setCapture|\n   setCustomValidity|setEnd|setEndAfter|setEndBefore|setItem|setNamedItem|\n   setRangeText|setSelectionRange|setSinkId|setStart|setStartAfter|setStartBefore|\n   slice|splitText|stepDown|stepUp|stopImmediatePropagation|stopPropagation|\n   submit|substringData|supports|surroundContents|takeRecords|terminate|toBlob|\n   toDataURL|toggle|toString|values|write|writeln\n )\n)(?=\\s*\\()",
+extensions/vscode/textmate-syntaxes/TypeScript.tmLanguage.json:2140:          "match": "(?x) (?<!\\.|\\$) \\b (?:\n  (document|event|navigator|performance|screen|window) \n  |\n  (AnalyserNode|ArrayBufferView|Attr|AudioBuffer|AudioBufferSourceNode|AudioContext|AudioDestinationNode|AudioListener\n  |AudioNode|AudioParam|BatteryManager|BeforeUnloadEvent|BiquadFilterNode|Blob|BufferSource|ByteString|CSS|CSSConditionRule\n  |CSSCounterStyleRule|CSSGroupingRule|CSSMatrix|CSSMediaRule|CSSPageRule|CSSPrimitiveValue|CSSRule|CSSRuleList|CSSStyleDeclaration\n  |CSSStyleRule|CSSStyleSheet|CSSSupportsRule|CSSValue|CSSValueList|CanvasGradient|CanvasImageSource|CanvasPattern\n  |CanvasRenderingContext2D|ChannelMergerNode|ChannelSplitterNode|CharacterData|ChromeWorker|CloseEvent|Comment|CompositionEvent\n  |Console|ConvolverNode|Coordinates|Credential|CredentialsContainer|Crypto|CryptoKey|CustomEvent|DOMError|DOMException\n  |DOMHighResTimeStamp|DOMImplementation|DOMString|DOMStringList|DOMStringMap|DOMTimeStamp|DOMTokenList|DataTransfer\n  |DataTransferItem|DataTransferItemList|DedicatedWorkerGlobalScope|DelayNode|DeviceProximityEvent|DirectoryEntry\n  |DirectoryEntrySync|DirectoryReader|DirectoryReaderSync|Document|DocumentFragment|DocumentTouch|DocumentType|DragEvent\n  |DynamicsCompressorNode|Element|Entry|EntrySync|ErrorEvent|Event|EventListener|EventSource|EventTarget|FederatedCredential\n  |FetchEvent|File|FileEntry|FileEntrySync|FileException|FileList|FileReader|FileReaderSync|FileSystem|FileSystemSync\n  |FontFace|FormData|GainNode|Gamepad|GamepadButton|GamepadEvent|Geolocation|GlobalEventHandlers|HTMLAnchorElement\n  |HTMLAreaElement|HTMLAudioElement|HTMLBRElement|HTMLBaseElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement\n  |HTMLCollection|HTMLContentElement|HTMLDListElement|HTMLDataElement|HTMLDataListElement|HTMLDialogElement|HTMLDivElement\n  |HTMLDocument|HTMLElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormControlsCollection|HTMLFormElement\n  |HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement\n  |HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMediaElement\n  |HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement\n  |HTMLOptionsCollection|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement\n  |HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement\n  |HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement\n  |HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTimeElement|HTMLTitleElement|HTMLTrackElement\n  |HTMLUListElement|HTMLUnknownElement|HTMLVideoElement|HashChangeEvent|History|IDBCursor|IDBCursorWithValue|IDBDatabase\n  |IDBEnvironment|IDBFactory|IDBIndex|IDBKeyRange|IDBMutableFile|IDBObjectStore|IDBOpenDBRequest|IDBRequest|IDBTransaction\n  |IDBVersionChangeEvent|IIRFilterNode|IdentityManager|ImageBitmap|ImageBitmapFactories|ImageData|Index|InputDeviceCapabilities\n  |InputEvent|InstallEvent|InstallTrigger|KeyboardEvent|LinkStyle|LocalFileSystem|LocalFileSystemSync|Location|MIDIAccess\n  |MIDIConnectionEvent|MIDIInput|MIDIInputMap|MIDIOutputMap|MediaElementAudioSourceNode|MediaError|MediaKeyMessageEvent\n  |MediaKeySession|MediaKeyStatusMap|MediaKeySystemAccess|MediaKeySystemConfiguration|MediaKeys|MediaRecorder|MediaStream\n  |MediaStreamAudioDestinationNode|MediaStreamAudioSourceNode|MessageChannel|MessageEvent|MessagePort|MouseEvent\n  |MutationObserver|MutationRecord|NamedNodeMap|Navigator|NavigatorConcurrentHardware|NavigatorGeolocation|NavigatorID\n  |NavigatorLanguage|NavigatorOnLine|Node|NodeFilter|NodeIterator|NodeList|NonDocumentTypeChildNode|Notification\n  |OfflineAudioCompletionEvent|OfflineAudioContext|OscillatorNode|PageTransitionEvent|PannerNode|ParentNode|PasswordCredential\n  |Path2D|PaymentAddress|PaymentRequest|PaymentResponse|Performance|PerformanceEntry|PerformanceFrameTiming|PerformanceMark\n  |PerformanceMeasure|PerformanceNavigation|PerformanceNavigationTiming|PerformanceObserver|PerformanceObserverEntryList\n  |PerformanceResourceTiming|PerformanceTiming|PeriodicSyncEvent|PeriodicWave|Plugin|Point|PointerEvent|PopStateEvent\n  |PortCollection|Position|PositionError|PositionOptions|PresentationConnectionClosedEvent|PresentationConnectionList\n  |PresentationReceiver|ProcessingInstruction|ProgressEvent|PromiseRejectionEvent|PushEvent|PushRegistrationManager\n  |RTCCertificate|RTCConfiguration|RTCPeerConnection|RTCSessionDescriptionCallback|RTCStatsReport|RadioNodeList|RandomSource\n  |Range|ReadableByteStream|RenderingContext|SVGAElement|SVGAngle|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement\n  |SVGAnimateTransformElement|SVGAnimatedAngle|SVGAnimatedBoolean|SVGAnimatedEnumeration|SVGAnimatedInteger|SVGAnimatedLength\n  |SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGAnimatedPoints|SVGAnimatedPreserveAspectRatio\n  |SVGAnimatedRect|SVGAnimatedString|SVGAnimatedTransformList|SVGAnimationElement|SVGCircleElement|SVGClipPathElement\n  |SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGEvent|SVGFilterElement|SVGFontElement\n  |SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement\n  |SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGradientElement|SVGHKernElement|SVGImageElement|SVGLength\n  |SVGLengthList|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMaskElement|SVGMatrix|SVGMissingGlyphElement\n  |SVGNumber|SVGNumberList|SVGPathElement|SVGPatternElement|SVGPoint|SVGPolygonElement|SVGPolylineElement|SVGPreserveAspectRatio\n  |SVGRadialGradientElement|SVGRect|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStringList\n  |SVGStylable|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTRefElement|SVGTSpanElement|SVGTests|SVGTextElement\n  |SVGTextPositioningElement|SVGTitleElement|SVGTransform|SVGTransformList|SVGTransformable|SVGUseElement|SVGVKernElement\n  |SVGViewElement|ServiceWorker|ServiceWorkerContainer|ServiceWorkerGlobalScope|ServiceWorkerRegistration|ServiceWorkerState\n  |ShadowRoot|SharedWorker|SharedWorkerGlobalScope|SourceBufferList|StereoPannerNode|Storage|StorageEvent|StyleSheet\n  |StyleSheetList|SubtleCrypto|SyncEvent|Text|TextMetrics|TimeEvent|TimeRanges|Touch|TouchEvent|TouchList|Transferable\n  |TreeWalker|UIEvent|USVString|VRDisplayCapabilities|ValidityState|WaveShaperNode|WebGL|WebGLActiveInfo|WebGLBuffer\n  |WebGLContextEvent|WebGLFramebuffer|WebGLProgram|WebGLRenderbuffer|WebGLRenderingContext|WebGLShader|WebGLShaderPrecisionFormat\n  |WebGLTexture|WebGLTimerQueryEXT|WebGLTransformFeedback|WebGLUniformLocation|WebGLVertexArrayObject|WebGLVertexArrayObjectOES\n  |WebSocket|WebSockets|WebVTT|WheelEvent|Window|WindowBase64|WindowEventHandlers|WindowTimers|Worker|WorkerGlobalScope\n  |WorkerLocation|WorkerNavigator|XMLHttpRequest|XMLHttpRequestEventTarget|XMLSerializer|XPathExpression|XPathResult\n  |XSLTProcessor))\\b(?!\\$)",
+extensions/vscode/textmate-syntaxes/TypeScript.tmLanguage.json:2151:          "match": "(?x) (\\.) \\s* (?:\n  (ATTRIBUTE_NODE|CDATA_SECTION_NODE|COMMENT_NODE|DOCUMENT_FRAGMENT_NODE|DOCUMENT_NODE|DOCUMENT_TYPE_NODE\n  |DOMSTRING_SIZE_ERR|ELEMENT_NODE|ENTITY_NODE|ENTITY_REFERENCE_NODE|HIERARCHY_REQUEST_ERR|INDEX_SIZE_ERR\n  |INUSE_ATTRIBUTE_ERR|INVALID_CHARACTER_ERR|NO_DATA_ALLOWED_ERR|NO_MODIFICATION_ALLOWED_ERR|NOT_FOUND_ERR\n  |NOT_SUPPORTED_ERR|NOTATION_NODE|PROCESSING_INSTRUCTION_NODE|TEXT_NODE|WRONG_DOCUMENT_ERR)\n  |\n  (_content|[xyz]|abbr|above|accept|acceptCharset|accessKey|action|align|[av]Link(?:color)?|all|alt|anchors|appCodeName\n  |appCore|applets|appMinorVersion|appName|appVersion|archive|areas|arguments|attributes|availHeight|availLeft|availTop\n  |availWidth|axis|background|backgroundColor|backgroundImage|below|bgColor|body|border|borderBottomWidth|borderColor\n  |borderLeftWidth|borderRightWidth|borderStyle|borderTopWidth|borderWidth|bottom|bufferDepth|callee|caller|caption\n  |cellPadding|cells|cellSpacing|ch|characterSet|charset|checked|childNodes|chOff|cite|classes|className|clear\n  |clientInformation|clip|clipBoardData|closed|code|codeBase|codeType|color|colorDepth|cols|colSpan|compact|complete\n  |components|content|controllers|cookie|cookieEnabled|cords|cpuClass|crypto|current|data|dateTime|declare|defaultCharset\n  |defaultChecked|defaultSelected|defaultStatus|defaultValue|defaultView|defer|description|dialogArguments|dialogHeight\n  |dialogLeft|dialogTop|dialogWidth|dir|directories|disabled|display|docmain|doctype|documentElement|elements|embeds\n  |enabledPlugin|encoding|enctype|entities|event|expando|external|face|fgColor|filename|firstChild|fontFamily|fontSize\n  |fontWeight|form|formName|forms|frame|frameBorder|frameElement|frames|hasFocus|hash|headers|height|history|host\n  |hostname|href|hreflang|hspace|htmlFor|httpEquiv|id|ids|ignoreCase|images|implementation|index|innerHeight|innerWidth\n  |input|isMap|label|lang|language|lastChild|lastIndex|lastMatch|lastModified|lastParen|layer[sXY]|left|leftContext\n  |lineHeight|link|linkColor|links|listStyleType|localName|location|locationbar|longDesc|lowsrc|lowSrc|marginBottom\n  |marginHeight|marginLeft|marginRight|marginTop|marginWidth|maxLength|media|menubar|method|mimeTypes|multiline|multiple\n  |name|nameProp|namespaces|namespaceURI|next|nextSibling|nodeName|nodeType|nodeValue|noHref|noResize|noShade|notationName\n  |notations|noWrap|object|offscreenBuffering|onLine|onreadystatechange|opener|opsProfile|options|oscpu|outerHeight\n  |outerWidth|ownerDocument|paddingBottom|paddingLeft|paddingRight|paddingTop|page[XY]|page[XY]Offset|parent|parentLayer\n  |parentNode|parentWindow|pathname|personalbar|pixelDepth|pkcs11|platform|plugins|port|prefix|previous|previousDibling\n  |product|productSub|profile|profileend|prompt|prompter|protocol|publicId|readOnly|readyState|referrer|rel|responseText\n  |responseXML|rev|right|rightContext|rowIndex|rows|rowSpan|rules|scheme|scope|screen[XY]|screenLeft|screenTop|scripts\n  |scrollbars|scrolling|sectionRowIndex|security|securityPolicy|selected|selectedIndex|selection|self|shape|siblingAbove\n  |siblingBelow|size|source|specified|standby|start|status|statusbar|statusText|style|styleSheets|suffixes|summary\n  |systemId|systemLanguage|tagName|tags|target|tBodies|text|textAlign|textDecoration|textIndent|textTransform|tFoot|tHead\n  |title|toolbar|top|type|undefined|uniqueID|updateInterval|URL|URLUnencoded|useMap|userAgent|userLanguage|userProfile\n  |vAlign|value|valueType|vendor|vendorSub|version|visibility|vspace|whiteSpace|width|X[MS]LDocument|zIndex))\\b(?!\\$|\\s*(<([^<>]|\\<[^<>]+\\>)+>\\s*)?\\()",
+extensions/vscode/textmate-syntaxes/TypeScript.tmLanguage.json:2211:          "match": "(?x) (\\.) \\s* \n(?:\n (on(?:Rowsinserted|Rowsdelete|Rowenter|Rowexit|Resize|Resizestart|Resizeend|Reset|\n   Readystatechange|Mouseout|Mouseover|Mousedown|Mouseup|Mousemove|\n   Before(?:cut|deactivate|unload|update|paste|print|editfocus|activate)|\n   Blur|Scrolltop|Submit|Select|Selectstart|Selectionchange|Hover|Help|\n   Change|Contextmenu|Controlselect|Cut|Cellchange|Clock|Close|Deactivate|\n   Datasetchanged|Datasetcomplete|Dataavailable|Drop|Drag|Dragstart|Dragover|\n   Dragdrop|Dragenter|Dragend|Dragleave|Dblclick|Unload|Paste|Propertychange|Error|\n   Errorupdate|Keydown|Keyup|Keypress|Focus|Load|Activate|Afterupdate|Afterprint|Abort)\n ) |\n (shift|showModelessDialog|showModalDialog|showHelp|scroll|scrollX|scrollByPages|\n   scrollByLines|scrollY|scrollTo|stop|strike|sizeToContent|sidebar|signText|sort|\n   sup|sub|substr|substring|splice|split|send|set(?:Milliseconds|Seconds|Minutes|Hours|\n   Month|Year|FullYear|Date|UTC(?:Milliseconds|Seconds|Minutes|Hours|Month|FullYear|Date)|\n   Time|Hotkeys|Cursor|ZOptions|Active|Resizable|RequestHeader)|search|slice|\n   savePreferences|small|home|handleEvent|navigate|char|charCodeAt|charAt|concat|\n   contextual|confirm|compile|clear|captureEvents|call|createStyleSheet|createPopup|\n   createEventObject|to(?:GMTString|UTCString|String|Source|UpperCase|LowerCase|LocaleString)|\n   test|taint|taintEnabled|indexOf|italics|disableExternalCapture|dump|detachEvent|unshift|\n   untaint|unwatch|updateCommands|join|javaEnabled|pop|push|plugins.refresh|paddings|parse|\n   print|prompt|preference|enableExternalCapture|exec|execScript|valueOf|UTC|find|file|\n   fileModifiedDate|fileSize|fileCreatedDate|fileUpdatedDate|fixed|fontsize|fontcolor|\n   forward|fromCharCode|watch|link|load|lastIndexOf|anchor|attachEvent|atob|apply|alert|\n   abort|routeEvents|resize|resizeBy|resizeTo|recalc|returnValue|replace|reverse|reload|\n   releaseCapture|releaseEvents|go|get(?:Milliseconds|Seconds|Minutes|Hours|Month|Day|Year|FullYear|\n   Time|Date|TimezoneOffset|UTC(?:Milliseconds|Seconds|Minutes|Hours|Day|Month|FullYear|Date)|\n   Attention|Selection|ResponseHeader|AllResponseHeaders)|moveBy|moveBelow|moveTo|\n   moveToAbsolute|moveAbove|mergeAttributes|match|margins|btoa|big|bold|borderWidths|blink|back\n ) |\n (acceptNode|add|addEventListener|addTextTrack|adoptNode|after|animate|append|\n   appendChild|appendData|before|blur|canPlayType|captureStream|\n   caretPositionFromPoint|caretRangeFromPoint|checkValidity|clear|click|\n   cloneContents|cloneNode|cloneRange|close|closest|collapse|\n   compareBoundaryPoints|compareDocumentPosition|comparePoint|contains|\n   convertPointFromNode|convertQuadFromNode|convertRectFromNode|createAttribute|\n   createAttributeNS|createCaption|createCDATASection|createComment|\n   createContextualFragment|createDocument|createDocumentFragment|\n   createDocumentType|createElement|createElementNS|createEntityReference|\n   createEvent|createExpression|createHTMLDocument|createNodeIterator|\n   createNSResolver|createProcessingInstruction|createRange|createShadowRoot|\n   createTBody|createTextNode|createTFoot|createTHead|createTreeWalker|delete|\n   deleteCaption|deleteCell|deleteContents|deleteData|deleteRow|deleteTFoot|\n   deleteTHead|detach|disconnect|dispatchEvent|elementFromPoint|elementsFromPoint|\n   enableStyleSheetsForSet|entries|evaluate|execCommand|exitFullscreen|\n   exitPointerLock|expand|extractContents|fastSeek|firstChild|focus|forEach|get|\n   getAll|getAnimations|getAttribute|getAttributeNames|getAttributeNode|\n   getAttributeNodeNS|getAttributeNS|getBoundingClientRect|getBoxQuads|\n   getClientRects|getContext|getDestinationInsertionPoints|getElementById|\n   getElementsByClassName|getElementsByName|getElementsByTagName|\n   getElementsByTagNameNS|getItem|getNamedItem|getSelection|getStartDate|\n   getVideoPlaybackQuality|has|hasAttribute|hasAttributeNS|hasAttributes|\n   hasChildNodes|hasFeature|hasFocus|importNode|initEvent|insertAdjacentElement|\n   insertAdjacentHTML|insertAdjacentText|insertBefore|insertCell|insertData|\n   insertNode|insertRow|intersectsNode|isDefaultNamespace|isEqualNode|\n   isPointInRange|isSameNode|item|key|keys|lastChild|load|lookupNamespaceURI|\n   lookupPrefix|matches|move|moveAttribute|moveAttributeNode|moveChild|\n   moveNamedItem|namedItem|nextNode|nextSibling|normalize|observe|open|\n   parentNode|pause|play|postMessage|prepend|preventDefault|previousNode|\n   previousSibling|probablySupportsContext|queryCommandEnabled|\n   queryCommandIndeterm|queryCommandState|queryCommandSupported|queryCommandValue|\n   querySelector|querySelectorAll|registerContentHandler|registerElement|\n   registerProtocolHandler|releaseCapture|releaseEvents|remove|removeAttribute|\n   removeAttributeNode|removeAttributeNS|removeChild|removeEventListener|\n   removeItem|replace|replaceChild|replaceData|replaceWith|reportValidity|\n   requestFullscreen|requestPointerLock|reset|scroll|scrollBy|scrollIntoView|\n   scrollTo|seekToNextFrame|select|selectNode|selectNodeContents|set|setAttribute|\n   setAttributeNode|setAttributeNodeNS|setAttributeNS|setCapture|\n   setCustomValidity|setEnd|setEndAfter|setEndBefore|setItem|setNamedItem|\n   setRangeText|setSelectionRange|setSinkId|setStart|setStartAfter|setStartBefore|\n   slice|splitText|stepDown|stepUp|stopImmediatePropagation|stopPropagation|\n   submit|substringData|supports|surroundContents|takeRecords|terminate|toBlob|\n   toDataURL|toggle|toString|values|write|writeln\n )\n)(?=\\s*\\()",
+extensions/vscode/textmate-syntaxes/TypeScriptReact.tmLanguage.json:2143:          "match": "(?x) (?<!\\.|\\$) \\b (?:\n  (document|event|navigator|performance|screen|window) \n  |\n  (AnalyserNode|ArrayBufferView|Attr|AudioBuffer|AudioBufferSourceNode|AudioContext|AudioDestinationNode|AudioListener\n  |AudioNode|AudioParam|BatteryManager|BeforeUnloadEvent|BiquadFilterNode|Blob|BufferSource|ByteString|CSS|CSSConditionRule\n  |CSSCounterStyleRule|CSSGroupingRule|CSSMatrix|CSSMediaRule|CSSPageRule|CSSPrimitiveValue|CSSRule|CSSRuleList|CSSStyleDeclaration\n  |CSSStyleRule|CSSStyleSheet|CSSSupportsRule|CSSValue|CSSValueList|CanvasGradient|CanvasImageSource|CanvasPattern\n  |CanvasRenderingContext2D|ChannelMergerNode|ChannelSplitterNode|CharacterData|ChromeWorker|CloseEvent|Comment|CompositionEvent\n  |Console|ConvolverNode|Coordinates|Credential|CredentialsContainer|Crypto|CryptoKey|CustomEvent|DOMError|DOMException\n  |DOMHighResTimeStamp|DOMImplementation|DOMString|DOMStringList|DOMStringMap|DOMTimeStamp|DOMTokenList|DataTransfer\n  |DataTransferItem|DataTransferItemList|DedicatedWorkerGlobalScope|DelayNode|DeviceProximityEvent|DirectoryEntry\n  |DirectoryEntrySync|DirectoryReader|DirectoryReaderSync|Document|DocumentFragment|DocumentTouch|DocumentType|DragEvent\n  |DynamicsCompressorNode|Element|Entry|EntrySync|ErrorEvent|Event|EventListener|EventSource|EventTarget|FederatedCredential\n  |FetchEvent|File|FileEntry|FileEntrySync|FileException|FileList|FileReader|FileReaderSync|FileSystem|FileSystemSync\n  |FontFace|FormData|GainNode|Gamepad|GamepadButton|GamepadEvent|Geolocation|GlobalEventHandlers|HTMLAnchorElement\n  |HTMLAreaElement|HTMLAudioElement|HTMLBRElement|HTMLBaseElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement\n  |HTMLCollection|HTMLContentElement|HTMLDListElement|HTMLDataElement|HTMLDataListElement|HTMLDialogElement|HTMLDivElement\n  |HTMLDocument|HTMLElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormControlsCollection|HTMLFormElement\n  |HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement\n  |HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMediaElement\n  |HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement\n  |HTMLOptionsCollection|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement\n  |HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement\n  |HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement\n  |HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTimeElement|HTMLTitleElement|HTMLTrackElement\n  |HTMLUListElement|HTMLUnknownElement|HTMLVideoElement|HashChangeEvent|History|IDBCursor|IDBCursorWithValue|IDBDatabase\n  |IDBEnvironment|IDBFactory|IDBIndex|IDBKeyRange|IDBMutableFile|IDBObjectStore|IDBOpenDBRequest|IDBRequest|IDBTransaction\n  |IDBVersionChangeEvent|IIRFilterNode|IdentityManager|ImageBitmap|ImageBitmapFactories|ImageData|Index|InputDeviceCapabilities\n  |InputEvent|InstallEvent|InstallTrigger|KeyboardEvent|LinkStyle|LocalFileSystem|LocalFileSystemSync|Location|MIDIAccess\n  |MIDIConnectionEvent|MIDIInput|MIDIInputMap|MIDIOutputMap|MediaElementAudioSourceNode|MediaError|MediaKeyMessageEvent\n  |MediaKeySession|MediaKeyStatusMap|MediaKeySystemAccess|MediaKeySystemConfiguration|MediaKeys|MediaRecorder|MediaStream\n  |MediaStreamAudioDestinationNode|MediaStreamAudioSourceNode|MessageChannel|MessageEvent|MessagePort|MouseEvent\n  |MutationObserver|MutationRecord|NamedNodeMap|Navigator|NavigatorConcurrentHardware|NavigatorGeolocation|NavigatorID\n  |NavigatorLanguage|NavigatorOnLine|Node|NodeFilter|NodeIterator|NodeList|NonDocumentTypeChildNode|Notification\n  |OfflineAudioCompletionEvent|OfflineAudioContext|OscillatorNode|PageTransitionEvent|PannerNode|ParentNode|PasswordCredential\n  |Path2D|PaymentAddress|PaymentRequest|PaymentResponse|Performance|PerformanceEntry|PerformanceFrameTiming|PerformanceMark\n  |PerformanceMeasure|PerformanceNavigation|PerformanceNavigationTiming|PerformanceObserver|PerformanceObserverEntryList\n  |PerformanceResourceTiming|PerformanceTiming|PeriodicSyncEvent|PeriodicWave|Plugin|Point|PointerEvent|PopStateEvent\n  |PortCollection|Position|PositionError|PositionOptions|PresentationConnectionClosedEvent|PresentationConnectionList\n  |PresentationReceiver|ProcessingInstruction|ProgressEvent|PromiseRejectionEvent|PushEvent|PushRegistrationManager\n  |RTCCertificate|RTCConfiguration|RTCPeerConnection|RTCSessionDescriptionCallback|RTCStatsReport|RadioNodeList|RandomSource\n  |Range|ReadableByteStream|RenderingContext|SVGAElement|SVGAngle|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement\n  |SVGAnimateTransformElement|SVGAnimatedAngle|SVGAnimatedBoolean|SVGAnimatedEnumeration|SVGAnimatedInteger|SVGAnimatedLength\n  |SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGAnimatedPoints|SVGAnimatedPreserveAspectRatio\n  |SVGAnimatedRect|SVGAnimatedString|SVGAnimatedTransformList|SVGAnimationElement|SVGCircleElement|SVGClipPathElement\n  |SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGEvent|SVGFilterElement|SVGFontElement\n  |SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement\n  |SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGradientElement|SVGHKernElement|SVGImageElement|SVGLength\n  |SVGLengthList|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMaskElement|SVGMatrix|SVGMissingGlyphElement\n  |SVGNumber|SVGNumberList|SVGPathElement|SVGPatternElement|SVGPoint|SVGPolygonElement|SVGPolylineElement|SVGPreserveAspectRatio\n  |SVGRadialGradientElement|SVGRect|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStringList\n  |SVGStylable|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTRefElement|SVGTSpanElement|SVGTests|SVGTextElement\n  |SVGTextPositioningElement|SVGTitleElement|SVGTransform|SVGTransformList|SVGTransformable|SVGUseElement|SVGVKernElement\n  |SVGViewElement|ServiceWorker|ServiceWorkerContainer|ServiceWorkerGlobalScope|ServiceWorkerRegistration|ServiceWorkerState\n  |ShadowRoot|SharedWorker|SharedWorkerGlobalScope|SourceBufferList|StereoPannerNode|Storage|StorageEvent|StyleSheet\n  |StyleSheetList|SubtleCrypto|SyncEvent|Text|TextMetrics|TimeEvent|TimeRanges|Touch|TouchEvent|TouchList|Transferable\n  |TreeWalker|UIEvent|USVString|VRDisplayCapabilities|ValidityState|WaveShaperNode|WebGL|WebGLActiveInfo|WebGLBuffer\n  |WebGLContextEvent|WebGLFramebuffer|WebGLProgram|WebGLRenderbuffer|WebGLRenderingContext|WebGLShader|WebGLShaderPrecisionFormat\n  |WebGLTexture|WebGLTimerQueryEXT|WebGLTransformFeedback|WebGLUniformLocation|WebGLVertexArrayObject|WebGLVertexArrayObjectOES\n  |WebSocket|WebSockets|WebVTT|WheelEvent|Window|WindowBase64|WindowEventHandlers|WindowTimers|Worker|WorkerGlobalScope\n  |WorkerLocation|WorkerNavigator|XMLHttpRequest|XMLHttpRequestEventTarget|XMLSerializer|XPathExpression|XPathResult\n  |XSLTProcessor))\\b(?!\\$)",
+extensions/vscode/textmate-syntaxes/TypeScriptReact.tmLanguage.json:2154:          "match": "(?x) (\\.) \\s* (?:\n  (ATTRIBUTE_NODE|CDATA_SECTION_NODE|COMMENT_NODE|DOCUMENT_FRAGMENT_NODE|DOCUMENT_NODE|DOCUMENT_TYPE_NODE\n  |DOMSTRING_SIZE_ERR|ELEMENT_NODE|ENTITY_NODE|ENTITY_REFERENCE_NODE|HIERARCHY_REQUEST_ERR|INDEX_SIZE_ERR\n  |INUSE_ATTRIBUTE_ERR|INVALID_CHARACTER_ERR|NO_DATA_ALLOWED_ERR|NO_MODIFICATION_ALLOWED_ERR|NOT_FOUND_ERR\n  |NOT_SUPPORTED_ERR|NOTATION_NODE|PROCESSING_INSTRUCTION_NODE|TEXT_NODE|WRONG_DOCUMENT_ERR)\n  |\n  (_content|[xyz]|abbr|above|accept|acceptCharset|accessKey|action|align|[av]Link(?:color)?|all|alt|anchors|appCodeName\n  |appCore|applets|appMinorVersion|appName|appVersion|archive|areas|arguments|attributes|availHeight|availLeft|availTop\n  |availWidth|axis|background|backgroundColor|backgroundImage|below|bgColor|body|border|borderBottomWidth|borderColor\n  |borderLeftWidth|borderRightWidth|borderStyle|borderTopWidth|borderWidth|bottom|bufferDepth|callee|caller|caption\n  |cellPadding|cells|cellSpacing|ch|characterSet|charset|checked|childNodes|chOff|cite|classes|className|clear\n  |clientInformation|clip|clipBoardData|closed|code|codeBase|codeType|color|colorDepth|cols|colSpan|compact|complete\n  |components|content|controllers|cookie|cookieEnabled|cords|cpuClass|crypto|current|data|dateTime|declare|defaultCharset\n  |defaultChecked|defaultSelected|defaultStatus|defaultValue|defaultView|defer|description|dialogArguments|dialogHeight\n  |dialogLeft|dialogTop|dialogWidth|dir|directories|disabled|display|docmain|doctype|documentElement|elements|embeds\n  |enabledPlugin|encoding|enctype|entities|event|expando|external|face|fgColor|filename|firstChild|fontFamily|fontSize\n  |fontWeight|form|formName|forms|frame|frameBorder|frameElement|frames|hasFocus|hash|headers|height|history|host\n  |hostname|href|hreflang|hspace|htmlFor|httpEquiv|id|ids|ignoreCase|images|implementation|index|innerHeight|innerWidth\n  |input|isMap|label|lang|language|lastChild|lastIndex|lastMatch|lastModified|lastParen|layer[sXY]|left|leftContext\n  |lineHeight|link|linkColor|links|listStyleType|localName|location|locationbar|longDesc|lowsrc|lowSrc|marginBottom\n  |marginHeight|marginLeft|marginRight|marginTop|marginWidth|maxLength|media|menubar|method|mimeTypes|multiline|multiple\n  |name|nameProp|namespaces|namespaceURI|next|nextSibling|nodeName|nodeType|nodeValue|noHref|noResize|noShade|notationName\n  |notations|noWrap|object|offscreenBuffering|onLine|onreadystatechange|opener|opsProfile|options|oscpu|outerHeight\n  |outerWidth|ownerDocument|paddingBottom|paddingLeft|paddingRight|paddingTop|page[XY]|page[XY]Offset|parent|parentLayer\n  |parentNode|parentWindow|pathname|personalbar|pixelDepth|pkcs11|platform|plugins|port|prefix|previous|previousDibling\n  |product|productSub|profile|profileend|prompt|prompter|protocol|publicId|readOnly|readyState|referrer|rel|responseText\n  |responseXML|rev|right|rightContext|rowIndex|rows|rowSpan|rules|scheme|scope|screen[XY]|screenLeft|screenTop|scripts\n  |scrollbars|scrolling|sectionRowIndex|security|securityPolicy|selected|selectedIndex|selection|self|shape|siblingAbove\n  |siblingBelow|size|source|specified|standby|start|status|statusbar|statusText|style|styleSheets|suffixes|summary\n  |systemId|systemLanguage|tagName|tags|target|tBodies|text|textAlign|textDecoration|textIndent|textTransform|tFoot|tHead\n  |title|toolbar|top|type|undefined|uniqueID|updateInterval|URL|URLUnencoded|useMap|userAgent|userLanguage|userProfile\n  |vAlign|value|valueType|vendor|vendorSub|version|visibility|vspace|whiteSpace|width|X[MS]LDocument|zIndex))\\b(?!\\$|\\s*(<([^<>]|\\<[^<>]+\\>)+>\\s*)?\\()",
+extensions/vscode/textmate-syntaxes/TypeScriptReact.tmLanguage.json:2214:          "match": "(?x) (\\.) \\s* \n(?:\n (on(?:Rowsinserted|Rowsdelete|Rowenter|Rowexit|Resize|Resizestart|Resizeend|Reset|\n   Readystatechange|Mouseout|Mouseover|Mousedown|Mouseup|Mousemove|\n   Before(?:cut|deactivate|unload|update|paste|print|editfocus|activate)|\n   Blur|Scrolltop|Submit|Select|Selectstart|Selectionchange|Hover|Help|\n   Change|Contextmenu|Controlselect|Cut|Cellchange|Clock|Close|Deactivate|\n   Datasetchanged|Datasetcomplete|Dataavailable|Drop|Drag|Dragstart|Dragover|\n   Dragdrop|Dragenter|Dragend|Dragleave|Dblclick|Unload|Paste|Propertychange|Error|\n   Errorupdate|Keydown|Keyup|Keypress|Focus|Load|Activate|Afterupdate|Afterprint|Abort)\n ) |\n (shift|showModelessDialog|showModalDialog|showHelp|scroll|scrollX|scrollByPages|\n   scrollByLines|scrollY|scrollTo|stop|strike|sizeToContent|sidebar|signText|sort|\n   sup|sub|substr|substring|splice|split|send|set(?:Milliseconds|Seconds|Minutes|Hours|\n   Month|Year|FullYear|Date|UTC(?:Milliseconds|Seconds|Minutes|Hours|Month|FullYear|Date)|\n   Time|Hotkeys|Cursor|ZOptions|Active|Resizable|RequestHeader)|search|slice|\n   savePreferences|small|home|handleEvent|navigate|char|charCodeAt|charAt|concat|\n   contextual|confirm|compile|clear|captureEvents|call|createStyleSheet|createPopup|\n   createEventObject|to(?:GMTString|UTCString|String|Source|UpperCase|LowerCase|LocaleString)|\n   test|taint|taintEnabled|indexOf|italics|disableExternalCapture|dump|detachEvent|unshift|\n   untaint|unwatch|updateCommands|join|javaEnabled|pop|push|plugins.refresh|paddings|parse|\n   print|prompt|preference|enableExternalCapture|exec|execScript|valueOf|UTC|find|file|\n   fileModifiedDate|fileSize|fileCreatedDate|fileUpdatedDate|fixed|fontsize|fontcolor|\n   forward|fromCharCode|watch|link|load|lastIndexOf|anchor|attachEvent|atob|apply|alert|\n   abort|routeEvents|resize|resizeBy|resizeTo|recalc|returnValue|replace|reverse|reload|\n   releaseCapture|releaseEvents|go|get(?:Milliseconds|Seconds|Minutes|Hours|Month|Day|Year|FullYear|\n   Time|Date|TimezoneOffset|UTC(?:Milliseconds|Seconds|Minutes|Hours|Day|Month|FullYear|Date)|\n   Attention|Selection|ResponseHeader|AllResponseHeaders)|moveBy|moveBelow|moveTo|\n   moveToAbsolute|moveAbove|mergeAttributes|match|margins|btoa|big|bold|borderWidths|blink|back\n ) |\n (acceptNode|add|addEventListener|addTextTrack|adoptNode|after|animate|append|\n   appendChild|appendData|before|blur|canPlayType|captureStream|\n   caretPositionFromPoint|caretRangeFromPoint|checkValidity|clear|click|\n   cloneContents|cloneNode|cloneRange|close|closest|collapse|\n   compareBoundaryPoints|compareDocumentPosition|comparePoint|contains|\n   convertPointFromNode|convertQuadFromNode|convertRectFromNode|createAttribute|\n   createAttributeNS|createCaption|createCDATASection|createComment|\n   createContextualFragment|createDocument|createDocumentFragment|\n   createDocumentType|createElement|createElementNS|createEntityReference|\n   createEvent|createExpression|createHTMLDocument|createNodeIterator|\n   createNSResolver|createProcessingInstruction|createRange|createShadowRoot|\n   createTBody|createTextNode|createTFoot|createTHead|createTreeWalker|delete|\n   deleteCaption|deleteCell|deleteContents|deleteData|deleteRow|deleteTFoot|\n   deleteTHead|detach|disconnect|dispatchEvent|elementFromPoint|elementsFromPoint|\n   enableStyleSheetsForSet|entries|evaluate|execCommand|exitFullscreen|\n   exitPointerLock|expand|extractContents|fastSeek|firstChild|focus|forEach|get|\n   getAll|getAnimations|getAttribute|getAttributeNames|getAttributeNode|\n   getAttributeNodeNS|getAttributeNS|getBoundingClientRect|getBoxQuads|\n   getClientRects|getContext|getDestinationInsertionPoints|getElementById|\n   getElementsByClassName|getElementsByName|getElementsByTagName|\n   getElementsByTagNameNS|getItem|getNamedItem|getSelection|getStartDate|\n   getVideoPlaybackQuality|has|hasAttribute|hasAttributeNS|hasAttributes|\n   hasChildNodes|hasFeature|hasFocus|importNode|initEvent|insertAdjacentElement|\n   insertAdjacentHTML|insertAdjacentText|insertBefore|insertCell|insertData|\n   insertNode|insertRow|intersectsNode|isDefaultNamespace|isEqualNode|\n   isPointInRange|isSameNode|item|key|keys|lastChild|load|lookupNamespaceURI|\n   lookupPrefix|matches|move|moveAttribute|moveAttributeNode|moveChild|\n   moveNamedItem|namedItem|nextNode|nextSibling|normalize|observe|open|\n   parentNode|pause|play|postMessage|prepend|preventDefault|previousNode|\n   previousSibling|probablySupportsContext|queryCommandEnabled|\n   queryCommandIndeterm|queryCommandState|queryCommandSupported|queryCommandValue|\n   querySelector|querySelectorAll|registerContentHandler|registerElement|\n   registerProtocolHandler|releaseCapture|releaseEvents|remove|removeAttribute|\n   removeAttributeNode|removeAttributeNS|removeChild|removeEventListener|\n   removeItem|replace|replaceChild|replaceData|replaceWith|reportValidity|\n   requestFullscreen|requestPointerLock|reset|scroll|scrollBy|scrollIntoView|\n   scrollTo|seekToNextFrame|select|selectNode|selectNodeContents|set|setAttribute|\n   setAttributeNode|setAttributeNodeNS|setAttributeNS|setCapture|\n   setCustomValidity|setEnd|setEndAfter|setEndBefore|setItem|setNamedItem|\n   setRangeText|setSelectionRange|setSinkId|setStart|setStartAfter|setStartBefore|\n   slice|splitText|stepDown|stepUp|stopImmediatePropagation|stopPropagation|\n   submit|substringData|supports|surroundContents|takeRecords|terminate|toBlob|\n   toDataURL|toggle|toString|values|write|writeln\n )\n)(?=\\s*\\()",
+extensions/vscode/textmate-syntaxes/c++.json:398:              "name": "meta.encoding.cpp"
+extensions/vscode/textmate-syntaxes/c++.json:434:              "name": "meta.encoding.cpp"
+extensions/vscode/textmate-syntaxes/less.tmLanguage.json:344:      "match": "(?x)\n(?<![\\w-])\n(vkern|view|use|tspan|tref|textPath|text|symbol|switch|stop|set\n|rect|radialGradient|polyline|polygon|pattern|path\n|mpath|missing-glyph|metadata|mask|marker|linearGradient|line\n|image|hkern|glyphRef|glyph|g\n|foreignObject|font(-face(-uri|-src|-name|-format)?)?|filter\n|fe(Turbulence|Tile|SpotLight|SpecularLighting|PointLight|Offset\n  |Morphology|MergeNode|Merge|Image|GaussianBlur|Func[RGBA]\n  |Flood|DistantLight|DisplacementMap|DiffuseLighting\n  |ConvolveMatrix|Composite|ComponentTransfer|ColorMatrix|Blend)\n|ellipse|desc|defs|cursor|color-profile|clipPath|circle\n|animate(Transform|Motion|Color)?|altGlyph(Item|Def)?)\n(?![\\w-])",
+extensions/vscode/textmate-syntaxes/php.json:316:              "match": "(\\\\)?\\b(GLOB_(MARK|BRACE|NO(SORT|CHECK|ESCAPE)|ONLYDIR|ERR|AVAILABLE_FLAGS)|XML_(SAX_IMPL|HTML_DOCUMENT_NODE|N(OTATION_NODE|AMESPACE_DECL_NODE)|C(OMMENT_NODE|DATA_SECTION_NODE)|TEXT_NODE|OPTION_(SKIP_(TAGSTART|WHITE)|CASE_FOLDING|TARGET_ENCODING)|D(TD_NODE|OCUMENT_(NODE|TYPE_NODE|FRAG_NODE))|PI_NODE|E(RROR_(RECURSIVE_ENTITY_REF|MISPLACED_XML_PI|B(INARY_ENTITY_REF|AD_CHAR_REF)|SYNTAX|NO(NE|_(MEMORY|ELEMENTS))|TAG_MISMATCH|IN(CORRECT_ENCODING|VALID_TOKEN)|DUPLICATE_ATTRIBUTE|UN(CLOSED_(CDATA_SECTION|TOKEN)|DEFINED_ENTITY|KNOWN_ENCODING)|JUNK_AFTER_DOC_ELEMENT|PAR(TIAL_CHAR|AM_ENTITY_REF)|EXTERNAL_ENTITY_HANDLING|A(SYNC_ENTITY|TTRIBUTE_EXTERNAL_ENTITY_REF))|NTITY_(REF_NODE|NODE|DECL_NODE)|LEMENT_(NODE|DECL_NODE))|LOCAL_NAMESPACE|ATTRIBUTE_(N(MTOKEN(S)?|O(TATION|DE))|CDATA|ID(REF(S)?)?|DECL_NODE|EN(TITY|UMERATION)))|M(HASH_(RIPEMD(1(28|60)|256|320)|GOST|MD(2|4|5)|S(HA(1|2(24|56)|384|512)|NEFRU256)|HAVAL(1(28|92|60)|2(24|56))|CRC32(B)?|TIGER(1(28|60))?|WHIRLPOOL|ADLER32)|YSQL(_(BOTH|NUM|CLIENT_(SSL|COMPRESS|I(GNORE_SPACE|NTERACTIVE))|ASSOC)|I_(RE(PORT_(STRICT|INDEX|OFF|ERROR|ALL)|FRESH_(GRANT|MASTER|BACKUP_LOG|S(TATUS|LAVE)|HOSTS|T(HREADS|ABLES)|LOG)|AD_DEFAULT_(GROUP|FILE))|GROUP_FLAG|MULTIPLE_KEY_FLAG|B(INARY_FLAG|OTH|LOB_FLAG)|S(T(MT_ATTR_(CURSOR_TYPE|UPDATE_MAX_LENGTH|PREFETCH_ROWS)|ORE_RESULT)|E(RVER_QUERY_(NO_(GOOD_INDEX_USED|INDEX_USED)|WAS_SLOW)|T_(CHARSET_NAME|FLAG)))|N(O(_D(EFAULT_VALUE_FLAG|ATA)|T_NULL_FLAG)|UM(_FLAG)?)|C(URSOR_TYPE_(READ_ONLY|SCROLLABLE|NO_CURSOR|FOR_UPDATE)|LIENT_(SSL|NO_SCHEMA|COMPRESS|I(GNORE_SPACE|NTERACTIVE)|FOUND_ROWS))|T(YPE_(GEOMETRY|MEDIUM_BLOB|B(IT|LOB)|S(HORT|TRING|ET)|YEAR|N(ULL|EWD(ECIMAL|ATE))|CHAR|TI(ME(STAMP)?|NY(_BLOB)?)|INT(24|ERVAL)|D(OUBLE|ECIMAL|ATE(TIME)?)|ENUM|VAR_STRING|FLOAT|LONG(_BLOB|LONG)?)|IMESTAMP_FLAG)|INIT_COMMAND|ZEROFILL_FLAG|O(N_UPDATE_NOW_FLAG|PT_(NET_(READ_BUFFER_SIZE|CMD_BUFFER_SIZE)|CONNECT_TIMEOUT|INT_AND_FLOAT_NATIVE|LOCAL_INFILE))|D(EBUG_TRACE_ENABLED|ATA_TRUNCATED)|U(SE_RESULT|N(SIGNED_FLAG|IQUE_KEY_FLAG))|P(RI_KEY_FLAG|ART_KEY_FLAG)|ENUM_FLAG|A(S(SOC|YNC)|UTO_INCREMENT_FLAG)))|CRYPT_(R(C(2|6)|IJNDAEL_(1(28|92)|256)|AND)|GOST|XTEA|M(ODE_(STREAM|NOFB|C(BC|FB)|OFB|ECB)|ARS)|BLOWFISH(_COMPAT)?|S(ERPENT|KIPJACK|AFER(128|PLUS|64))|C(RYPT|AST_(128|256))|T(RIPLEDES|HREEWAY|WOFISH)|IDEA|3DES|DE(S|CRYPT|V_(RANDOM|URANDOM))|PANAMA|EN(CRYPT|IGNA)|WAKE|LOKI97|ARCFOUR(_IV)?))|S(TREAM_(REPORT_ERRORS|M(UST_SEEK|KDIR_RECURSIVE)|BUFFER_(NONE|FULL|LINE)|S(HUT_(RD(WR)?|WR)|OCK_(R(DM|AW)|S(TREAM|EQPACKET)|DGRAM)|ERVER_(BIND|LISTEN))|NOTIFY_(RE(SOLVE|DIRECTED)|MIME_TYPE_IS|SEVERITY_(INFO|ERR|WARN)|CO(MPLETED|NNECT)|PROGRESS|F(ILE_SIZE_IS|AILURE)|AUTH_RE(SULT|QUIRED))|C(RYPTO_METHOD_(SSLv(2(_(SERVER|CLIENT)|3_(SERVER|CLIENT))|3_(SERVER|CLIENT))|TLS_(SERVER|CLIENT))|LIENT_(CONNECT|PERSISTENT|ASYNC_CONNECT)|AST_(FOR_SELECT|AS_STREAM))|I(GNORE_URL|S_URL|PPROTO_(RAW|TCP|I(CMP|P)|UDP))|O(OB|PTION_(READ_(BUFFER|TIMEOUT)|BLOCKING|WRITE_BUFFER))|U(RL_STAT_(QUIET|LINK)|SE_PATH)|P(EEK|F_(INET(6)?|UNIX))|ENFORCE_SAFE_MODE|FILTER_(READ|WRITE|ALL))|UNFUNCS_RET_(STRING|TIMESTAMP|DOUBLE)|QLITE(_(R(OW|EADONLY)|MIS(MATCH|USE)|B(OTH|USY)|SCHEMA|N(O(MEM|T(FOUND|ADB)|LFS)|UM)|C(O(RRUPT|NSTRAINT)|ANTOPEN)|TOOBIG|I(NTER(RUPT|NAL)|OERR)|OK|DONE|P(ROTOCOL|ERM)|E(RROR|MPTY)|F(ORMAT|ULL)|LOCKED|A(BORT|SSOC|UTH))|3_(B(OTH|LOB)|NU(M|LL)|TEXT|INTEGER|OPEN_(READ(ONLY|WRITE)|CREATE)|FLOAT|ASSOC)))|CURL(M(SG_DONE|_(BAD_(HANDLE|EASY_HANDLE)|CALL_MULTI_PERFORM|INTERNAL_ERROR|O(UT_OF_MEMORY|K)))|SSH_AUTH_(HOST|NONE|DEFAULT|P(UBLICKEY|ASSWORD)|KEYBOARD)|CLOSEPOLICY_(SLOWEST|CALLBACK|OLDEST|LEAST_(RECENTLY_USED|TRAFFIC))|_(HTTP_VERSION_(1_(1|0)|NONE)|NETRC_(REQUIRED|IGNORED|OPTIONAL)|TIMECOND_(IF(MODSINCE|UNMODSINCE)|LASTMOD)|IPRESOLVE_(V(4|6)|WHATEVER)|VERSION_(SSL|IPV6|KERBEROS4|LIBZ))|INFO_(RE(DIRECT_(COUNT|TIME)|QUEST_SIZE)|S(SL_VERIFYRESULT|TARTTRANSFER_TIME|IZE_(DOWNLOAD|UPLOAD)|PEED_(DOWNLOAD|UPLOAD))|H(TTP_CODE|EADER_(SIZE|OUT))|NAMELOOKUP_TIME|C(ON(NECT_TIME|TENT_(TYPE|LENGTH_(DOWNLOAD|UPLOAD)))|ERTINFO)|TOTAL_TIME|PR(IVATE|ETRANSFER_TIME)|EFFECTIVE_URL|FILETIME)|OPT_(R(E(SUME_FROM|TURNTRANSFER|DIR_PROTOCOLS|FERER|AD(DATA|FUNCTION))|AN(GE|DOM_FILE))|MAX(REDIRS|CONNECTS)|B(INARYTRANSFER|UFFERSIZE)|S(S(H_(HOST_PUBLIC_KEY_MD5|P(RIVATE_KEYFILE|UBLIC_KEYFILE)|AUTH_TYPES)|L(CERT(TYPE|PASSWD)?|_(CIPHER_LIST|VERIFY(HOST|PEER))|ENGINE(_DEFAULT)?|VERSION|KEY(TYPE|PASSWD)?))|TDERR)|H(TTP(GET|HEADER|200ALIASES|_VERSION|PROXYTUNNEL|AUTH)|EADER(FUNCTION)?)|N(O(BODY|SIGNAL|PROGRESS)|ETRC)|C(RLF|O(NNECTTIMEOUT(_MS)?|OKIE(SESSION|JAR|FILE)?)|USTOMREQUEST|ERTINFO|LOSEPOLICY|A(INFO|PATH))|T(RANSFERTEXT|CP_NODELAY|IME(CONDITION|OUT(_MS)?|VALUE))|I(N(TERFACE|FILE(SIZE)?)|PRESOLVE)|DNS_(CACHE_TIMEOUT|USE_GLOBAL_CACHE)|U(RL|SER(PWD|AGENT)|NRESTRICTED_AUTH|PLOAD)|P(R(IVATE|O(GRESSFUNCTION|XY(TYPE|USERPWD|PORT|AUTH)?|TOCOLS))|O(RT|ST(REDIR|QUOTE|FIELDS)?)|UT)|E(GDSOCKET|NCODING)|VERBOSE|K(RB4LEVEL|EYPASSWD)|QUOTE|F(RESH_CONNECT|TP(SSLAUTH|_(S(SL|KIP_PASV_IP)|CREATE_MISSING_DIRS|USE_EP(RT|SV)|FILEMETHOD)|PORT|LISTONLY|APPEND)|ILE(TIME)?|O(RBID_REUSE|LLOWLOCATION)|AILONERROR)|WRITE(HEADER|FUNCTION)|LOW_SPEED_(TIME|LIMIT)|AUTOREFERER)|PRO(XY_(SOCKS(4|5)|HTTP)|TO_(S(CP|FTP)|HTTP(S)?|T(ELNET|FTP)|DICT|F(TP(S)?|ILE)|LDAP(S)?|ALL))|E_(RE(CV_ERROR|AD_ERROR)|GOT_NOTHING|MALFORMAT_USER|BAD_(C(ONTENT_ENCODING|ALLING_ORDER)|PASSWORD_ENTERED|FUNCTION_ARGUMENT)|S(S(H|L_(C(IPHER|ONNECT_ERROR|ERTPROBLEM|ACERT)|PEER_CERTIFICATE|ENGINE_(SETFAILED|NOTFOUND)))|HARE_IN_USE|END_ERROR)|HTTP_(RANGE_ERROR|NOT_FOUND|PO(RT_FAILED|ST_ERROR))|COULDNT_(RESOLVE_(HOST|PROXY)|CONNECT)|T(OO_MANY_REDIRECTS|ELNET_OPTION_SYNTAX)|O(BSOLETE|UT_OF_MEMORY|PERATION_TIMEOUTED|K)|U(RL_MALFORMAT(_USER)?|N(SUPPORTED_PROTOCOL|KNOWN_TELNET_OPTION))|PARTIAL_FILE|F(TP_(BAD_DOWNLOAD_RESUME|SSL_FAILED|C(OULDNT_(RETR_FILE|GET_SIZE|S(TOR_FILE|ET_(BINARY|ASCII))|USE_REST)|ANT_(RECONNECT|GET_HOST))|USER_PASSWORD_INCORRECT|PORT_FAILED|QUOTE_ERROR|W(RITE_ERROR|EIRD_(SERVER_REPLY|227_FORMAT|USER_REPLY|PAS(S_REPLY|V_REPLY)))|ACCESS_DENIED)|ILE(SIZE_EXCEEDED|_COULDNT_READ_FILE)|UNCTION_NOT_FOUND|AILED_INIT)|WRITE_ERROR|L(IBRARY_NOT_FOUND|DAP_(SEARCH_FAILED|CANNOT_BIND|INVALID_URL))|ABORTED_BY_CALLBACK)|VERSION_NOW|FTP(METHOD_(MULTICWD|SINGLECWD|NOCWD)|SSL_(NONE|CONTROL|TRY|ALL)|AUTH_(SSL|TLS|DEFAULT))|AUTH_(GSSNEGOTIATE|BASIC|NTLM|DIGEST|ANY(SAFE)?))|I(MAGETYPE_(GIF|XBM|BMP|SWF|COUNT|TIFF_(MM|II)|I(CO|FF)|UNKNOWN|J(B2|P(X|2|C|EG(2000)?))|P(SD|NG)|WBMP)|NPUT_(REQUEST|GET|SE(RVER|SSION)|COOKIE|POST|ENV)|CONV_(MIME_DECODE_(STRICT|OCIRCUIT_ON_ERROR)|IMPL|VERSION))|D(NS_(MX|S(RV|OA)|HINFO|N(S|APTR)|CNAME|TXT|PTR|A(NY|LL|AAA|6)?)|OM(STRING_SIZE_ERR|_(SYNTAX_ERR|HIERARCHY_REQUEST_ERR|N(O(_(MODIFICATION_ALLOWED_ERR|DATA_ALLOWED_ERR)|T_(SUPPORTED_ERR|FOUND_ERR))|AMESPACE_ERR)|IN(DEX_SIZE_ERR|USE_ATTRIBUTE_ERR|VALID_(MODIFICATION_ERR|STATE_ERR|CHARACTER_ERR|ACCESS_ERR))|PHP_ERR|VALIDATION_ERR|WRONG_DOCUMENT_ERR)))|JSON_(HEX_(TAG|QUOT|A(MP|POS))|NUMERIC_CHECK|ERROR_(S(YNTAX|TATE_MISMATCH)|NONE|CTRL_CHAR|DEPTH|UTF8)|FORCE_OBJECT)|P(REG_(RECURSION_LIMIT_ERROR|GREP_INVERT|BA(CKTRACK_LIMIT_ERROR|D_UTF8_(OFFSET_ERROR|ERROR))|S(PLIT_(NO_EMPTY|OFFSET_CAPTURE|DELIM_CAPTURE)|ET_ORDER)|NO_ERROR|INTERNAL_ERROR|OFFSET_CAPTURE|PATTERN_ORDER)|SFS_(PASS_ON|ERR_FATAL|F(EED_ME|LAG_(NORMAL|FLUSH_(CLOSE|INC))))|CRE_VERSION|OSIX_(R_OK|X_OK|S_IF(REG|BLK|SOCK|CHR|IFO)|F_OK|W_OK))|F(NM_(NOESCAPE|CASEFOLD|P(ERIOD|ATHNAME))|IL(TER_(REQUIRE_(SCALAR|ARRAY)|SANITIZE_(MAGIC_QUOTES|S(TRI(NG|PPED)|PECIAL_CHARS)|NUMBER_(INT|FLOAT)|URL|E(MAIL|NCODED)|FULL_SPECIAL_CHARS)|NULL_ON_FAILURE|CALLBACK|DEFAULT|UNSAFE_RAW|VALIDATE_(REGEXP|BOOLEAN|I(NT|P)|URL|EMAIL|FLOAT)|F(ORCE_ARRAY|LAG_(S(CHEME_REQUIRED|TRIP_(BACKTICK|HIGH|LOW))|HOST_REQUIRED|NO(NE|_(RES_RANGE|PRIV_RANGE|ENCODE_QUOTES))|IPV(4|6)|PATH_REQUIRED|E(MPTY_STRING_NULL|NCODE_(HIGH|LOW|AMP))|QUERY_REQUIRED|ALLOW_(SCIENTIFIC|HEX|THOUSAND|OCTAL|FRACTION))))|E(_(BINARY|SKIP_EMPTY_LINES|NO_DEFAULT_CONTEXT|TEXT|IGNORE_NEW_LINES|USE_INCLUDE_PATH|APPEND)|INFO_(RAW|MIME(_(TYPE|ENCODING))?|SYMLINK|NONE|OCIRCUIT|DEVICES|PRESERVE_ATIME)))|ORCE_(GZIP|DEFLATE))|LIBXML_(XINCLUDE|N(SCLEAN|O(XMLDECL|BLANKS|NET|CDATA|E(RROR|MPTYTAG|NT)|WARNING))|COMPACT|D(TD(VALID|LOAD|ATTR)|OTTED_VERSION)|PARSEHUGE|ERR_(NONE|ERROR|FATAL|WARNING)|VERSION|LOADED_VERSION))\\b",
+extensions/vscode/textmate-syntaxes/php.json:2170:          "match": "(?i)\\bfann_(s(huffle_train_data|cale_(train(_data)?|input(_train_data)?|output(_train_data)?)|ubset_train_data|et_(s(caling_params|arprop_(step_error_(shift|threshold_factor)|temperature|weight_decay_shift))|ca(scade_(num_candidate_groups|candidate_(stagnation_epochs|change_fraction|limit)|output_(stagnation_epochs|change_fraction)|weight_multiplier|activation_(steepnesses|functions)|m(in_(cand_epochs|out_epochs)|ax_(cand_epochs|out_epochs)))|llback)|train(ing_algorithm|_(stop_function|error_function))|input_scaling_params|output_scaling_params|error_log|quickprop_(decay|mu)|weight(_array)?|learning_(rate|momentum)|activation_(steepness(_(hidden|output|layer))?|function(_(hidden|output|layer))?)|rprop_(increase_factor|de(crease_factor|lta_(zero|m(in|ax))))|bit_fail_limit)|ave(_train)?)|num_(input_train_data|output_train_data)|c(opy|lear_scaling_params|ascadetrain_on_(data|file)|reate_(s(hortcut(_array)?|tandard(_array)?|parse(_array)?)|train(_from_callback)?|from_file))|t(est(_data)?|rain(_(on_(data|file)|epoch))?)|init_weights|d(uplicate_train_data|es(cale_(train|input|output)|troy(_train)?))|print_error|length_train_data|r(un|e(set_(MSE|err(str|no))|ad_train_from_file)|andomize_weights)|get_(sarprop_(step_error_(shift|threshold_factor)|temperature|weight_decay_shift)|n(um_(input|output|layers)|etwork_type)|MSE|c(onnection_(array|rate)|ascade_(num_candidate(s|_groups)|candidate_(stagnation_epochs|change_fraction|limit)|output_(stagnation_epochs|change_fraction)|weight_multiplier|activation_(steepnesses(_count)?|functions(_count)?)|m(in_(cand_epochs|out_epochs)|ax_(cand_epochs|out_epochs))))|t(otal_(neurons|connections)|rain(ing_algorithm|_(stop_function|error_function)))|err(str|no)|quickprop_(decay|mu)|l(earning_(rate|momentum)|ayer_array)|activation_(steepness|function)|rprop_(increase_factor|de(crease_factor|lta_(zero|m(in|ax))))|bi(t_fail(_limit)?|as_array))|merge_train_data)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2210:          "match": "(?i)\\b(iconv(_(s(tr(pos|len|rpos)|ubstr|et_encoding)|get_encoding|mime_(decode(_headers)?|encode)))?|ob_iconv_handler)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2218:          "match": "(?i)\\b(i(ptc(parse|embed)|mage(s(y|cale|tring(up)?|et(style|t(hickness|ile)|interpolation|pixel|brush)|avealpha|x)|c(har(up)?|o(nvolution|py(res(ized|ampled)|merge(gray)?)?|lor(s(total|et|forindex)|closest(hwb|alpha)?|transparent|deallocate|exact(alpha)?|a(t|llocate(alpha)?)|resolve(alpha)?|match))|r(op(auto)?|eate(truecolor|from(string|jpeg|png|w(ebp|bmp)|g(if|d(2(part)?)?)|x(pm|bm)))?))|t(ypes|tf(text|bbox)|ruecolortopalette)|i(struecolor|nterlace)|2wbmp|d(estroy|ashedline)|jpeg|_type_to_(extension|mime_type)|p(s(slantfont|text|e(ncodefont|xtendfont)|freefont|loadfont|bbox)|ng|olygon|alette(copy|totruecolor))|ellipse|f(t(text|bbox)|il(ter|l(toborder|ed(polygon|ellipse|arc|rectangle))?)|ont(height|width)|lip)|w(ebp|bmp)|l(ine|oadfont|ayereffect)|a(ntialias|ffine(matrix(concat|get))?|lphablending|rc)|r(otate|ectangle)|g(if|d(2)?|ammacorrect|rab(screen|window))|xbm))|jpeg2wbmp|png2wbmp|g(d_info|etimagesize(fromstring)?))\\b",
+extensions/vscode/textmate-syntaxes/php.json:2254:          "match": "(?i)\\bmb_(s(tr(str|cut|to(upper|lower)|i(str|pos|mwidth)|pos|width|len|r(chr|i(chr|pos)|pos))|ubst(itute_character|r(_count)?)|plit|end_mail)|http_(input|output)|c(heck_encoding|onvert_(case|encoding|variables|kana))|internal_encoding|output_handler|de(code_(numericentity|mimeheader)|tect_(order|encoding))|p(arse_str|referred_mime_name)|e(ncod(ing_aliases|e_(numericentity|mimeheader))|reg(i(_replace)?|_(search(_(setpos|init|pos|regs|get(pos|regs)))?|replace(_callback)?|match))?)|l(ist_encodings|anguage)|regex_(set_options|encoding)|get_info)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2274:          "match": "(?i)\\bmysql_(s(tat|e(t_charset|lect_db))|num_(fields|rows)|c(onnect|l(ient_encoding|ose)|reate_db)|t(hread_id|ablename)|in(sert_id|fo)|d(ata_seek|rop_db|b_(name|query))|unbuffered_query|p(connect|ing)|e(scape_string|rr(no|or))|query|f(ield_(seek|name|t(ype|able)|flags|len)|etch_(object|field|lengths|a(ssoc|rray)|row)|ree_result)|list_(tables|dbs|processes|fields)|affected_rows|re(sult|al_escape_string)|get_(server_info|host_info|client_info|proto_info))\\b",
+extensions/vscode/textmate-syntaxes/php.json:2278:          "match": "(?i)\\bmysqli_(s(sl_set|t(ore_result|at|mt_(s(tore_result|end_long_data)|next_result|close|init|data_seek|prepare|execute|f(etch|ree_result)|attr_(set|get)|res(ult_metadata|et)|get_(warnings|result)|more_results|bind_(param|result)))|e(nd_(query|long_data)|t_(charset|opt|local_infile_(handler|default))|lect_db)|lave_query|avepoint)|next_result|c(ha(nge_user|racter_set_name)|o(nnect|mmit)|l(ient_encoding|ose))|thread_safe|init|options|d(isable_r(pl_parse|eads_from_master)|ump_debug_info|ebug|ata_seek)|use_result|p(ing|oll|aram_count|repare)|e(scape_string|nable_r(pl_parse|eads_from_master)|xecute|mbedded_server_(start|end))|kill|query|f(ield_seek|etch(_(object|field(s|_direct)?|a(ssoc|ll|rray)|row))?|ree_result)|autocommit|r(ollback|pl_(p(arse_enabled|robe)|query_type)|e(port|fresh|lease_savepoint|a(p_async_query|l_(connect|escape_string|query))))|get_(c(harset|onnection_stats|lient_(stats|info|version)|ache_stats)|warnings|links_stats|metadata)|m(ore_results|ulti_query|aster_query)|b(ind_(param|result)|egin_transaction))\\b",
+extensions/vscode/textmate-syntaxes/php.json:2330:          "match": "(?i)\\bpg_(s(ocket|e(nd_(prepare|execute|query(_params)?)|t_(client_encoding|error_verbosity)|lect))|host|num_(fields|rows)|c(o(n(sume_input|nect(ion_(status|reset|busy)|_poll)?|vert)|py_(to|from))|l(ient_encoding|ose)|ancel_query)|t(ty|ra(nsaction_status|ce))|insert|options|d(elete|bname)|u(n(trace|escape_bytea)|pdate)|p(connect|ing|ort|ut_line|arameter_status|repare)|e(scape_(string|identifier|literal|bytea)|nd_copy|xecute)|version|query(_params)?|f(ield_(size|n(um|ame)|t(ype(_oid)?|able)|is_null|prtlen)|etch_(object|a(ssoc|ll(_columns)?|rray)|r(ow|esult))|lush|ree_result)|l(o_(seek|c(lose|reate)|t(ell|runcate)|import|open|unlink|export|write|read(_all)?)|ast_(notice|oid|error))|affected_rows|result_(s(tatus|eek)|error(_field)?)|get_(notify|pid|result)|meta_data)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2422:          "match": "(?i)\\bsqlite_(s(ingle_query|eek)|has_(prev|more)|n(um_(fields|rows)|ext)|c(hanges|olumn|urrent|lose|reate_(function|aggregate))|open|u(nbuffered_query|df_(decode_binary|encode_binary))|p(open|rev)|e(scape_string|rror_string|xec)|valid|key|query|f(ield_name|etch_(s(tring|ingle)|column_types|object|a(ll|rray))|actory)|l(ib(encoding|version)|ast_(insert_rowid|error))|array_query|rewind|busy_timeout)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2434:          "match": "(?i)\\bs(tream_(s(ocket_(s(hutdown|e(ndto|rver))|client|pair|enable_crypto|accept|recvfrom|get_name)|upports_lock|e(t_(chunk_size|timeout|write_buffer|read_buffer|blocking)|lect))|notification_callback|co(ntext_(set_(option|default|params)|create|get_(options|default|params))|py_to_stream)|is_local|encoding|filter_(prepend|append|re(gister|move))|wrapper_(unregister|re(store|gister))|re(solve_include_path|gister_wrapper)|get_(contents|transports|filters|wrappers|line|meta_data)|bucket_(new|prepend|append|make_writeable))|et_socket_blocking)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2450:          "match": "(?i)\\b(tidy_(s(et(opt|_encoding)|ave_config)|c(onfig_count|lean_repair)|is_x(html|ml)|diagnose|parse_(string|file)|error_count|warning_count|load_config|access_count|re(set_config|pair_(string|file))|get(opt|_(status|h(tml(_ver)?|ead)|config|o(utput|pt_doc)|r(oot|elease)|body)))|ob_tidyhandler)\\b",
+extensions/vscode/textmate-syntaxes/php.json:2455:          "name": "support.function.tokenizer.php"
+extensions/vscode/textmate-syntaxes/yaml.json:462:              "name": "constant.language.merge.yaml"
+extensions/vscode/textmate-syntaxes/yaml.json:504:              "name": "constant.language.merge.yaml"
+package-lock.json:3391:        "merge-stream": "^2.0.0",
+package-lock.json:3636:    "node_modules/@semantic-release/npm/node_modules/@sindresorhus/merge-streams": {
+package-lock.json:3638:      "resolved": "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-4.0.0.tgz",
+package-lock.json:3702:        "@sindresorhus/merge-streams": "^4.0.0",
+package-lock.json:3874:    "node_modules/@sindresorhus/merge-streams": {
+package-lock.json:3876:      "resolved": "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-2.3.0.tgz",
+package-lock.json:6148:    "node_modules/deepmerge": {
+package-lock.json:6150:      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz",
+package-lock.json:6683:        "merge-stream": "^2.0.0",
+package-lock.json:6755:        "merge2": "^1.3.0",
+package-lock.json:7207:        "@sindresorhus/merge-streams": "^2.1.0",
+package-lock.json:7891:        "merge-stream": "^2.0.0",
+package-lock.json:8085:        "deepmerge": "^4.2.2",
+package-lock.json:8593:        "merge-stream": "^2.0.0",
+package-lock.json:9360:    "node_modules/merge-stream": {
+package-lock.json:9362:      "resolved": "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz",
+package-lock.json:9367:    "node_modules/merge2": {
+package-lock.json:9369:      "resolved": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+package-lock.json:13237:    "node_modules/semantic-release/node_modules/@sindresorhus/merge-streams": {
+package-lock.json:13239:      "resolved": "https://registry.npmjs.org/@sindresorhus/merge-streams/-/merge-streams-4.0.0.tgz",
+package-lock.json:13310:        "@sindresorhus/merge-streams": "^4.0.0",
+package-lock.json:14400:    "node_modules/semantic-release/node_modules/npm/node_modules/encoding": {
+package-lock.json:14962:        "encoding": "^0.1.13"
+packages/fetch/src/node-fetch-patch.js:3:This is to fix "Premature close" errors caused by chunked encoding assumptions - see https://github.com/open-circuit-dev/open-circuit/issues/5502
+packages/fetch/src/node-fetch-patch.js:350:      const codings = headers.get("Content-Encoding");
+packages/fetch/src/node-fetch-patch.js:357:      // 3. no Content-Encoding header
+packages/fetch/src/node-fetch-patch.js:465:      headers["transfer-encoding"] === "chunked" && !headers["content-length"];
+packages/fetch/src/node-fetch-patch.test.js:5:describe("Chunked Transfer Encoding Patch Logic", () => {
+scripts/analyze-file-hotspots.js:25:    encoding: "utf-8",
+scripts/check-cli-release-artifact.mjs:19:    encoding: "utf8",
+scripts/check-npm-install-scripts.mjs:13:  { encoding: "utf8" },

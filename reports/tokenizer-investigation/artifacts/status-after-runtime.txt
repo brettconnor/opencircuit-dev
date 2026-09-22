@@ -1,0 +1,16 @@
+ M core/package-lock.json
+ M core/package.json
+?? reports/tokenizer-investigation/artifacts/baseline.txt
+?? reports/tokenizer-investigation/artifacts/bundle-reference-report.json
+?? reports/tokenizer-investigation/artifacts/candidate-files.txt
+?? reports/tokenizer-investigation/artifacts/content-format-observations.txt
+?? reports/tokenizer-investigation/artifacts/dependency-versions.txt
+?? reports/tokenizer-investigation/artifacts/file-metadata.txt
+?? reports/tokenizer-investigation/artifacts/large-files.txt
+?? reports/tokenizer-investigation/artifacts/llamaTokenizer-history.txt
+?? reports/tokenizer-investigation/artifacts/manifest-references.txt
+?? reports/tokenizer-investigation/artifacts/minilm-tokenizer-history.txt
+?? reports/tokenizer-investigation/artifacts/provenance-files.txt
+?? reports/tokenizer-investigation/artifacts/static-reference-report.txt
+?? reports/tokenizer-investigation/artifacts/status-after-runtime.txt
+?? reports/tokenizer-investigation/artifacts/status-before-runtime.txt
