@@ -1,6 +1,5 @@
 import type { ChatHistoryItem } from "core";
 import React from "react";
-
 import { UpdateServiceState } from "src/services/types.js";
 
 import { ConfigSelector } from "../ConfigSelector.js";

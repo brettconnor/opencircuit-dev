@@ -1,11 +1,10 @@
 // Helper functions extracted from streamChatResponse.ts to reduce file size
 /* eslint-disable max-lines */
 
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import type { ToolStatus, Usage } from "core/index.js";
 import { calculateRequestCost } from "core/llm/calculateRequestCost.js";
-import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
-
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";
 
 import { checkToolPermission } from "../permissions/permissionChecker.js";

@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { runTerminalCommandTool } from "src/tools/runTerminalCommand.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { services } from "../../services/index.js";
 

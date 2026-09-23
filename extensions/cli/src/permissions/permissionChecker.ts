@@ -1,5 +1,4 @@
 import type { ToolPolicy } from "@opencircuit/terminal-security";
-
 import { ALL_BUILT_IN_TOOLS } from "src/tools/allBuiltIns.js";
 
 import {

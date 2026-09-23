@@ -1,6 +1,6 @@
+import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import type { ContextItem } from "core/index.js";
 import { fetchUrlContentImpl } from "core/tools/implementations/fetchUrlContent.js";
-import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 
 import {
   parseEnvNumber,

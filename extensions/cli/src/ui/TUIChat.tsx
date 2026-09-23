@@ -6,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";
 
 import { useServices } from "../hooks/useService.js";
@@ -148,7 +147,6 @@ function useChatHandlers(
   };
 }
 
-// eslint-disable-next-line complexity
 const TUIChat: React.FC<TUIChatProps> = ({
   remoteUrl,
   configPath,

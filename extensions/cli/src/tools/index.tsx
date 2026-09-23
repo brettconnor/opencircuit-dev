@@ -1,7 +1,6 @@
 // @ts-ignore
 import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
 import { ChatCompletionTool } from "openai/resources.mjs";
-
 import { isModelCapable } from "src/utils/modelCapability.js";
 
 import {

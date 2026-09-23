@@ -7,14 +7,22 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  isSupportedNodeVersion,
+  SUPPORTED_NODE_RANGE,
+} from "./runtime-version.mjs";
+
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDirectory, "../..");
 const cliDirectory = path.join(repoRoot, "extensions/cli");
 const loaderPath = path.join(scriptDirectory, "runtime-boundary-loader.mjs");
-const expectedNodeVersion = `v${fs
+const pinnedNodeVersion = fs
   .readFileSync(path.join(repoRoot, ".node-version"), "utf8")
-  .trim()}`;
-const nodeVersionMatches = process.version === expectedNodeVersion;
+  .trim();
+const runtimeSupported = isSupportedNodeVersion(
+  process.version,
+  pinnedNodeVersion,
+);
 const temporaryDirectory = fs.mkdtempSync(
   path.join(os.tmpdir(), "ocircuit-runtime-boundary-"),
 );
@@ -136,7 +144,7 @@ if (fs.existsSync(loaderReportPath)) {
 }
 
 const passed =
-  nodeVersionMatches &&
+  runtimeSupported &&
   childResult.exitCode === 0 &&
   !childResult.timedOut &&
   childResult.stdout.includes("Hello World!") &&
@@ -182,8 +190,9 @@ const report = {
   workingDirectory: path.relative(repoRoot, cliDirectory),
   runtime: {
     actualNodeVersion: process.version,
-    expectedNodeVersion,
-    matchesRepositoryPin: nodeVersionMatches,
+    pinnedNodeVersion: `v${pinnedNodeVersion}`,
+    supportedRange: SUPPORTED_NODE_RANGE,
+    matchesSupportedRange: runtimeSupported,
   },
   child: {
     exitCode: childResult.exitCode,

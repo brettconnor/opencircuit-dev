@@ -2,7 +2,6 @@ import path from "path";
 
 import { Box, Text } from "ink";
 import React from "react";
-
 import { getToolDisplayName } from "src/tools/index.js";
 
 import { ColoredDiff } from "./ColoredDiff.js";

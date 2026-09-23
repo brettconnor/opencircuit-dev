@@ -2,9 +2,8 @@ import * as path from "node:path";
 
 import type { ChatHistoryItem } from "core/index.js";
 import { getLastNPathParts } from "core/uri.js";
-import { v4 as uuidv4 } from "uuid";
-
 import { logger } from "src/util/logger.js";
+import { v4 as uuidv4 } from "uuid";
 
 import { DEFAULT_SESSION_TITLE } from "../../constants/session.js";
 import { loadSession, startNewSession } from "../../session.js";

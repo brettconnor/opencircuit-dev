@@ -5,6 +5,7 @@ set -euo pipefail
 # curl -fsSL //install.sh | bash
 
 REQUIRED_NODE_VERSION="24.19.0"
+MAX_SUPPORTED_NODE_MAJOR="27"
 PACKAGE_NAME="@opencircuit/cli"
 PACKAGE_VERSION="1.0.0"
 CLI_COMMAND="oc"
@@ -141,6 +142,10 @@ version_gte() {
     [ "$(printf '%s\n' "$2" "$1" | sort -V | head -n1)" = "$2" ]
 }
 
+version_lt_major() {
+    [ "${1%%.*}" -lt "$MAX_SUPPORTED_NODE_MAJOR" ]
+}
+
 source_nvm() {
     export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -166,11 +171,12 @@ check_node() {
 
         if [ -n "$current_version" ]; then
             info "Found Node.js v$current_version"
-            if version_gte "$current_version" "$REQUIRED_NODE_VERSION"; then
-                success "Node.js meets requirements (>= v$REQUIRED_NODE_VERSION)"
+            if version_gte "$current_version" "$REQUIRED_NODE_VERSION" && \
+                version_lt_major "$current_version"; then
+                success "Node.js meets requirements (>= v$REQUIRED_NODE_VERSION < v$MAX_SUPPORTED_NODE_MAJOR)"
                 return 0
             fi
-            warn "Node.js v$current_version is below required v$REQUIRED_NODE_VERSION"
+            warn "Node.js v$current_version is outside the supported range (>= v$REQUIRED_NODE_VERSION < v$MAX_SUPPORTED_NODE_MAJOR)"
             return 1
         fi
     fi

@@ -1,6 +1,6 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { decodeFQSN, getTemplateVariables } from "@opencircuit/config-yaml";
 import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 import { getErrorString } from "../util/error.js";
 import { logger } from "../util/logger.js";
