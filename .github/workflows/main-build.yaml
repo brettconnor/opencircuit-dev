@@ -16,7 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [Linux, macOS]
+        include:
+          - artifact_name: vscode-extension-build-linux-x64
+          - artifact_name: vscode-extension-build-darwin-arm64
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -64,7 +66,7 @@ jobs:
           # Get the latest successful workflow run for the branch
           RUN_ID=$(gh run list \
             --repo "${{ github.repository }}" \
-            --workflow="pr_checks.yaml" \
+            --workflow="pr-build-upload-vsix.yaml" \
             --branch="$BRANCH_NAME" \
             --json databaseId,status,conclusion \
             --jq ".[] | select(.status == \"completed\" and .conclusion == \"success\") | .databaseId" \
@@ -81,10 +83,10 @@ jobs:
       - name: Download PR artifact
         env:
           RUN_ID: ${{ steps.find-run.outputs.run_id }}
-          PLATFORM: ${{ matrix.platform }}
+          ARTIFACT_NAME: ${{ matrix.artifact_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "📥 Downloading vscode-extension-build-$PLATFORM artifact from run $RUN_ID..."
+          echo "📥 Downloading $ARTIFACT_NAME artifact from run $RUN_ID..."
 
           # Create temporary directory for download
           mkdir -p ./temp-download
@@ -92,9 +94,9 @@ jobs:
           # Download the artifact from the PR workflow run
           if ! gh run download "$RUN_ID" \
             --repo "${{ github.repository }}" \
-            --name "vscode-extension-build-$PLATFORM" \
+            --name "$ARTIFACT_NAME" \
             --dir "./temp-download"; then
-            echo "❌ Failed to download artifact vscode-extension-build-$PLATFORM from run $RUN_ID"
+            echo "❌ Failed to download artifact $ARTIFACT_NAME from run $RUN_ID"
             exit 1
           fi
 
@@ -103,5 +105,5 @@ jobs:
       - name: Republish as main branch artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: vscode-extension-build-${{ matrix.platform }}
+          name: ${{ matrix.artifact_name }}
           path: ./temp-download/*
