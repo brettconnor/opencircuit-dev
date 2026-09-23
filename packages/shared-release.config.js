@@ -1,6 +1,10 @@
 export default function createReleaseConfig(packageName) {
+  const githubRepository =
+    process.env.GITHUB_REPOSITORY || "brettconnor/opencircuit-dev";
+
   return {
     branches: ["main"],
+    repositoryUrl: `https://github.com/${githubRepository}.git`,
     tagFormat: `@opencircuit/${packageName}@\${version}`,
     plugins: [
       [

@@ -11,6 +11,22 @@ on:
       - main
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      cli_core: ${{ steps.profiles.outputs.cli_core }}
+      vsix: ${{ steps.profiles.outputs.vsix }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+      - name: Detect change profiles
+        id: profiles
+        uses: ./.github/actions/detect-change-profiles
+        with:
+          base-sha: ${{ github.event.pull_request.base.sha || github.event.before }}
+          head-sha: ${{ github.sha }}
+
   track-rerun:
     runs-on: ubuntu-latest
     if: github.run_attempt > 1
@@ -41,6 +57,8 @@ jobs:
         run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}" --ignore-path .gitignore --ignore-path .prettierignore
 
   core-checks:
+    needs: changes
+    if: needs.changes.outputs.cli_core == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -94,6 +112,8 @@ jobs:
           INCEPTION_API_KEY: ${{ secrets.INCEPTION_API_KEY }}
 
   binary-checks:
+    needs: changes
+    if: needs.changes.outputs.cli_core == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -116,6 +136,8 @@ jobs:
           npx tsc --noEmit
 
   vscode-checks:
+    needs: changes
+    if: needs.changes.outputs.vsix == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -160,7 +182,8 @@ jobs:
           echo "Found packages: $packages"
 
   packages-checks:
-    needs: get-packages-matrix
+    needs: [changes, get-packages-matrix]
+    if: needs.changes.outputs.cli_core == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -199,6 +222,8 @@ jobs:
           INCEPTION_API_KEY: ${{ secrets.INCEPTION_API_KEY }}
 
   vscode-get-test-file-matrix:
+    needs: changes
+    if: needs.changes.outputs.vsix == 'true'
     runs-on: ubuntu-latest
     outputs:
       test_file_matrix: ${{ steps.vscode-get-test-file-matrix.outputs.test_file_matrix }}
@@ -260,6 +285,8 @@ jobs:
           echo "Test files: ${{ steps.vscode-get-test-file-matrix.outputs.test_file_matrix }}"
 
   vscode-package-extension-linux:
+    needs: changes
+    if: needs.changes.outputs.vsix == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -285,7 +312,9 @@ jobs:
 
   vscode-e2e-tests:
     name: ${{ matrix.test_file || 'unknown' }} (${{ matrix.command }})
-    needs: [vscode-get-test-file-matrix, vscode-package-extension-linux]
+    needs:
+      [changes, vscode-get-test-file-matrix, vscode-package-extension-linux]
+    if: always() && needs.changes.outputs.vsix == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Tests requiring secrets need approval from maintainers
@@ -314,6 +343,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     needs:
+      - changes
       - prettier-check
       - core-checks
       - binary-checks
@@ -328,4 +358,5 @@ jobs:
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35
         with:
+          allowed-skips: changes,core-checks,binary-checks,vscode-checks,packages-checks,vscode-get-test-file-matrix,vscode-package-extension-linux,vscode-e2e-tests
           jobs: ${{ toJSON(needs) }}

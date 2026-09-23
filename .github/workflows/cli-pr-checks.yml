@@ -8,6 +8,22 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      cli_core: ${{ steps.profiles.outputs.cli_core }}
+      vsix: ${{ steps.profiles.outputs.vsix }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+      - name: Detect change profiles
+        id: profiles
+        uses: ./.github/actions/detect-change-profiles
+        with:
+          base-sha: ${{ github.event.pull_request.base.sha }}
+          head-sha: ${{ github.event.pull_request.head.sha }}
+
   track-rerun:
     runs-on: ubuntu-latest
     if: github.run_attempt > 1
@@ -17,6 +33,8 @@ jobs:
         uses: ./.github/actions/track-rerun
 
   lint:
+    needs: changes
+    if: needs.changes.outputs.cli_core == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -55,6 +73,8 @@ jobs:
           npm run lint
 
   test:
+    needs: changes
+    if: needs.changes.outputs.cli_core == 'true'
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -134,7 +154,8 @@ jobs:
 
   smoke-api:
     # Only runs when secrets are available (not on fork PRs)
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    needs: changes
+    if: needs.changes.outputs.cli_core == 'true' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -187,6 +208,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     needs:
+      - changes
       - lint
       - test
       - smoke-api
@@ -196,5 +218,5 @@ jobs:
         uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35
         with:
           # smoke-api is allowed to skip for fork PRs that lack secrets
-          allowed-skips: smoke-api
+          allowed-skips: changes,smoke-api,lint,test
           jobs: ${{ toJSON(needs) }}

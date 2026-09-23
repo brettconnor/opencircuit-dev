@@ -17,9 +17,9 @@ permissions:
 jobs:
   stable-release:
     name: Stable Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Only run this workflow on the canonical repository.
-    if: github.repository == 'open-circuit-dev/open-circuit'
+    if: github.repository == 'brettconnor/opencircuit-dev'
     steps:
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        uses: actions/setup-node@v5
         with:
           node-version: 24.19.0
 
@@ -63,7 +63,7 @@ jobs:
         run: npm test
 
       - name: Setup Node.js for OIDC publish
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        uses: actions/setup-node@v5
         with:
           node-version: 24.19.0
           registry-url: "https://registry.npmjs.org"
