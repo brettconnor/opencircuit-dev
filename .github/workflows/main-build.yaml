@@ -88,6 +88,14 @@ jobs:
         run: |
           echo "📥 Downloading $ARTIFACT_NAME artifact from run $RUN_ID..."
 
+          artifact_id="$(gh api \
+            "/repos/${{ github.repository }}/actions/runs/$RUN_ID/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.name == env.ARTIFACT_NAME) | .id')"
+          if [[ -z "$artifact_id" ]]; then
+            echo "No $ARTIFACT_NAME artifact was produced by this PR; skipping republish."
+            exit 0
+          fi
+
           # Create temporary directory for download
           mkdir -p ./temp-download
 
