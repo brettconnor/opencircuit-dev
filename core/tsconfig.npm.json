@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext", "ES2021"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -15,10 +15,19 @@
     "jsx": "react-jsx",
     "noEmitOnError": false,
     "types": ["jest", "node"],
+    "rootDir": ".",
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["./**/*.ts", "**/*.js"],
-  "exclude": ["test", "dist", "eslint.config.js"]
+  "include": ["./**/*.ts"],
+  "exclude": [
+    "test",
+    "dist",
+    "vendor",
+    "**/*.test.ts",
+    "**/*.vitest.ts",
+    "vitest.config.ts",
+    "eslint.config.js"
+  ]
 }
