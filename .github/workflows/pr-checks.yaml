@@ -6,10 +6,6 @@ on:
     branches:
       - main
 
-  push:
-    branches:
-      - main
-
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -205,7 +201,6 @@ jobs:
       - name: Test and check ${{ matrix.package }}
         run: |
           cd packages/${{ matrix.package }}
-          npm ci
           npm test
         env:
           IGNORE_API_KEY_TESTS: ${{ steps.llm-changes.outputs.ignore_api_tests }}
@@ -314,14 +309,18 @@ jobs:
     name: ${{ matrix.test_file || 'unknown' }} (${{ matrix.command }})
     needs:
       [changes, vscode-get-test-file-matrix, vscode-package-extension-linux]
-    if: always() && needs.changes.outputs.vsix == 'true'
+    if: >-
+      always() &&
+      needs.changes.outputs.vsix == 'true' &&
+      needs.vscode-get-test-file-matrix.result == 'success' &&
+      needs.vscode-package-extension-linux.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Tests requiring secrets need approval from maintainers
     strategy:
       fail-fast: false
       matrix:
-        test_file: ${{ fromJson(needs.vscode-get-test-file-matrix.outputs.test_file_matrix) }}
+        test_file: ${{ fromJson(needs.vscode-get-test-file-matrix.outputs.test_file_matrix || '[]') }}
         command: ["e2e:ci:run", "e2e:ci:run-yaml"]
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
