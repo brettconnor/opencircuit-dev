@@ -51,6 +51,8 @@ jobs:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
+
           echo "🔍 Getting branch name for PR #$PR_NUMBER..."
 
           # Get the branch name for the PR
@@ -73,14 +75,17 @@ jobs:
             | head -1)
 
           if [ -z "$RUN_ID" ]; then
-            echo "❌ No successful workflow run found for PR #$PR_NUMBER (branch: $BRANCH_NAME)"
-            exit 1
+            echo "No successful VSIX workflow run found for PR #$PR_NUMBER (branch: $BRANCH_NAME); skipping republish."
+            echo "skip_republish=true" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
           echo "Found successful workflow run: $RUN_ID"
           echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "skip_republish=false" >> $GITHUB_OUTPUT
 
       - name: Download PR artifact
+        if: steps.find-run.outputs.skip_republish != 'true'
         env:
           RUN_ID: ${{ steps.find-run.outputs.run_id }}
           ARTIFACT_NAME: ${{ matrix.artifact_name }}
@@ -111,6 +116,7 @@ jobs:
           echo "✅ Successfully downloaded artifact"
 
       - name: Republish as main branch artifact
+        if: steps.find-run.outputs.skip_republish != 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ${{ matrix.artifact_name }}
