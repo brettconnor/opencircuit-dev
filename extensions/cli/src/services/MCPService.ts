@@ -1,6 +1,6 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { decodeFQSN, getTemplateVariables } from "@opencircuit/config-yaml";
 import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 import { getErrorString } from "../util/error.js";
 import { logger } from "../util/logger.js";
@@ -40,6 +40,15 @@ export class MCPService
   private isShuttingDown = false;
   private isHeadless: boolean | undefined;
   private apiKeyCache: Map<string, string> = new Map();
+  private readonly processExitHandler = () => {
+    void this.cleanup();
+  };
+  private readonly sigintHandler = () => {
+    void this.cleanup();
+  };
+  private readonly sigtermHandler = () => {
+    void this.cleanup();
+  };
 
   getDependencies(): string[] {
     return [SERVICE_NAMES.CONFIG, SERVICE_NAMES.AUTH];
@@ -50,9 +59,9 @@ export class MCPService
     });
 
     // Register shutdown handler
-    process.on("exit", () => this.cleanup());
-    process.on("SIGINT", () => this.cleanup());
-    process.on("SIGTERM", () => this.cleanup());
+    process.on("exit", this.processExitHandler);
+    process.on("SIGINT", this.sigintHandler);
+    process.on("SIGTERM", this.sigtermHandler);
   }
 
   /**
@@ -391,6 +400,9 @@ Org-level secrets can only be used for MCP by Background Agents (//hub/agents/ov
     if (this.isShuttingDown) return;
     this.isShuttingDown = true;
 
+    process.off("exit", this.processExitHandler);
+    process.off("SIGINT", this.sigintHandler);
+    process.off("SIGTERM", this.sigtermHandler);
     this.removeAllListeners();
     await this.shutdownConnections();
   }

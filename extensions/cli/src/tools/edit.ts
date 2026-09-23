@@ -2,8 +2,8 @@ import * as fs from "fs";
 import path from "path";
 
 import { validateSingleEdit, executeFindAndReplace } from "core/editing.js";
-import { throwIfFileIsSecurityConcern } from "core/security.js";
 import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
+import { throwIfFileIsSecurityConcern } from "core/security.js";
 
 import { telemetryService } from "../telemetry/telemetryService.js";
 import {

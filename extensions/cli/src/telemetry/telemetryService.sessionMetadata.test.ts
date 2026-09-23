@@ -1,5 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("../util/logger.js", () => ({
+  logger: {
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
 import { telemetryService } from "./telemetryService.js";
 
 describe("TelemetryService - Session Metadata", () => {
@@ -10,16 +19,6 @@ describe("TelemetryService - Session Metadata", () => {
     // Save original environment and argv
     originalEnv = { ...process.env };
     originalArgv = [...process.argv];
-
-    // Mock logger to prevent console output during tests
-    vi.mock("../util/logger.js", () => ({
-      logger: {
-        debug: vi.fn(),
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-      },
-    }));
 
     // Enable telemetry for tests
     process.env.OCIRCUIT_CLI_ENABLE_TELEMETRY = "1";

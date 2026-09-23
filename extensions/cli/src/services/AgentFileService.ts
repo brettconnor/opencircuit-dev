@@ -8,7 +8,6 @@ import {
   parseAgentFileRules,
   parseAgentFileTools,
 } from "@opencircuit/config-yaml";
-
 import { getErrorString } from "src/util/error.js";
 
 import {

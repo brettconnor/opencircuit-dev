@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
-import { throwIfFileIsSecurityConcern } from "core/security.js";
 import { OCircuitError, OCircuitErrorReason } from "core/errors.js";
+import { throwIfFileIsSecurityConcern } from "core/security.js";
 
 import { parseEnvNumber } from "../util/truncateOutput.js";
 

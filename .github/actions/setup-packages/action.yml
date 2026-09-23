@@ -10,13 +10,30 @@ runs:
     - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-npm-cache-packages-${{ hashFiles('packages/*/package-lock.json') }}
+        key: ${{ runner.os }}-npm-cache-packages-${{ hashFiles('package-lock.json') }}
 
     - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+      id: packages-node-modules-cache
       with:
         path: |
+          node_modules
           packages/*/node_modules
-        key: ${{ runner.os }}-packages-node-modules-${{ hashFiles('packages/*/package-lock.json') }}
+        key: ${{ runner.os }}-packages-node-modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Reject package-local lockfiles
+      shell: bash
+      run: |
+        stray=$(find packages -mindepth 2 -maxdepth 2 -name package-lock.json)
+        if [ -n "$stray" ]; then
+          echo "::error::Found package-local package-lock.json files (root package-lock.json is authoritative):"
+          echo "$stray"
+          exit 1
+        fi
+
+    - name: Install package graph from the repository root
+      if: steps.packages-node-modules-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npm ci
 
     - name: Build packages
       shell: bash

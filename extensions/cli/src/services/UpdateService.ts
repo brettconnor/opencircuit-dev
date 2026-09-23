@@ -2,7 +2,6 @@ import { execFile, spawn } from "child_process";
 import { promisify } from "util";
 
 import { GlobalContext } from "core/globalContext.js";
-
 import { logger } from "src/util/logger.js";
 
 import { compareVersions, getLatestVersion, getVersion } from "../version.js";

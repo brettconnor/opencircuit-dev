@@ -15,7 +15,7 @@ jobs:
   CLAAssistant:
     runs-on: ubuntu-latest
     # Only run this workflow on the canonical repository.
-    if: github.repository == 'brettconnor/opencircuit-dev'
+    if: github.repository == 'open-circuit-dev/open-circuit'
     steps:
       - name: "CLA Assistant"
         if: (contains(github.event.comment.body, 'recheck') || contains(github.event.comment.body, 'I have read the CLA Document and I hereby sign the CLA')) || github.event_name == 'pull_request_target'
@@ -24,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: "signatures/version1/cla.json"
-          path-to-document: "https://github.com/brettconnor/opencircuit-dev/blob/main/CLA.md"
+          path-to-document: "https://github.com/open-circuit-dev/open-circuit/blob/main/CLA.md"
           branch: cla-signatures
           # Bots and CLAs signed outside of GitHub
           allowlist: dependabot[bot],fbricon,panyamkeerthana,Jazzcort,owtaylor,halfline,agent@ocircuit.dev,action@github.com,continue[bot],snyk-bot,noreply@ocircuit.dev,google-labs-jules[bot]

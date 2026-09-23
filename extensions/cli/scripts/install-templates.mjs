@@ -1,9 +1,9 @@
 import {
-    chmodSync,
-    mkdirSync,
-    readdirSync,
-    readFileSync,
-    writeFileSync,
+  chmodSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
 } from "node:fs";
 import os from "node:os";
 import path from "node:path";

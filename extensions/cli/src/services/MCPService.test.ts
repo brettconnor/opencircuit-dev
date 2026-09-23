@@ -14,25 +14,45 @@ const mockClient = {
 };
 
 vi.mock("@modelcontextprotocol/sdk/client/index.js", () => ({
-  Client: vi.fn(() => mockClient),
+  Client: vi.fn(function MockClient() {
+    return mockClient;
+  }),
 }));
 
 vi.mock("@modelcontextprotocol/sdk/client/stdio.js", () => ({
-  StdioClientTransport: vi.fn(),
+  StdioClientTransport: vi.fn(function MockStdioClientTransport() {}),
 }));
 
 vi.mock("@modelcontextprotocol/sdk/client/sse.js", () => ({
-  SSEClientTransport: vi.fn(),
+  SSEClientTransport: vi.fn(function MockSseClientTransport() {}),
+  SseError: class SseError extends Error {
+    code: number;
+
+    constructor(message: string, code: number) {
+      super(message);
+      this.code = code;
+    }
+  },
 }));
 
 vi.mock("@modelcontextprotocol/sdk/client/streamableHttp.js", () => ({
-  StreamableHTTPClientTransport: vi.fn(),
+  StreamableHTTPClientTransport: vi.fn(
+    function MockStreamableHTTPClientTransport() {},
+  ),
+  StreamableHTTPError: class StreamableHTTPError extends Error {
+    code: number;
+
+    constructor(message: string, code: number) {
+      super(message);
+      this.code = code;
+    }
+  },
 }));
 
 vi.mock("https", () => ({
-  Agent: vi.fn().mockImplementation(() => ({
-    rejectUnauthorized: false,
-  })),
+  Agent: vi.fn().mockImplementation(function MockHttpsAgent() {
+    return { rejectUnauthorized: false };
+  }),
 }));
 
 describe("MCPService", () => {
@@ -93,7 +113,7 @@ describe("MCPService", () => {
 
   describe("service management", () => {
     beforeEach(async () => {
-      await mcpService.initialize(mockAssistant);
+      await mcpService.initialize(mockAssistant, false, true);
     });
 
     it("should get overall status", async () => {
@@ -239,7 +259,7 @@ describe("MCPService", () => {
         ],
       } as AssistantConfig;
 
-      await mcpService.initialize(sseAssistant);
+      await mcpService.initialize(sseAssistant, false, true);
 
       expect(SSEClientTransport).toHaveBeenCalledWith(
         expect.any(URL),
@@ -278,7 +298,7 @@ describe("MCPService", () => {
         ],
       } as AssistantConfig;
 
-      await mcpService.initialize(sseAssistant);
+      await mcpService.initialize(sseAssistant, false, true);
 
       expect(SSEClientTransport).toHaveBeenCalledWith(
         expect.any(URL),
@@ -323,7 +343,7 @@ describe("MCPService", () => {
         ],
       } as AssistantConfig;
 
-      await mcpService.initialize(httpAssistant);
+      await mcpService.initialize(httpAssistant, false, true);
 
       expect(StreamableHTTPClientTransport).toHaveBeenCalledWith(
         expect.any(URL),
@@ -359,7 +379,7 @@ describe("MCPService", () => {
         ],
       } as AssistantConfig;
 
-      await mcpService.initialize(httpAssistant);
+      await mcpService.initialize(httpAssistant, false, true);
 
       expect(StreamableHTTPClientTransport).toHaveBeenCalledWith(
         expect.any(URL),
@@ -398,7 +418,7 @@ describe("MCPService", () => {
         ],
       } as AssistantConfig;
 
-      await mcpService.initialize(httpAssistant);
+      await mcpService.initialize(httpAssistant, false, true);
 
       expect(StreamableHTTPClientTransport).toHaveBeenCalledWith(
         expect.any(URL),

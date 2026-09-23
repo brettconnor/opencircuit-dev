@@ -1,3 +1,4 @@
+import { cleanup as cleanupInk } from "ink-testing-library";
 import { vi } from "vitest";
 
 import { resetConsoleOverrides } from "./src/init.js";
@@ -64,6 +65,10 @@ vi.mock("./src/systemMessage.js", () => ({
 
 // Set up global afterEach hook to clear all timers and reset console
 afterEach(() => {
+  // Unmount all Ink renderers so shared event emitters do not retain listeners
+  // between tests.
+  cleanupInk();
+
   // Clear vitest timers
   vi.clearAllTimers();
 

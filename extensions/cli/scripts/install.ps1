@@ -21,6 +21,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'  # Faster downloads
 
 $script:RequiredNodeVersion = [version]"24.19.0"
+$script:MaxSupportedNodeMajor = 27
 $script:PackageName = "@opencircuit/cli"
 $script:PackageVersion = "1.0.0"
 $script:CliCommand = "oc"
@@ -92,12 +93,13 @@ function Test-NodeInstalled {
     }
 
     Write-Info "Found Node.js v$currentVersion"
-    if ($currentVersion -ge $RequiredNodeVersion) {
-        Write-Success "Node.js meets requirements (>= v$RequiredNodeVersion)"
+    if ($currentVersion -ge $RequiredNodeVersion -and
+        $currentVersion.Major -lt $MaxSupportedNodeMajor) {
+        Write-Success "Node.js meets requirements (>= v$RequiredNodeVersion <$MaxSupportedNodeMajor.0.0)"
         return $true
     }
 
-    Write-Warn "Node.js v$currentVersion is below required v$RequiredNodeVersion"
+    Write-Warn "Node.js v$currentVersion is outside the supported range (>= v$RequiredNodeVersion <$MaxSupportedNodeMajor.0.0)"
     return $false
 }
 

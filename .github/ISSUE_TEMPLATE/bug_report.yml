@@ -11,7 +11,7 @@ body:
     attributes:
       label: Before submitting your bug report
       options:
-        - label: I'm not able to find an [open issue](https://github.com/brettconnor/opencircuit-dev/issues?q=is%3Aopen+is%3Aissue) that reports the same bug
+        - label: I'm not able to find an [open issue](https://github.com/open-circuit-dev/open-circuit/issues?q=is%3Aopen+is%3Aissue) that reports the same bug
           required: false
   - type: textarea
     attributes:

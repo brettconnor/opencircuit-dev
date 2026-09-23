@@ -1,7 +1,6 @@
 import type { ChatHistoryItem, MessageContent } from "core";
 import { Box, Text } from "ink";
 import React, { memo } from "react";
-
 import { ToolCallTitle } from "src/tools/ToolCallTitle.js";
 
 import { MarkdownRenderer } from "../MarkdownRenderer.js";

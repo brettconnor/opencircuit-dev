@@ -1,3 +1,4 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
   AgentFile,
   AssistantUnrolled,
@@ -5,10 +6,9 @@ import {
   parseAgentFileRules,
   parseAgentFileTools,
 } from "@opencircuit/config-yaml";
-import { BaseLlmApi } from "@opencircuit/openai-adapters";
 import type { AssistantUnrolled as AssistantConfig } from "@opencircuit/config-yaml";
+import { BaseLlmApi } from "@opencircuit/openai-adapters";
 import { DefaultApiInterface } from "@opencircuit/sdk/dist/api/dist/index.js";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 import type { AuthConfig } from "../auth/workos.js";
 import { BaseCommandOptions } from "../commands/BaseCommandOptions.js";

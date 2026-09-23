@@ -17,7 +17,7 @@ permissions:
 jobs:
   release:
     # Only run this workflow on the canonical repository.
-    if: github.repository == 'brettconnor/opencircuit-dev'
+    if: github.repository == 'open-circuit-dev/open-circuit'
     uses: ./.github/workflows/reusable-release.yml
     with:
       package-name: "fetch"

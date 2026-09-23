@@ -1,9 +1,6 @@
 const { spawn } = require("child_process");
 const path = require("path");
 const fs = require("fs");
-const fsPromises = require("fs/promises");
-
-const npmInstallCmd = process.env.CI === "true" ? "npm ci" : "npm install";
 
 function runCommand(command, cwd, packageName) {
   return new Promise((resolve, reject) => {
@@ -47,27 +44,15 @@ function runCommand(command, cwd, packageName) {
   });
 }
 
-// Helper function to build a package (install + build)
-async function buildPackage(packageName, cleanNodeModules = false) {
+// Helper function to build a package. Dependencies are installed once from
+// the repository root workspace before this script runs; this script must
+// not run npm install/ci inside any package.
+async function buildPackage(packageName) {
   const packagePath = path.join(__dirname, "..", "packages", packageName);
 
   if (!fs.existsSync(packagePath)) {
     throw new Error(`Package directory not found: ${packagePath}`);
   }
-
-  if (cleanNodeModules) {
-    const nodeModulesPath = path.join(packagePath, "node_modules");
-    if (fs.existsSync(nodeModulesPath)) {
-      console.log(`🧹 Cleaning node_modules for ${packageName}`);
-      await fsPromises.rm(nodeModulesPath, { recursive: true, force: true });
-    }
-  }
-
-  await runCommand(
-    npmInstallCmd === "npm ci" ? ["npm", "ci"] : ["npm", "install"],
-    packagePath,
-    `${packageName} (install)`,
-  );
 
   return runCommand(
     ["npm", "run", "build"],
@@ -76,10 +61,8 @@ async function buildPackage(packageName, cleanNodeModules = false) {
   );
 }
 
-async function buildPackagesInParallel(packages, cleanNodeModules = false) {
-  const buildPromises = packages.map((pkg) =>
-    buildPackage(pkg, cleanNodeModules),
-  );
+async function buildPackagesInParallel(packages) {
+  const buildPromises = packages.map((pkg) => buildPackage(pkg));
   return Promise.all(buildPromises);
 }
 

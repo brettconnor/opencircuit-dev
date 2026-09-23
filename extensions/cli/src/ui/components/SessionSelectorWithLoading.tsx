@@ -1,6 +1,5 @@
 import { Box, Text } from "ink";
 import React from "react";
-
 import { logger } from "src/util/logger.js";
 
 import { listSessions, type ExtendedSessionMetadata } from "../../session.js";
