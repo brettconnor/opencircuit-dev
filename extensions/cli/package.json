@@ -26,7 +26,7 @@
     "test:smoke": "node smoke-test.mjs",
     "test:smoke-api": "vitest run --config vitest.smoke-api.config.ts",
     "build:tsc": "tsc -p tsconfig.build.json",
-    "build:local-deps": "cd ../.. && npm ci && node ./scripts/build-packages.js && cd core && npm ci && npm run build && cd ../extensions/cli && npm ci --include=optional",
+    "build:local-deps": "cd ../.. && npm ci --include=dev && node ./scripts/build-packages.js && cd core && npm ci && npm run build && cd ../extensions/cli && npm ci --include=optional",
     "build:validate": "node validate-aliases.mjs",
     "build:bundle": "node build.mjs",
     "build": "npm run build:validate && npm run build:bundle && npm run build:tsc",
