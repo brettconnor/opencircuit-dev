@@ -11,6 +11,30 @@ Pick the path that matches your goal:
 
 Do not start with the source-build path unless you intend to work on the project itself. The packaged release tarball is the default and simplest first-run experience for most users.
 
+## Contributor pre-push validation
+
+Maintainers with Ubuntu1 access can opt in to validating each new branch commit
+before a GitHub push. From the repository root, configure the gate once:
+
+```bash
+git config --local ocircuit.ubuntu-gate true
+git config --local ocircuit.orchestration-root /Users/brettcon/git/opencircuit/opencircuit-orchestration
+```
+
+The pre-push hook synchronizes the exact clean commit to Ubuntu1 and runs the
+registered install, build, typecheck, and smoke-test workload. Successful
+commit and orchestration revision pairs are cached under `.git/`, so another
+push of the same commit does not rerun the workload. The first validation can
+take several minutes; progress heartbeats remain visible in the terminal.
+
+Use an explicit emergency bypass only when necessary:
+
+```bash
+OC_SKIP_UBUNTU_GATE=1 git push
+```
+
+The gate is opt-in per clone. It does not replace required GitHub checks.
+
 ## 1. Check Node.js
 
 Open Circuit 1.0.0 expects Node.js `24.19.0`.
