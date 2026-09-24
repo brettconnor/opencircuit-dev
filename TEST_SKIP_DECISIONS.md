@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/util/generateRepoMap.test.ts`
 - `core/diff/util.vitest.ts`
 - `core/config/ConfigHandler.vitest.ts`
 - `core/edit/lazy/deterministic.test.ts`
@@ -152,6 +151,7 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
   no network, no external infra). Both were stale test-expectation
   issues, not production defects — no changes were made to
   `core/util/index.ts`'s `dedent` implementation:
+
   - CRLF test: the implementation only strips the common _leading_
     indentation shared by all lines; it never trims trailing whitespace
     from an individual content line. The test's fixture ends its last
@@ -188,3 +188,56 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
     — 51/59 suites passed (899/973 tests passed, 74 skipped in the
     remaining un-migrated families), zero failures. `npm run tsc:check`
     passed with no errors.
+
+- `core/util/generateRepoMap.test.ts` — re-enabled the sole
+  `describe.skip("generateRepoMap")` block (3 tests). Behavior is fully
+  deterministic (in-process file generation against a real temp test
+  directory, no network, no external infra). All 3 failures were caused
+  by pre-existing bugs **in the test fixture itself**, not in
+  `core/util/generateRepoMap.ts` — no production code was modified:
+  - The mock `groupedByUri` keys were built with `path.join(TEST_DIR,
+...)`, but `TEST_DIR` is itself a `file://` URI (see
+    `core/test/testDir.ts`), and Node's `path.join` collapses the
+    URI's double slash (`file:///...` → `file:/...`). This produced
+    mock keys that never matched the real `file:///...`-format URIs
+    `generateRepoMap` collects via `walkDirs`, so its
+    `pathsInDirsWithSnippets` bookkeeping never recognized a uri as
+    already processed, and every file incorrectly reappeared in the
+    "remaining uris without snippets" section. Fixed by building the
+    mock keys with `joinPathsToUri` (`core/util/uri.ts`) — the same
+    URI-safe join helper `generateRepoMap`'s own callers use — instead
+    of `path.join`.
+  - The "file read errors" test mocked `fs.promises.readFile`, but
+    `generateRepoMap` actually calls `this.ide.readFile(uri)`, and the
+    concrete `FileSystemIde.readFile` (`core/util/filesystem.ts`) uses
+    the callback-style `fs.readFile`, not `fs.promises.readFile` — so
+    the mock never intercepted anything and the simulated read failure
+    never occurred. Fixed by mocking `testIde.readFile` directly (the
+    actual method invoked), falling back to the real implementation for
+    files other than the intentionally-failing one.
+  - The same test's expected error-log string used a stale `Path:`
+    label; the current implementation logs `Uri:`
+    (`core/util/generateRepoMap.ts`'s catch block). Corrected the
+    expected string to `Uri:` once the mock was fixed to actually fire.
+  - Two tests' expected output included a trailing `\n` after the last
+    plain-uri entry, but both code paths that write plain uri lists
+    (the `includeSignatures: false` branch, and the "remaining uris
+    without snippets" pass) build their content via
+    `uris.map(...).join("\n")`, which never appends a trailing
+    terminator — unlike the `includeSignatures: true` per-file blocks,
+    which each end in `"\n\n"`. Verified this against all 4 current
+    production callers of `generateRepoMap`
+    (`core/tools/implementations/viewRepoMap.ts`,
+    `core/tools/implementations/viewSubdirectory.ts`,
+    `core/context/providers/RepoMapContextProvider.ts`,
+    `core/context/retrieval/repoMapRequest.ts`) — each embeds the
+    returned string as prose context in a prompt, where a missing
+    trailing newline has no functional effect — so this is a cosmetic,
+    not correctness, difference, and the fix belongs in the test
+    expectation rather than in production output. Corrected both
+    expectations to drop the stale trailing newline.
+    Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest util/generateRepoMap.test.ts`
+    — 3/3 passed. Full-suite regression check: `npm run test` in `core/` —
+    52/59 suites passed (902/973 tests passed, 71 skipped in the remaining
+    un-migrated families), zero failures. `npm run tsc:check` passed with
+    no errors.
