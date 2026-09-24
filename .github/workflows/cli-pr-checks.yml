@@ -194,8 +194,8 @@ jobs:
           npm run build
 
       - name: Run smoke API tests
+        if: github.actor != 'dependabot[bot]'
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OCIRCUIT_API_KEY: ${{ secrets.OCIRCUIT_API_KEY }}
         run: |
           cd extensions/cli
