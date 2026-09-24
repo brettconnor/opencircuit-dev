@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/config/ConfigHandler.vitest.ts`
 - `core/edit/lazy/deterministic.test.ts`
 - `core/indexing/CodebaseIndexer.test.ts`
 - `extensions/cli/src/e2e/headless-simple.test.ts`
@@ -276,3 +275,71 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
     52/59 suites, 902/973 tests, zero failures (unchanged — jest does not
     run `.vitest.ts` files). `npm run tsc:check` in `core/` passed with
     no errors.
+- `core/config/ConfigHandler.vitest.ts` — re-enabled the sole
+  `describe.skip("Test the ConfigHandler and E2E config loading")` block
+  (4 tests). `core/config/ConfigHandler.ts` was **not modified** — this
+  was test-only, but required a deeper architectural finding than prior
+  rounds:
+  - Removing the skip: 2/4 passed immediately ("should show only local
+    profile", "should load the default config successfully"). The other
+    2 failed with `expected undefined to be 'SYSTEM'` /
+    `'SYSTEM2'`.
+  - Root cause 1 (assertion shape): both failing tests read
+    `config.systemMessage` off the value returned by
+    `testConfigHandler.reloadConfig(...)`, but `reloadConfig` returns
+    `{ config, errors, configLoadInterrupted }` — the actual
+    `OCircuitConfig` is at `.config`, and tracing `config/load.ts`
+    (`intermediateToFinalConfig`) showed that a raw `systemMessage`
+    string (from either config.ts's `modifyConfig` or a merged
+    `.ocircuitrc.json`) is converted into a rule pushed onto
+    `finalConfig.rules` as `{ rule: "SYSTEM", source: "json-systemMessage" }`
+    — there is no top-level `systemMessage` field on the resolved config
+    at all. Corrected both assertions to check
+    `result.config?.rules.some(r => r.rule === "..." && r.source === "json-systemMessage")`.
+  - Root cause 2 (URI-mangling, same class of bug as round 5's
+    `generateRepoMap.test.ts`): the `.ocircuitrc.json` test wrote via
+    `fs.writeFileSync(path.join(TEST_DIR, ".ocircuitrc.json"), ...)`, but
+    `TEST_DIR` is a `file://` URI and `path.join` collapses `file:///` to
+    `file:/`, verified directly via `node -e` — the file was never
+    written to the real workspace directory the `IDE` reads from. Fixed
+    by using the existing `addToTestDir`/`setUpTestDir`/`tearDownTestDir`
+    helpers from `test/testDir.ts` (the established pattern already used
+    by `config/loadLocalAssistants.vitest.ts` for the same workspace-file
+    scenario), added in `beforeEach`/`afterEach`.
+  - Root cause 3 (architectural drift, found by direct tracing, not
+    assumption): the "local" test profile normally loads config via
+    `config.yaml` (`getConfigYamlPath()` auto-creates a default
+    `config.yaml` the first time it's called if no `config.json` already
+    exists), and `config/profile/doLoadConfig.ts` only calls
+    `loadOCircuitConfigFromJson` (the function that applies config.ts's
+    `modifyConfig` and merges `.ocircuitrc.json`) when **no**
+    `config.yaml` is present. Confirmed via a temporary debug test that,
+    unmodified, `result.config?.rules` was always `[]` for both tests —
+    the legacy config.json+config.ts systemMessage path was silently
+    unreachable for the profile under test. This is real, still-shipped
+    production behavior (it's how a user who hasn't migrated to
+    `config.yaml` experiences config.ts/`.ocircuitrc.json`), not a
+    removed feature — so this was resolved rather than deferred: each of
+    the 2 affected tests now deletes `config.yaml` and writes a minimal
+    `config.json` (`{"models": []}`) before calling `reloadConfig`,
+    deterministically forcing the same routing condition
+    `doLoadConfig` uses in real usage. `afterEach` restores `config.ts`
+    to its default content, removes the test-created `config.json`, and
+    calls `getConfigYamlPath()` again to recreate `config.yaml`, so later
+    tests in this file (and other files sharing the same
+    `OCIRCUIT_GLOBAL_DIR`) see the normal YAML-based default profile
+    again.
+  - Affected files: `core/config/ConfigHandler.vitest.ts` only (skip
+    removed, `beforeEach`/`afterEach` added, 2 assertions corrected, 2
+    tests' setup rewritten to force the legacy JSON-config routing
+    condition). No production code changed.
+  - Validation: `npx vitest run config/ConfigHandler.vitest.ts` — 4/4
+    passed, repeated 3 times back-to-back with identical results (no
+    flakiness/ordering sensitivity). Full `core/` vitest suite
+    (`npm run vitest`) — same 3 pre-existing failing files as round 6
+    (`config/loadContextProviders.vitest.ts`, `util/repoUrl.vitest.ts`,
+    `config/yaml/LocalPlatformClient.vitest.ts`), no new failures.
+    `npm run tsc:check` in `core/` passed with no errors. An incidental
+    test-run side effect on
+    `core/test/.ocircuit-test/sessions/sessions.json` was reverted before
+    finalizing, keeping the change atomic.
