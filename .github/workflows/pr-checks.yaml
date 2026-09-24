@@ -16,7 +16,7 @@ jobs:
       cli_core: ${{ steps.profiles.outputs.cli_core }}
       vsix: ${{ steps.profiles.outputs.vsix }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
       - name: Detect change profiles
@@ -30,14 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.run_attempt > 1
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Track workflow rerun
         uses: ./.github/actions/track-rerun
 
   prettier-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: ".nvmrc"
@@ -63,7 +63,7 @@ jobs:
     # locally or via the Ubuntu1 gate. See PR #67 investigation notes.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0 # Needed for git diff to work
       - name: Setup packages
@@ -121,7 +121,7 @@ jobs:
     # locally or via the Ubuntu1 gate. See PR #67 investigation notes.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Setup packages
         uses: ./.github/actions/setup-packages
       - name: Setup core component
@@ -148,7 +148,7 @@ jobs:
     # locally or via the Ubuntu1 gate. See PR #67 investigation notes.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Setup packages
         uses: ./.github/actions/setup-packages
       - name: Setup core component
@@ -181,7 +181,7 @@ jobs:
     outputs:
       packages: ${{ steps.get-packages.outputs.packages }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Get package list
         id: get-packages
         run: |
@@ -197,7 +197,7 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.get-packages-matrix.outputs.packages) }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0 # Needed for git diff to work
       - name: Setup packages
@@ -238,7 +238,7 @@ jobs:
     outputs:
       test_file_matrix: ${{ steps.vscode-get-test-file-matrix.outputs.test_file_matrix }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: ".nvmrc"
@@ -303,7 +303,7 @@ jobs:
     # locally or via the Ubuntu1 gate. See PR #67 investigation notes.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
 
@@ -341,7 +341,7 @@ jobs:
         test_file: ${{ fromJson(needs.vscode-get-test-file-matrix.outputs.test_file_matrix || '[]') }}
         command: ["e2e:ci:run", "e2e:ci:run-yaml"]
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Run VS Code E2E test
         uses: ./.github/actions/run-vscode-e2e-test
         with:
