@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import {
   DocumentSymbol,
@@ -253,7 +254,17 @@ class FileSystemIde implements IDE {
   }
 
   getBranch(dir: string): Promise<string> {
-    return Promise.resolve("");
+    try {
+      const cwd = fileURLToPath(dir);
+      const branch = execSync("git rev-parse --abbrev-ref HEAD", {
+        cwd,
+      })
+        .toString()
+        .trim();
+      return Promise.resolve(branch || "NONE");
+    } catch (e) {
+      return Promise.resolve("NONE");
+    }
   }
 
   getOpenFiles(): Promise<string[]> {

@@ -255,9 +255,16 @@ describe("CodebaseIndexer", () => {
       execSync(
         `cd ${TEST_DIR_PATH} && git init && git checkout -b main && git add -A && git commit -m "First commit"`,
       );
+
+      // Establish the tag state for the "main" branch itself (reusing the
+      // already-computed embeddings via the content-addressed global cache),
+      // so that later switching away from and back to "main" has a genuine
+      // baseline to compare against instead of an empty tag bucket.
+      const updates = await refreshIndex();
+      expect(updates.length).toBeGreaterThan(0);
     });
 
-    test.skip("should only re-index the changed files when changing branches", async () => {
+    test("should only re-index the changed files when changing branches", async () => {
       execSync(`cd ${TEST_DIR_PATH} && git checkout -b test2`);
       // Rewriting the file
       addToTestDir([["test.ts", "// This is different"]]);
@@ -265,12 +272,15 @@ describe("CodebaseIndexer", () => {
       // Should re-compute test.ts, but just re-tag the .py file
       await expectPlan(1, 1, 0, 0);
 
+      const updates = await refreshIndex();
+      expect(updates.length).toBeGreaterThan(0);
+
       execSync(
         `cd ${TEST_DIR_PATH} && git add -A && git commit -m "Change .ts file"`,
       );
     });
 
-    test.skip("shouldn't re-index anything when changing back to original branch", async () => {
+    test("shouldn't re-index anything when changing back to original branch", async () => {
       execSync(`cd ${TEST_DIR_PATH} && git checkout main`);
       await expectPlan(0, 0, 0, 0);
     });
