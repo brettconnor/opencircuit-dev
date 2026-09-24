@@ -20,7 +20,8 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `packages/config-yaml/src/__tests__/index.test.ts`
+_(none remaining — all candidates in this list have been resolved or moved
+to the deferred table above; see `serve.test.ts` in the deferred table)_
 
 These are not silently treated as passing. They remain a tracked follow-up
 inventory with an explicit owner boundary and are excluded from the required
@@ -477,6 +478,7 @@ with lazy block surrounding` — confirmed via debug instrumentation that
 - `extensions/cli/*` family (RELIABILITY-003 round 10) — 5 of 6
   candidate files fully or mostly resolved; 1 file's single stub test
   deferred (moved to the deferred table above).
+
   - `extensions/cli/src/util/fileWatcher.test.ts` — re-enabled both
     `it.skip` cases ("should detect when new files are created",
     "should detect when files are deleted"). Root cause: both tests
@@ -591,3 +593,28 @@ with lazy block surrounding` — confirmed via debug instrumentation that
     `220badb62` (streamChatResponse) — all pushed to `origin/main`, all
     independently passed the Ubuntu1 pre-push gate (242s, 265s, 238s,
     261s, 240s canonical build times respectively).
+
+- `packages/config-yaml/src/__tests__/index.test.ts` (RELIABILITY-003
+  round 11) — re-enabled the single `it.skip` stub, "should prioritize
+  org over user / package secrets" (previously an empty placeholder
+  with no body). Traced `getLocationsToLook()`'s resolution order
+  (ModelsAddOn/Package for the block, Package for the assistant,
+  Organization, then User) and `resolveFQSN()`'s consumption of that
+  order to confirm the actual, current contract: an Organization-level
+  secret is returned ahead of a User-level secret when both stores hold
+  a value for the same secret name, and only `SecretType.User` results
+  carry a raw `value` back to the client (Organization results
+  intentionally omit it). Wrote a scoped test using a shared secret
+  name present in both a local org and user secret-store fixture (the
+  file's existing shared `orgSecrets`/`userSecrets` consts use disjoint
+  key names, so a local fixture was used instead to avoid mutating
+  shared test state) and asserted `resolveFQSN` picks the Organization
+  location and omits `value`. No production code changed. Validation:
+  file 9/9 passing (up from 8/9), repeated 3x consistent; full
+  `config-yaml` jest suite (`npm run test`) 15/15 suites, 288/288 tests
+  passing (up from 287), zero failures; `npx tsc --noEmit` clean.
+  Committed `3e8373149`, pushed to `origin/main`, Ubuntu1 pre-push gate
+  passed (245s, log
+  `logs/ubuntu-build-workload-20260924T134933Z.json`). This was the
+  final remaining `RELIABILITY-003` candidate family; the "Candidate
+  deterministic coverage" list above is now empty.
