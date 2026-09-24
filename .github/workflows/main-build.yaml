@@ -11,6 +11,11 @@ on:
         description: "PR number to test with"
         required: true
 
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
 jobs:
   republish-pr-artifacts:
     runs-on: ubuntu-latest

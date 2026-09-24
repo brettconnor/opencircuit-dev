@@ -22,6 +22,9 @@ on:
       OCIRCUIT_API_KEY:
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   run-agent:
     runs-on: ubuntu-latest
