@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/diff/util.vitest.ts`
 - `core/config/ConfigHandler.vitest.ts`
 - `core/edit/lazy/deterministic.test.ts`
 - `core/indexing/CodebaseIndexer.test.ts`
@@ -240,4 +239,40 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
     — 3/3 passed. Full-suite regression check: `npm run test` in `core/` —
     52/59 suites passed (902/973 tests passed, 71 skipped in the remaining
     un-migrated families), zero failures. `npm run tsc:check` passed with
+    no errors.
+- `core/diff/util.vitest.ts` — re-enabled the sole
+  `describe.skip("matchLine")` block (10 tests; `streamLines` and
+  `generateLines` in the same file were already enabled and passing).
+  Behavior is fully consistent with the current, correct implementation
+  in `core/diff/util.ts` — no production code was modified:
+  - Removing the skip produced exactly 1 failure (of 10):
+    "should match lines with tolerable differences" expected
+    `matchIndex: 2` for `newLine = "console.log(a);"` against
+    `oldLines = ["const a = 5;", "console.log(b);", "console.log( a );"]`.
+  - `matchLine` is a first-match-wins linear scan (confirmed by reading
+    its sole real caller, `core/diff/streamDiff.ts`, which relies on
+    scanning old lines in order and taking the first sufficiently-close
+    match to build a line-by-line diff). Verified via
+    `fastest-levenshtein`'s `distance()` directly (`node -e`) that index 1
+    (`"console.log(b);"`, edit distance 1, ratio 0.067) is closer than
+    index 2 (`"console.log( a );"`, edit distance 2, ratio 0.118) and
+    both are within the matching threshold, so the implementation
+    correctly returns the first (index 1) match it encounters while
+    iterating in order. The test's expectation of index 2 was a stale/
+    incorrect fixture expectation, not a description of real behavior —
+    corrected it to `matchIndex: 1` (still a genuine "tolerable
+    difference" match, just at the index the algorithm actually reaches
+    first).
+  - Affected files: `core/diff/util.vitest.ts` only (one expectation
+    corrected, `describe.skip` → `describe`). No production code changed.
+  - Validation: `npx vitest run diff/util.vitest.ts` — 14/14 passed.
+    Full `core/` vitest suite (`npm run vitest`): 94/98 files passed
+    (1669/1700 tests passed, 6 skipped); the 3 failing files
+    (`config/loadContextProviders.vitest.ts`, `util/repoUrl.vitest.ts`,
+    `config/yaml/LocalPlatformClient.vitest.ts`) and the docker-dependent
+    `OpenAI-compatible.vitest.ts` uncaught-exception cases were confirmed
+    via `git stash` to fail identically on the pre-change baseline —
+    pre-existing, unrelated to this change. `npm run test` (jest):
+    52/59 suites, 902/973 tests, zero failures (unchanged — jest does not
+    run `.vitest.ts` files). `npm run tsc:check` in `core/` passed with
     no errors.
