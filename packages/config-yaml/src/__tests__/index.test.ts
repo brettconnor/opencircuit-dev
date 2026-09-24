@@ -409,5 +409,56 @@ describe("E2E Scenarios", () => {
     expect(result.config?.rules?.length).toBeGreaterThan(0);
   });
 
-  it.skip("should prioritize org over user / package secrets", () => {});
+  it("should prioritize org over user / package secrets", async () => {
+    // Use a secret name that is present in both the org and user secret
+    // stores (and never resolves at the package level), so we can observe
+    // which location `resolveFQSN` actually picks first.
+    const sharedSecretName = "SHARED_SECRET";
+    const localOrgSecrets: Record<string, string> = {
+      [sharedSecretName]: "org-value",
+    };
+    const localUserSecrets: Record<string, string> = {
+      [sharedSecretName]: "user-value",
+    };
+
+    const localPlatformSecretStore: PlatformSecretStore = {
+      getSecretFromSecretLocation: async function (
+        secretLocation: SecretLocation,
+      ): Promise<string | undefined> {
+        switch (secretLocation.secretType) {
+          case SecretType.Package:
+            // Package/assistant-level secrets never match in this scenario,
+            // isolating the org-vs-user comparison.
+            return undefined;
+          case SecretType.Organization:
+            return localOrgSecrets[secretLocation.secretName];
+          case SecretType.User:
+            return localUserSecrets[secretLocation.secretName];
+          default:
+            return undefined;
+        }
+      },
+    };
+
+    const fqsn: FQSN = {
+      packageSlugs: [{ ownerSlug: "test-org", packageSlug: "test-assistant" }],
+      secretName: sharedSecretName,
+    };
+
+    const result = await resolveFQSN(
+      "test-user",
+      fqsn,
+      localPlatformSecretStore,
+      "test-org",
+    );
+
+    // Per `getLocationsToLook`, Organization is checked before User in the
+    // resolution order, so the org value should win even though both stores
+    // have a value for this secret name.
+    expect(result.found).toBe(true);
+    expect(result.secretLocation.secretType).toBe(SecretType.Organization);
+    // Only User-type results carry a raw `value` back to the client -
+    // Organization results intentionally omit it.
+    expect("value" in result).toBe(false);
+  });
 });
