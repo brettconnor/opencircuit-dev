@@ -127,10 +127,21 @@ describe("deterministicApplyLazyEdit(", () => {
     await expectDiff("calculator-comments.js");
   });
 
+  // TODO(RELIABILITY-003 round 8, deferred - see TEST_SKIP_DECISIONS.md): matching
+  // heuristic in programNodeIsSimilar compares old/new lines at fixed relative
+  // offsets, which breaks when new content interleaves extra lines (e.g. added
+  // docstrings) between otherwise-matching lines. Fixing requires an alignment
+  // algorithm change to deterministic.ts, not a narrow test fix.
   test.skip("calculator docstrings", async () => {
     await expectDiff("calculator-docstrings.js");
   });
 
+  // TODO(RELIABILITY-003 round 8, deferred - see TEST_SKIP_DECISIONS.md): the
+  // deterministic diff computed here is verified correct (matches the expected
+  // fixture), but shouldRejectDiff's 30% REMOVAL_PERCENTAGE_THRESHOLD safety
+  // valve rejects it as "too messy" because this legitimate stateful->stateless
+  // rewrite replaces most method bodies. Loosening/tuning that global threshold
+  // is a production behavior change affecting all callers, not a narrow fix.
   test.skip("calculator stateless", async () => {
     await expectDiff("calculator-stateless.js");
   });
@@ -139,6 +150,10 @@ describe("deterministicApplyLazyEdit(", () => {
     await expectDiff("top-level-same.js");
   });
 
+  // TODO(RELIABILITY-003 round 8, deferred - see TEST_SKIP_DECISIONS.md): same
+  // shouldRejectDiff removal-percentage safety-valve limitation as
+  // "calculator stateless" above (large legitimate diff exceeds the 30%
+  // threshold), applied to a bigger real-world fixture.
   test.skip("gui add toggle", async () => {
     await expectDiff("gui.js");
   });
@@ -151,7 +166,7 @@ describe("deterministicApplyLazyEdit(", () => {
     await expectDiff("no-lazy.js");
   });
 
-  test.skip("no lazy blocks in single top level class", async () => {
+  test("no lazy blocks in single top level class", async () => {
     await expectDiff("no-lazy-single-class.js");
   });
 
@@ -159,6 +174,14 @@ describe("deterministicApplyLazyEdit(", () => {
     await expectDiff("migration-page.tsx");
   });
 
+  // TODO(RELIABILITY-003 round 8, deferred - see TEST_SKIP_DECISIONS.md):
+  // findLazyBlockReplacements only compares siblings at matching nesting
+  // depth; when the new lazy snippet omits the surrounding class wrapper the
+  // top-level type comparison (class_declaration vs bare statements) never
+  // matches, so it never descends to find "divide" and falls back to
+  // appending the whole snippet after the untouched old class. Handling this
+  // needs recursive-descent structural realignment, a real algorithm change,
+  // not a narrow test fix.
   test.skip("should handle case where surrounding class is neglected, with lazy block surrounding", async () => {
     await expectDiff("calculator-class-neglected.js");
   });

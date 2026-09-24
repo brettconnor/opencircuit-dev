@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/edit/lazy/deterministic.test.ts`
 - `core/indexing/CodebaseIndexer.test.ts`
 - `extensions/cli/src/e2e/headless-simple.test.ts`
 - `extensions/cli/src/util/fileWatcher.test.ts`
@@ -280,6 +279,7 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
   (4 tests). `core/config/ConfigHandler.ts` was **not modified** — this
   was test-only, but required a deeper architectural finding than prior
   rounds:
+
   - Removing the skip: 2/4 passed immediately ("should show only local
     profile", "should load the default config successfully"). The other
     2 failed with `expected undefined to be 'SYSTEM'` /
@@ -343,3 +343,87 @@ overlap")` in the `intersection` block. All behavior is a pure, in-process
     test-run side effect on
     `core/test/.ocircuit-test/sessions/sessions.json` was reverted before
     finalizing, keeping the change atomic.
+
+- `core/edit/lazy/deterministic.test.ts` — partially resolved. Un-skipped all
+  5 remaining `test.skip` cases in the `deterministicApplyLazyEdit(` describe
+  block (10 of 15 tests in this file were already enabled/passing). 1 of the
+  5 was a genuine stale fixture and is now fully re-enabled and passing; the
+  other 4 are re-characterized as intentionally deferred production
+  limitations (re-skipped with a `TODO(RELIABILITY-003 round 8, deferred)`
+  comment on each explaining the specific root cause, so they remain visibly
+  tracked rather than silently reverted).
+
+  - **Re-enabled (test-only fix):** `no lazy blocks in single top level
+class` — root-caused via direct instrumentation of
+    `deterministicApplyLazyEdit`/`programNodeIsSimilar` (temporary, reverted
+    debug logging; no lasting change) to confirm the computed diff and
+    reconstructed file content were byte-for-byte correct. The failure was
+    the fixture's expected-diff text itself: `displayDiff()`'s
+    `` `${symbol} ${line}` `` format always inserts one separator space
+    between the `-`/`+` symbol and the original line's own leading
+    indentation (confirmed against an already-passing fixture,
+    `calculator-comments.js.diff`, which follows this convention
+    consistently). The `no-lazy-single-class.js.diff` fixture's two changed
+    lines had one fewer leading space than that convention requires. Fixed
+    by adding the missing space to both lines in the fixture; no production
+    code or test-file assertion logic changed.
+  - **Deferred:** `calculator docstrings` — `programNodeIsSimilar`'s
+    line-alignment check compares old/new lines at a fixed relative offset
+    from the first matched line, which cannot handle inserted lines (e.g.
+    JSDoc blocks) between otherwise-matching content. Confirmed via debug
+    instrumentation that the root node was the only match candidate
+    considered and its "matching lines" count fell well below the 50%
+    threshold purely due to the interleaved docstring lines shifting every
+    subsequent line's position. Fixing this needs a real alignment-algorithm
+    change (e.g. LCS-based instead of fixed-offset), which is a production
+    behavior change to a shared heuristic, not a narrow test fix.
+  - **Deferred:** `calculator stateless` — confirmed via debug
+    instrumentation that `deterministicApplyLazyEdit` computes the exact
+    correct diff (byte-for-byte matches the fixture's expected diff), but
+    `shouldRejectDiff`'s global `REMOVAL_PERCENTAGE_THRESHOLD` (0.3) rejects
+    it as "too messy" because 22/46 (48%) of the diff lines are removals —
+    an intentional, legitimate large rewrite (stateful → stateless
+    calculator), not an artifact. Loosening or re-deriving this threshold
+    (e.g. to account for paired removal+addition "replacement" lines vs. pure
+    deletions) would change accepted/rejected outcomes for every caller of
+    this deterministic-apply path in production, so it is deferred rather
+    than tuned narrowly here.
+  - **Deferred:** `gui add toggle` — same `shouldRejectDiff` removal-
+    percentage limitation as `calculator stateless` (217/567 = 38% removals
+    on a larger real-world fixture), confirmed via the same instrumentation
+    approach.
+  - **Deferred:** `should handle case where surrounding class is neglected,
+with lazy block surrounding` — confirmed via debug instrumentation that
+    `findLazyBlockReplacements` only compares nodes as siblings at matching
+    tree depth. When the lazy-edit snippet omits the surrounding
+    `class { ... }` wrapper (the scenario this test is named for), the
+    top-level type comparison (`class_declaration` vs. bare statements)
+    never matches, so the algorithm never descends into the class to find
+    the `divide` method it should replace; it instead falls back to treating
+    the whole old class as unmatched "replacement" content and appends the
+    new snippet verbatim after it. Correctly handling a missing structural
+    wrapper needs recursive-descent realignment logic, a real algorithm
+    change with wider blast radius, not a narrow fix. (The sibling test
+    "...without lazy block surrounding" was already passing before this
+    round and is unaffected.)
+  - Affected files: `core/edit/lazy/deterministic.test.ts` (1 test
+    re-enabled, 4 re-skipped with explanatory `TODO` comments — net: 1 more
+    test passing than before this round) and
+    `core/edit/lazy/test-examples/no-lazy-single-class.js.diff` (fixture
+    whitespace fix). No production code (`core/edit/lazy/deterministic.ts`)
+    changed; all debug instrumentation added during investigation was fully
+    reverted before committing.
+  - Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest edit/lazy/deterministic.test.ts`
+    — 11/15 passed, 4 intentionally skipped (up from 10/15 passed, 5
+    skipped). Full-suite regression check: `npm run test` in `core/` —
+    52/59 suites passed (903/973 tests passed, up from the round-7 baseline
+    of 902/973 — the +1 matches the single newly re-enabled test), zero
+    failures. `npm run vitest` — same 3 pre-existing failing files as prior
+    rounds, no new failures (this test file is Jest-only, not part of the
+    Vitest run). `npm run tsc:check` passed with no errors. The 4 deferred
+    cases are documented here (rather than left in the generic "Candidate
+    deterministic coverage" list above) since resolving them needs
+    production-code changes to shared matching/rejection heuristics with
+    real regression risk, not simple ownership/fixture follow-up. An
+    incidental `core/test/.ocircuit-test/sessions/sessions.json` test-run
+    diff was reverted before finalizing, keeping the change atomic.

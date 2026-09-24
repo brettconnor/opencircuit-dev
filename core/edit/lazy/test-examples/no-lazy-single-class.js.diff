@@ -23,8 +23,8 @@ class Calculator {
   }
 
   reset() {
--    this.result = 0;
-+    this.result = 1;
+-     this.result = 0;
++     this.result = 1;
     return this;
   }
 }
