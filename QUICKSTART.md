@@ -459,6 +459,11 @@ Return to the repository [README](README.md) and use its **Build from source**
 section. The source-development path builds Core and the CLI in dependency
 order before running the CLI smoke tests.
 
+Review the [contributor workflow](CONTRIBUTING.md) and
+[Contributor License Agreement](CLA.md) before opening a pull request. The
+agreement remains project policy, but GitHub Actions does not currently enforce
+CLA acceptance.
+
 ## 10. More answers and examples
 
 See [`FAQ.md`](FAQ.md) for common installation, provider, bootstrap, testing,

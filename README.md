@@ -130,6 +130,11 @@ npm install --global @opencircuit/cli@1.0.0
 
 Use this path only when developing Open Circuit itself:
 
+Review the [contributor workflow](CONTRIBUTING.md) and
+[Contributor License Agreement](CLA.md) before opening a pull request. The
+agreement remains project policy, but GitHub Actions does not currently enforce
+CLA acceptance.
+
 ```bash
 cd core
 npm install
