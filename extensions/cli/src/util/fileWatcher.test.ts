@@ -27,22 +27,27 @@ describe("FileWatcher", () => {
     }
   });
 
-  it.skip("should detect when new files are created", async () => {
+  it("should detect when new files are created", async () => {
     const callback = vi.fn();
     watcher.onChange(callback);
     watcher.startWatching(tempDir);
+
+    // Wait for watcher to initialize (past the isInitializing suppression
+    // window) before triggering a change, matching the pattern used by the
+    // other tests in this file.
+    await new Promise((resolve) => setTimeout(resolve, 600));
 
     // Create a new file
     const testFile = path.join(tempDir, "test.txt");
     fs.writeFileSync(testFile, "test content");
 
     // Wait for debounce
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     expect(callback).toHaveBeenCalled();
   });
 
-  it.skip("should detect when files are deleted", async () => {
+  it("should detect when files are deleted", async () => {
     // Create a file first
     const testFile = path.join(tempDir, "test.txt");
     fs.writeFileSync(testFile, "test content");
@@ -51,11 +56,16 @@ describe("FileWatcher", () => {
     watcher.onChange(callback);
     watcher.startWatching(tempDir);
 
+    // Wait for watcher to initialize (past the isInitializing suppression
+    // window) before triggering a change, matching the pattern used by the
+    // other tests in this file.
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
     // Delete the file
     fs.unlinkSync(testFile);
 
     // Wait for debounce
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     expect(callback).toHaveBeenCalled();
   });
