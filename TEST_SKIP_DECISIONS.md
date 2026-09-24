@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/util/ranges.test.ts`
 - `core/util/index.test.ts`
 - `core/util/generateRepoMap.test.ts`
 - `core/diff/util.vitest.ts`
@@ -63,6 +62,7 @@ retained-closure baseline until re-enabled or removed with evidence.
   deterministic (in-process tokenizer calls, no network, no external
   infra). Three distinct stale-test root causes were found and fixed, with
   no production code changes to `core/llm/countTokens.ts`:
+
   - `pruneRawPromptFromTop`/`pruneStringFromTop`/`pruneStringFromBottom`:
     the fixture string `"Hello world!"` tokenizes to 3 tokens under
     `gpt-4`/js-tiktoken, but the tests used `maxTokens` values (5) that
@@ -92,3 +92,56 @@ retained-closure baseline until re-enabled or removed with evidence.
     51/59 suites passed (886/973 tests passed, 87 skipped in the remaining
     un-migrated families), zero failures. `npm run tsc:check` passed with no
     errors.
+
+- `core/util/ranges.test.ts` — re-enabled `describe.skip("getRangeInString")`
+  (9 tests) and `test.skip("returns correct intersection for single line
+overlap")` in the `intersection` block. All behavior is a pure, in-process
+  string/range computation (no network, no external infra). Investigation
+  found a mix of stale test fixtures **and two genuine, narrowly-scoped
+  production bugs** in `core/util/ranges.ts`:
+  - Stale fixtures (test-only fix): three `getRangeInString` tests used an
+    `end.character` value that undercounted the target line's real length
+    (each fixture line is 6 characters, e.g. `"Line 4"`, but fixtures used
+    `3` or `5`), so the substring assertions were checking a truncated
+    prefix instead of the full line the test's own `expected` string
+    described. Corrected the `end.character` values to `6`.
+  - Stale expectation (test-only fix): two "same start/end character"
+    tests asserted a single-character result (`"L"`, `"n"`) for a
+    zero-width range, which is inconsistent with `substring`'s semantics
+    (a zero-width range must yield `""`, as already correctly exercised by
+    the passing "same line, different characters" test). Corrected both
+    expectations to `""` and renamed the tests to describe zero-width
+    range behavior.
+  - **Production bug 1** (`getRangeInString`, `core/util/ranges.ts`): the
+    function had no guard for a reversed/invalid range
+    (`start` after `end`). For a cross-line reversed range it returned a
+    nonsense partial-line result instead of `""`; for a same-line reversed
+    range it silently returned a wrong substring because JS's
+    `String.prototype.substring` auto-swaps out-of-order arguments. Added
+    an explicit `isReversed` guard at the top of the function returning
+    `""` for any range where `start` is after `end`. The function's only
+    production caller (`core/autocomplete/templating/constructPrefixSuffix.ts`)
+    always constructs forward ranges, so this is purely additive
+    hardening with no behavior change for any existing valid caller.
+  - **Production bug 2** (`intersection`, `core/util/ranges.ts`): when two
+    ranges' earliest end line coincided (`startLine === endLine` in the
+    same-line branch), the function unconditionally took
+    `Math.min(a.end.character, b.end.character)` — but if one range's real
+    `end.line` is actually _later_ than that shared line (i.e. it doesn't
+    end on this line at all), its `end.character` refers to a different
+    line and must not bound the intersection here. This produced incorrect
+    `null` results for ranges that genuinely overlap on a single line
+    while one of them continues onto a later line. Fixed by only applying
+    a range's `end.character` as a bound when that range's `end.line`
+    equals the computed `endLine`. This function has a real production
+    caller (`extensions/vscode/src/autocomplete/lsp.ts`, used to
+    deduplicate overlapping definition ranges), so this fix corrects an
+    actual duplicate-detection defect, not just a hypothetical case.
+    Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest util/ranges.test.ts`
+    — 32/32 passed. Full-suite regression check: `npm run test` in `core/` —
+    51/59 suites passed (897/973 tests passed, 76 skipped in the remaining
+    un-migrated families), zero failures. `npm run tsc:check` in `core/`
+    passed with no errors. `npm run tsc:check` in `extensions/vscode/` (the
+    only other package importing `core/util/ranges.ts` production code)
+    passed with no errors, confirming the `intersection`/`getRangeInString`
+    signature is unchanged and the fix is safe for that caller.

@@ -3,6 +3,14 @@ import { Position, Range } from "../index.js";
 export function getRangeInString(content: string, range: Range): string {
   const lines = content.split("\n");
 
+  const isReversed =
+    range.start.line > range.end.line ||
+    (range.start.line === range.end.line &&
+      range.start.character > range.end.character);
+  if (isReversed) {
+    return "";
+  }
+
   if (range.start.line === range.end.line) {
     return (
       lines[range.start.line]?.substring(
@@ -34,7 +42,18 @@ export function intersection(a: Range, b: Range): Range | null {
 
   if (startLine === endLine) {
     const startCharacter = Math.max(a.start.character, b.start.character);
-    const endCharacter = Math.min(a.end.character, b.end.character);
+
+    // On the shared line, only bound the end by a range's end.character if
+    // that range's end actually falls on this line. A range that continues
+    // past this line (its end.line is later) is unbounded here, so its
+    // end.character (which refers to a different line) must be ignored.
+    const aEndsHere = a.end.line === endLine;
+    const bEndsHere = b.end.line === endLine;
+    const endCharacter = aEndsHere
+      ? bEndsHere
+        ? Math.min(a.end.character, b.end.character)
+        : a.end.character
+      : b.end.character;
 
     if (startCharacter > endCharacter) {
       return null;

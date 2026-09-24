@@ -160,7 +160,7 @@ describe("Position comparison functions", () => {
   });
 });
 
-describe.skip("getRangeInString", () => {
+describe("getRangeInString", () => {
   let content: string;
 
   beforeEach(() => {
@@ -186,7 +186,7 @@ Line 5`;
   test("should return substring spanning multiple lines", () => {
     const range = {
       start: { line: 1, character: 2 },
-      end: { line: 3, character: 3 },
+      end: { line: 3, character: 6 },
     };
     const expected = `ne 2
 Line 3
@@ -194,18 +194,18 @@ Line 4`;
     expect(getRangeInString(content, range)).toBe(expected);
   });
 
-  test("should handle range that starts and ends at the same character", () => {
+  test("should return empty string for a zero-width range", () => {
     const range = {
       start: { line: 2, character: 0 },
       end: { line: 2, character: 0 },
     };
-    expect(getRangeInString(content, range)).toBe("L");
+    expect(getRangeInString(content, range)).toBe("");
   });
 
   test("should handle range that spans entire content", () => {
     const range = {
       start: { line: 0, character: 0 },
-      end: { line: 4, character: 5 },
+      end: { line: 4, character: 6 },
     };
     expect(getRangeInString(content, range)).toBe(content);
   });
@@ -213,7 +213,7 @@ Line 4`;
   test("should handle range that spans to the end of the last line", () => {
     const range = {
       start: { line: 3, character: 2 },
-      end: { line: 4, character: 5 },
+      end: { line: 4, character: 6 },
     };
     const expected = `ne 4
 Line 5`;
@@ -253,12 +253,12 @@ Line 5`;
     expect(getRangeInString(content, range)).toBe("ne 2");
   });
 
-  test("should handle range that starts and ends at the same line and same characters", () => {
+  test("should return empty string for a zero-width range on a later line", () => {
     const range = {
       start: { line: 1, character: 2 },
       end: { line: 1, character: 2 },
     };
-    expect(getRangeInString(content, range)).toBe("n");
+    expect(getRangeInString(content, range)).toBe("");
   });
 });
 
@@ -301,8 +301,7 @@ describe("intersection", () => {
     expect(result).toBeNull();
   });
 
-  // TODO
-  test.skip("returns correct intersection for single line overlap", () => {
+  test("returns correct intersection for single line overlap", () => {
     rangeA = {
       start: { line: 1, character: 0 },
       end: { line: 1, character: 5 },
