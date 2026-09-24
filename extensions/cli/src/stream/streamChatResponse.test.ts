@@ -5,6 +5,12 @@ import type { ChatCompletionChunk } from "openai/resources/chat/completions.mjs"
 import { vi } from "vitest";
 
 import { toolPermissionManager } from "../permissions/permissionManager.js";
+import {
+  SERVICE_NAMES,
+  initializeServices,
+  serviceContainer,
+} from "../services/index.js";
+import { ToolPermissionServiceState } from "../services/ToolPermissionService.js";
 import { ToolCall } from "../tools/index.js";
 import { readFileTool } from "../tools/readFile.js";
 import { searchCodeTool } from "../tools/searchCode.js";
@@ -16,6 +22,17 @@ import {
   preprocessStreamedToolCalls,
 } from "./streamChatResponse.helpers.js";
 import { processStreamingResponse } from "./streamChatResponse.js";
+
+// Resets the DI container's registered factories/instances so each test
+// starts from a clean slate, matching the pattern used by
+// streamChatResponse.modeSwitch.test.ts.
+function resetServiceContainer() {
+  Object.values(SERVICE_NAMES).forEach((service) => {
+    (serviceContainer as any).services.delete(service);
+    (serviceContainer as any).factories.delete(service);
+    (serviceContainer as any).dependencies.delete(service);
+  });
+}
 
 // Test the chunk processing logic that was identified as buggy
 describe("processStreamingResponse - content preservation", () => {
@@ -534,10 +551,14 @@ describe("processStreamingResponse - content preservation", () => {
 });
 
 // Tests for preprocessStreamedToolCalls function
-describe.skip("preprocessStreamedToolCalls", () => {
-  // Mock dependencies
+describe("preprocessStreamedToolCalls", () => {
   beforeEach(async () => {
-    // Mock setup would go here but is currently causing issues
+    // getAllAvailableTools (called internally) reads the MODEL service from
+    // the real DI container, so tests need real service bootstrap rather
+    // than a mock of the ../permissions/index.js facade (which is not the
+    // module streamChatResponse.helpers.ts actually imports from).
+    resetServiceContainer();
+    await initializeServices({ headless: true });
   });
 
   afterEach(() => {
@@ -576,7 +597,9 @@ describe.skip("preprocessStreamedToolCalls", () => {
   });
 
   it("handles tool preprocessing errors correctly", async () => {
-    // Set the spy to throw an error
+    // streamChatResponse.helpers.ts imports validateToolCallArgsPresent
+    // directly from ../tools/index.js, the same module reference used
+    // here, so spying on it here does intercept the real call.
     const toolsModule = await import("../tools/index.js");
     vi.spyOn(toolsModule, "validateToolCallArgsPresent").mockImplementationOnce(
       () => {
@@ -639,8 +662,27 @@ describe.skip("preprocessStreamedToolCalls", () => {
 });
 
 // Tests for executeStreamedToolCalls function
-describe.skip("executeStreamedToolCalls", () => {
-  beforeEach(() => {
+describe("executeStreamedToolCalls", () => {
+  // Directly sets the real TOOL_PERMISSIONS service state so that
+  // checkToolPermission (imported by streamChatResponse.helpers.ts directly
+  // from ../permissions/permissionChecker.js, not the ../permissions/index.js
+  // facade) evaluates using these policies, since that direct import can't
+  // be intercepted by spying on the facade module.
+  function setToolPermissionPolicies(
+    policies: { tool: string; permission: "allow" | "ask" | "exclude" }[],
+  ) {
+    const state: ToolPermissionServiceState = {
+      permissions: { policies },
+      currentMode: "normal",
+      isHeadless: false,
+    };
+    serviceContainer.set(SERVICE_NAMES.TOOL_PERMISSIONS, state);
+  }
+
+  beforeEach(async () => {
+    resetServiceContainer();
+    await initializeServices({ headless: false });
+
     // Reset spies
     vi.spyOn(toolPermissionManager, "requestPermission").mockReset();
     vi.spyOn(toolPermissionManager, "on").mockReset();
@@ -648,11 +690,7 @@ describe.skip("executeStreamedToolCalls", () => {
   });
 
   it("executes tool calls with allowed permissions", async () => {
-    // Setup spies instead of mocks
-    const permissionsModule = await import("../permissions/index.js");
-    vi.spyOn(permissionsModule, "checkToolPermission").mockReturnValue({
-      permission: "allow",
-    });
+    setToolPermissionPolicies([{ tool: "Read", permission: "allow" }]);
 
     const toolsModule = await import("../tools/index.js");
     const mockedExecuteToolCall = vi
@@ -685,7 +723,7 @@ describe.skip("executeStreamedToolCalls", () => {
     // Verify results
     expect(chatHistoryEntries).toHaveLength(1);
     expect(chatHistoryEntries[0].content).toBe("Tool execution successful");
-    expect(callbacks.onToolStart).toHaveBeenCalledWith("read_file", {
+    expect(callbacks.onToolStart).toHaveBeenCalledWith("Read", {
       filepath: "/test.txt",
     });
     expect(callbacks.onToolResult).toHaveBeenCalledWith(
@@ -693,15 +731,16 @@ describe.skip("executeStreamedToolCalls", () => {
       "Read",
       "done",
     );
-    expect(mockedExecuteToolCall).toHaveBeenCalledWith(preprocessedCalls[0]);
+    // executeToolCall is now called with a second options argument
+    // (parallelToolCallCount) that didn't exist when this test was
+    // originally written.
+    expect(mockedExecuteToolCall).toHaveBeenCalledWith(preprocessedCalls[0], {
+      parallelToolCallCount: 1,
+    });
   });
 
   it("handles permission denied correctly", async () => {
-    // Setup permission to ask
-    const permissionsModule = await import("../permissions/index.js");
-    vi.spyOn(permissionsModule, "checkToolPermission").mockReturnValue({
-      permission: "ask",
-    });
+    setToolPermissionPolicies([{ tool: "Write", permission: "ask" }]);
 
     // Spy on permission request to be denied
     vi.spyOn(toolPermissionManager, "requestPermission").mockResolvedValue({
@@ -760,12 +799,14 @@ describe.skip("executeStreamedToolCalls", () => {
     );
 
     // Verify results
+    // Current executeStreamedToolCalls evaluates permission for every call
+    // independently (no "cancel remaining calls after first rejection"
+    // cascade in the real implementation) — both calls are denied on their
+    // own merits since the mocked requestPermission always resolves false.
     expect(hasRejection).toEqual(true);
     expect(chatHistoryEntries).toHaveLength(2);
     expect(chatHistoryEntries[0].content).toBe("Permission denied by user");
-    expect(chatHistoryEntries[1].content).toBe(
-      "Cancelled due to previous tool rejection",
-    );
+    expect(chatHistoryEntries[1].content).toBe("Permission denied by user");
     expect(callbacks.onToolStart).toHaveBeenCalledWith("Write", {
       filepath: "/test.txt",
       content: "data",
@@ -784,11 +825,7 @@ describe.skip("executeStreamedToolCalls", () => {
   });
 
   it("handles tool execution errors", async () => {
-    // Setup spies
-    const permissionsModule = await import("../permissions/index.js");
-    vi.spyOn(permissionsModule, "checkToolPermission").mockReturnValue({
-      permission: "allow",
-    });
+    setToolPermissionPolicies([{ tool: "search_code", permission: "allow" }]);
 
     const toolsModule = await import("../tools/index.js");
     vi.spyOn(toolsModule, "executeToolCall").mockRejectedValue(
