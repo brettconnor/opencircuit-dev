@@ -99,7 +99,16 @@ describe("prompt utilities", () => {
       expect(result).toBe(userInput);
     });
 
-    it.skip("should handle SIGINT (Ctrl+C) by exiting process", async () => {
+    it("should handle SIGINT (Ctrl+C) by exiting process", async () => {
+      // question()'s returned promise only ever settles via the
+      // rl.question() callback (see prompt.ts) — it never rejects on
+      // SIGINT. In real usage that's fine because process.exit(0)
+      // genuinely terminates the process, so the promise's fate is
+      // irrelevant; here process.exit is mocked (it must be, to avoid
+      // killing the test runner), so we assert the actual, observable
+      // behavior directly: the SIGINT handler is registered and, when
+      // invoked, closes the readline interface and calls
+      // process.exit(0).
       const promptText = "Enter something: ";
       let sigintHandler: (() => void) | null = null;
 
@@ -113,18 +122,20 @@ describe("prompt utilities", () => {
         },
       );
 
-      // Setup question mock that doesn't resolve immediately
-      mockInterface.question.mockImplementation(() => {
-        // Trigger SIGINT after question is called
-        setTimeout(() => {
-          if (sigintHandler) {
-            sigintHandler();
-          }
-        }, 10);
-      });
+      // Setup question mock that never calls back, simulating a prompt
+      // that is still awaiting input when SIGINT arrives.
+      mockInterface.question.mockImplementation(() => {});
 
-      // The promise should reject when SIGINT is triggered
-      await expect(question(promptText)).rejects.toThrow("Process exit");
+      // Start the prompt; intentionally not awaited since this promise
+      // never settles in this scenario.
+      void question(promptText);
+
+      // Let the promise executor run and register the SIGINT handler.
+      await Promise.resolve();
+
+      expect(sigintHandler).toBeInstanceOf(Function);
+      expect(() => sigintHandler!()).toThrow("Process exit");
+      expect(mockInterface.close).toHaveBeenCalled();
       expect(processExitSpy).toHaveBeenCalledWith(0);
     });
   });
