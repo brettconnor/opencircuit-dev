@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/indexing/CodebaseIndexer.test.ts`
 - `extensions/cli/src/e2e/headless-simple.test.ts`
 - `extensions/cli/src/util/fileWatcher.test.ts`
 - `extensions/cli/src/util/prompt.test.ts`
@@ -425,5 +424,56 @@ with lazy block surrounding` — confirmed via debug instrumentation that
     deterministic coverage" list above) since resolving them needs
     production-code changes to shared matching/rejection heuristics with
     real regression risk, not simple ownership/fixture follow-up. An
+    incidental `core/test/.ocircuit-test/sessions/sessions.json` test-run
+    diff was reverted before finalizing, keeping the change atomic.
+
+- `core/indexing/CodebaseIndexer.test.ts` — re-enabled both remaining
+  `test.skip` cases ("should only re-index the changed files when
+  changing branches", "shouldn't re-index anything when changing back to
+  original branch"). Root cause: `core/util/filesystem.ts`'s
+  `FileSystemIde.getBranch()` was a hardcoded stub that always returned
+  `""` regardless of the real git branch. Confirmed via grep that
+  `FileSystemIde` has zero production/runtime IDE consumers (not exported
+  from `core/index.ts`'s public entrypoint; only ever instantiated by
+  `core/test/fixtures.ts`, `core/context/providers/_context-providers.vitest.ts`,
+  `core/indexing/docs/crawlers/DocsCrawler.test.ts`, and
+  `binary/test/binary.test.ts`), so implementing real branch detection is
+  a narrowly-scoped test-infrastructure fix, not a production behavior
+  change. Implemented `getBranch()` using
+  `execSync("git rev-parse --abbrev-ref HEAD", { cwd })`, matching the
+  same convention already used by the real, shipped
+  `extensions/vscode/src/util/ideUtils.ts` implementation (falls back to
+  `"NONE"` on error, e.g. an unborn/no-commit repo).
+  - With real branch detection wired up, the first test passed
+    immediately (per-branch tag reuse via the content-addressed global
+    cache worked exactly as designed: the changed `test.ts` needed
+    `compute`, the unchanged `main.py` only needed `addTag`).
+  - The second test failed at first because neither this test nor the
+    prior one ever called `refreshIndex()` to persist the computed plan
+    for their respective branches — unlike every other test in this same
+    sequential block, which calls `refreshIndex()` immediately after
+    `expectPlan()`. Without that persistence step, the `"main"` branch's
+    tag bucket was still empty when re-checked, so both files
+    legitimately needed `addTag` (not zero pending work). Added the
+    missing `refreshIndex()` calls (in "should create git repo for
+    testing" and "should only re-index the changed files when changing
+    branches"), matching the established pattern; the return-to-`"main"`
+    plan then correctly resolves to zero pending work.
+  - Affected files: `core/util/filesystem.ts` (`getBranch()` real
+    implementation — test-infrastructure-only code, no production
+    consumers) and `core/indexing/CodebaseIndexer.test.ts` (2 skips
+    removed, 2 `refreshIndex()` persistence calls added).
+  - Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest indexing/CodebaseIndexer.test.ts`
+    — 32/32 passed (up from 30/32), repeated 3x back-to-back with
+    identical results (no flakiness). Full core jest suite
+    (`npm run test`) — 52/59 suites passed, 905/973 tests passed (up from
+    903/973 — the +2 matches the two newly re-enabled tests), zero
+    failures. Full core vitest suite (`npm run vitest`) — same 3
+    pre-existing failing files as prior rounds, no new failures (this
+    test file is Jest-only, not part of the Vitest run). Confirmed no
+    regression in the other `FileSystemIde` consumers:
+    `_context-providers.vitest.ts` 8/8 passed;
+    `DocsCrawler.test.ts` was already fully skipped (11/11 skipped),
+    unaffected either way. `npm run tsc:check` passed with no errors. An
     incidental `core/test/.ocircuit-test/sessions/sessions.json` test-run
     diff was reverted before finalizing, keeping the change atomic.
