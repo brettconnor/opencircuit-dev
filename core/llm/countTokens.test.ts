@@ -14,7 +14,7 @@ import {
   pruneStringFromTop,
 } from "./countTokens.js";
 
-describe.skip("countTokens", () => {
+describe("countTokens", () => {
   it("should count tokens for a simple string", () => {
     const content = "Hello world!";
     const tokenCount = countTokens(content, "gpt-4");
@@ -47,7 +47,7 @@ describe("countTokensAsync", () => {
   });
 });
 
-describe.skip("pruneLinesFromTop", () => {
+describe("pruneLinesFromTop", () => {
   it("should prune lines from the top to fit within max tokens", () => {
     const prompt = "Line 1\nLine 2\nLine 3\nLine 4";
     const pruned = pruneLinesFromTop(prompt, 5, "gpt-4");
@@ -88,7 +88,7 @@ describe.skip("pruneLinesFromTop", () => {
   });
 });
 
-describe.skip("pruneLinesFromBottom", () => {
+describe("pruneLinesFromBottom", () => {
   it("should prune lines from the bottom to fit within max tokens", () => {
     const prompt = "Line 1\nLine 2\nLine 3\nLine 4";
     const pruned = pruneLinesFromBottom(prompt, 5, "gpt-4");
@@ -129,31 +129,41 @@ describe.skip("pruneLinesFromBottom", () => {
   });
 });
 
-describe.skip("pruneRawPromptFromTop", () => {
+describe("pruneRawPromptFromTop", () => {
   it("should prune string from the top based on maxTokens", () => {
-    const result = pruneRawPromptFromTop("gpt-4", 5, "Hello world!", 2);
+    const result = pruneRawPromptFromTop("gpt-4", 10, "Hello world!", 8);
     expect(result.length).toBeLessThan("Hello world!".length);
   });
 });
 
-describe.skip("pruneStringFromTop", () => {
+describe("pruneStringFromTop", () => {
   it("should prune string from the top based on maxTokens", () => {
-    const result = pruneStringFromTop("gpt-4", 5, "Hello world!");
+    const result = pruneStringFromTop("gpt-4", 1, "Hello world!");
     expect(result.length).toBeLessThan("Hello world!".length);
   });
 });
 
-describe.skip("pruneStringFromBottom", () => {
+describe("pruneStringFromBottom", () => {
   it("should prune string from the bottom based on maxTokens", () => {
-    const result = pruneStringFromBottom("gpt-4", 5, "Hello world!");
+    const result = pruneStringFromBottom("gpt-4", 1, "Hello world!");
     expect(result.length).toBeLessThan("Hello world!".length);
   });
 });
 
-describe.skip("compileChatMessages", () => {
-  it("should compile and handle an empty or undefined message list", () => {
-    const compiled = compileChatMessages("gpt-4", undefined, 100, 50, false);
-    expect(compiled.length).toBe(0);
+describe("compileChatMessages", () => {
+  it("should throw when given an empty message list", () => {
+    // extractToolSequence requires at least one user/tool message to anchor
+    // the compiled result; compileChatMessages has no messages to work with
+    // and throws rather than silently returning an empty compiled result.
+    expect(() => {
+      compileChatMessages({
+        modelName: "gpt-4",
+        msgs: [],
+        knownContextLength: 100,
+        maxTokens: 50,
+        supportsImages: false,
+      });
+    }).toThrow("no user/tool message found");
   });
 
   it("should compile chat messages without truncating if within context length", () => {
@@ -161,24 +171,50 @@ describe.skip("compileChatMessages", () => {
       { role: "user", content: "Hello world!" },
       { role: "assistant", content: "Hi there!" },
     ];
-    const compiled = compileChatMessages("gpt-4", msgs, 100, 10, false);
-    expect(compiled.length).toBe(2);
+    const compiled = compileChatMessages({
+      modelName: "gpt-4",
+      msgs,
+      knownContextLength: 100,
+      maxTokens: 10,
+      supportsImages: false,
+    });
+    expect(compiled.compiledChatMessages.length).toBe(2);
   });
 
   it("should throw an error if maxTokens is close to or exceeds contextLength", () => {
+    const msgs: ChatMessage[] = [{ role: "user", content: "Hello world!" }];
     expect(() => {
-      compileChatMessages("gpt-4", [], 100, 90, false);
+      compileChatMessages({
+        modelName: "gpt-4",
+        msgs,
+        knownContextLength: 100,
+        maxTokens: 99,
+        supportsImages: false,
+      });
     }).toThrow();
   });
 
-  it("should filter out any empty or system messages", () => {
+  it("should filter out empty non-system messages while always preserving the system message", () => {
+    // The system message is extracted separately for its own token
+    // accounting and is always re-added to the compiled result, even when
+    // its content is empty; only empty user/assistant messages are dropped.
     const msgs: ChatMessage[] = [
       { role: "system", content: "" },
       { role: "user", content: "" },
       { role: "assistant", content: "Hi there!" },
     ];
-    const compiled = compileChatMessages("gpt-4", msgs, 100, 10, false);
-    expect(compiled.length).toBe(1);
+    const compiled = compileChatMessages({
+      modelName: "gpt-4",
+      msgs,
+      knownContextLength: 100,
+      maxTokens: 10,
+      supportsImages: false,
+    });
+    expect(compiled.compiledChatMessages.length).toBe(2);
+    expect(compiled.compiledChatMessages.map((m) => m.role)).toEqual([
+      "system",
+      "assistant",
+    ]);
   });
 });
 

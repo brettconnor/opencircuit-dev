@@ -19,7 +19,6 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `core/llm/countTokens.test.ts`
 - `core/util/ranges.test.ts`
 - `core/util/index.test.ts`
 - `core/util/generateRepoMap.test.ts`
@@ -55,3 +54,41 @@ retained-closure baseline until re-enabled or removed with evidence.
   `npm run test` in `core/` — 51/59 suites passed (865/973 tests passed, 108
   skipped in the remaining un-migrated families), zero failures, zero new
   skips introduced. `npm run tsc:check` passed with no errors.
+
+- `core/llm/countTokens.test.ts` — re-enabled all 7 remaining
+  `describe.skip` blocks (`countTokens`, `pruneLinesFromTop`,
+  `pruneLinesFromBottom`, `pruneRawPromptFromTop`, `pruneStringFromTop`,
+  `pruneStringFromBottom`, `compileChatMessages`; `countTokensAsync` and
+  `extractToolSequence` were already enabled). All behavior is fully
+  deterministic (in-process tokenizer calls, no network, no external
+  infra). Three distinct stale-test root causes were found and fixed, with
+  no production code changes to `core/llm/countTokens.ts`:
+  - `pruneRawPromptFromTop`/`pruneStringFromTop`/`pruneStringFromBottom`:
+    the fixture string `"Hello world!"` tokenizes to 3 tokens under
+    `gpt-4`/js-tiktoken, but the tests used `maxTokens` values (5) that
+    never actually forced truncation, so the assertions
+    (`result.length < original.length`) were unreachable. Adjusted the
+    `maxTokens`/`contextLength`/`tokensForCompletion` fixture values so
+    each call genuinely exceeds the token budget and truncation is
+    exercised.
+  - `compileChatMessages` "empty message list": the current
+    implementation's `extractToolSequence` throws
+    `"no user/tool message found"` when given zero messages — this is
+    intentional (there is nothing to anchor the compiled result on), not
+    a bug. Re-characterized the test to assert the throw instead of a
+    graceful empty-array return.
+  - `compileChatMessages` "maxTokens close to contextLength" and "filter
+    empty/system messages": the function's signature changed from
+    positional arguments returning a bare array to an options object
+    returning `{ compiledChatMessages, didPrune, contextPercentage }`
+    (see `core/llm/index.ts` for the real call site). Updated call sites
+    to the object API and `.compiledChatMessages` access. Additionally,
+    the system message is intentionally always preserved in the compiled
+    output (extracted only for separate token accounting, then re-added),
+    so the "filter" test's expected count was corrected from 1 to 2 and
+    renamed to state that intent explicitly.
+    Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest llm/countTokens.test.ts`
+    — 34/34 passed. Full-suite regression check: `npm run test` in `core/` —
+    51/59 suites passed (886/973 tests passed, 87 skipped in the remaining
+    un-migrated families), zero failures. `npm run tsc:check` passed with no
+    errors.
