@@ -20,7 +20,6 @@ The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
 - `core/llm/countTokens.test.ts`
-- `core/util/withExponentialBackoff.test.ts`
 - `core/util/ranges.test.ts`
 - `core/util/index.test.ts`
 - `core/util/generateRepoMap.test.ts`
@@ -39,3 +38,20 @@ handled by the owning package before the feature is considered fully covered:
 These are not silently treated as passing. They remain a tracked follow-up
 inventory with an explicit owner boundary and are excluded from the required
 retained-closure baseline until re-enabled or removed with evidence.
+
+### Resolved
+
+- `core/util/withExponentialBackoff.test.ts` — re-enabled
+  (`describe.skip` → `describe`). The retry/backoff behavior is fully
+  deterministic (no network, no external infra, fake timers only) and
+  remains important supported behavior. Root cause of the original skip: two
+  assertions expected a stale literal error string
+  (`"Failed to make API call after max tries"`) that no longer matches the
+  implementation's actual message
+  (`` `Failed to make API call after ${maxTries} retries` ``). Fixed the two
+  assertions to match current, correct behavior; no production code changed.
+  Validation: `npx cross-env IGNORE_API_KEY_TESTS=true NODE_OPTIONS=--experimental-vm-modules jest util/withExponentialBackoff.test.ts`
+  — 6/6 passed. Full-suite regression check:
+  `npm run test` in `core/` — 51/59 suites passed (865/973 tests passed, 108
+  skipped in the remaining un-migrated families), zero failures, zero new
+  skips introduced. `npm run tsc:check` passed with no errors.
