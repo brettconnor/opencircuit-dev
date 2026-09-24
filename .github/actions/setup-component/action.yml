@@ -63,3 +63,10 @@ runs:
       run: |
         cd core
         npm run check:install-scripts
+
+    - name: Check dependency policy
+      if: inputs.component == 'core'
+      shell: bash
+      run: |
+        cd core
+        npm run check:dependency-policy

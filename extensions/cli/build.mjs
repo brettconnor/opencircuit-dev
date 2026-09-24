@@ -51,6 +51,10 @@ try {
 
     // Handle TypeScript paths and local packages
     alias: {
+      "@opencircuit/config-types": resolve(
+        __dirname,
+        "../../packages/config-types/dist/index.js",
+      ),
       "@opencircuit/config-yaml": resolve(
         __dirname,
         "../../packages/config-yaml/dist/index.js",
