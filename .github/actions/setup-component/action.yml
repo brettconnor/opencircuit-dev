@@ -22,7 +22,7 @@ runs:
     - uses: actions/cache@v4
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-npm-cache-${{ inputs.component }}-${{ hashFiles(inputs.component == 'vscode' && 'extensions/vscode/package-lock.json' || format('{0}/package-lock.json', inputs.component)) }}
+        key: ${{ runner.os }}-npm-cache-${{ inputs.component }}-v2-${{ hashFiles(inputs.component == 'vscode' && 'extensions/vscode/package-lock.json' || format('{0}/package-lock.json', inputs.component)) }}
 
     - uses: actions/cache@v4
       if: inputs.include-packages == 'true'
@@ -37,7 +37,7 @@ runs:
       id: root-cache
       with:
         path: node_modules
-        key: ${{ runner.os }}-root-node-modules-${{ hashFiles('package-lock.json') }}
+        key: ${{ runner.os }}-root-node-modules-v2-${{ hashFiles('package-lock.json') }}
 
     - name: Install root dependencies
       if: inputs.include-root == 'true' && steps.root-cache.outputs.cache-hit != 'true'
@@ -48,7 +48,7 @@ runs:
       id: component-cache
       with:
         path: ${{ inputs.component == 'vscode' && 'extensions/vscode/node_modules' || format('{0}/node_modules', inputs.component) }}
-        key: ${{ runner.os }}-${{ inputs.component }}-node-modules-${{ hashFiles(inputs.component == 'vscode' && 'extensions/vscode/package-lock.json' || format('{0}/package-lock.json', inputs.component)) }}
+        key: ${{ runner.os }}-${{ inputs.component }}-node-modules-v2-${{ hashFiles(inputs.component == 'vscode' && 'extensions/vscode/package-lock.json' || format('{0}/package-lock.json', inputs.component)) }}
 
     - name: Install component dependencies
       if: steps.component-cache.outputs.cache-hit != 'true'
@@ -63,3 +63,10 @@ runs:
       run: |
         cd core
         npm run check:install-scripts
+
+    - name: Check dependency policy
+      if: inputs.component == 'core'
+      shell: bash
+      run: |
+        cd core
+        npm run check:dependency-policy

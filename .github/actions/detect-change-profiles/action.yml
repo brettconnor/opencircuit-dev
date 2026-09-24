@@ -54,9 +54,12 @@ runs:
             extensions/vscode/**|gui/**|.github/actions/build-vscode-extension/**|.github/actions/run-vscode-e2e-test/**|.github/workflows/pr-build-upload-vsix.yaml)
               vsix=true
               ;;
-            .github/actions/**|.github/workflows/**|*.lock|**/package-lock.json)
+            .github/actions/**|*.lock|**/package-lock.json)
               cli_core=true
               vsix=true
+              ;;
+            .github/workflows/**)
+              cli_core=true
               ;;
           esac
         done <<< "$changed_files"
