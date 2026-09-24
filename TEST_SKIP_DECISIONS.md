@@ -6,25 +6,20 @@ not be re-enabled with live credentials or unavailable external infrastructure.
 
 ## Deferred or external-surface tests
 
-| Tests                                                                                                                                                                                                    | Decision                                                                            | Re-enable condition                                                                                   |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `core/indexing/CodeSnippetsIndex.test.ts`, `core/indexing/FullTextSearchCodebaseIndex.test.ts`, `core/indexing/LanceDbIndex.test.skip.ts`, `core/indexing/chunk/{basic,code,ChunkCodebaseIndex}.test.ts` | Deferred indexing implementations; not required by the retained CLI/Core smoke path | Re-enable when the owning index implementation has deterministic fixtures and a maintained test owner |
-| `core/indexing/docs/DocsService.skip.ts`, `core/indexing/docs/crawlers/DocsCrawler.test.ts`                                                                                                              | External crawling/browser integration; excluded from deterministic baseline         | Re-enable with local HTTP fixtures and a pinned browser fixture                                       |
-| `core/context/mcp/MCPConnection.vitest.ts` filesystem connection case                                                                                                                                    | External MCP server integration                                                     | Re-enable with a loopback MCP fixture                                                                 |
-| `extensions/cli/src/smoke-api/*.test.ts`, `packages/openai-adapters/src/test/*live*`, provider/API-key comparison tests                                                                                  | Credentialed provider tests; intentionally opt-in                                   | Run only in the provider integration workflow with injected CI secrets                                |
-| `extensions/vscode/e2e/tests/*.test.skip.ts`, GUI and keyboard cases                                                                                                                                     | Deferred VS Code surface, outside retained CLI/Core scope                           | Re-enable in the VS Code E2E workflow when the feature and CI environment are supported               |
+| Tests                                                                                                                                                                                                    | Decision                                                                                                                                                                                                                                                                                                            | Re-enable condition                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `core/indexing/CodeSnippetsIndex.test.ts`, `core/indexing/FullTextSearchCodebaseIndex.test.ts`, `core/indexing/LanceDbIndex.test.skip.ts`, `core/indexing/chunk/{basic,code,ChunkCodebaseIndex}.test.ts` | Deferred indexing implementations; not required by the retained CLI/Core smoke path                                                                                                                                                                                                                                 | Re-enable when the owning index implementation has deterministic fixtures and a maintained test owner                                                                                    |
+| `core/indexing/docs/DocsService.skip.ts`, `core/indexing/docs/crawlers/DocsCrawler.test.ts`                                                                                                              | External crawling/browser integration; excluded from deterministic baseline                                                                                                                                                                                                                                         | Re-enable with local HTTP fixtures and a pinned browser fixture                                                                                                                          |
+| `core/context/mcp/MCPConnection.vitest.ts` filesystem connection case                                                                                                                                    | External MCP server integration                                                                                                                                                                                                                                                                                     | Re-enable with a loopback MCP fixture                                                                                                                                                    |
+| `extensions/cli/src/smoke-api/*.test.ts`, `packages/openai-adapters/src/test/*live*`, provider/API-key comparison tests                                                                                  | Credentialed provider tests; intentionally opt-in                                                                                                                                                                                                                                                                   | Run only in the provider integration workflow with injected CI secrets                                                                                                                   |
+| `extensions/vscode/e2e/tests/*.test.skip.ts`, GUI and keyboard cases                                                                                                                                     | Deferred VS Code surface, outside retained CLI/Core scope                                                                                                                                                                                                                                                           | Re-enable in the VS Code E2E workflow when the feature and CI environment are supported                                                                                                  |
+| `extensions/cli/src/commands/serve.test.ts` `/exit` endpoint stub                                                                                                                                        | The `/exit` route is defined inline inside `serve()`'s closure with no extractable factory; reaching a live `app.listen` requires deep-mocking ~6 service modules (config, model, tool permissions, agent file, chat history, storage sync) — a broad test-infrastructure redesign, not a deterministic fixture fix | Re-enable once `serve.ts` exposes a testable seam for constructing the Express app independent of full service bootstrap, or once a lighter-weight service-bootstrap test harness exists |
 
 ## Candidate deterministic coverage
 
 The following skipped tests are retained behavior candidates and should be
 handled by the owning package before the feature is considered fully covered:
 
-- `extensions/cli/src/e2e/headless-simple.test.ts`
-- `extensions/cli/src/util/fileWatcher.test.ts`
-- `extensions/cli/src/util/prompt.test.ts`
-- `extensions/cli/src/commands/serve.test.ts`
-- `extensions/cli/src/stream/streamChatResponse.test.ts`
-- `extensions/cli/src/tools/preprocess.test.ts`
 - `packages/config-yaml/src/__tests__/index.test.ts`
 
 These are not silently treated as passing. They remain a tracked follow-up
@@ -444,6 +439,7 @@ with lazy block surrounding` — confirmed via debug instrumentation that
   same convention already used by the real, shipped
   `extensions/vscode/src/util/ideUtils.ts` implementation (falls back to
   `"NONE"` on error, e.g. an unborn/no-commit repo).
+
   - With real branch detection wired up, the first test passed
     immediately (per-branch tag reuse via the content-addressed global
     cache worked exactly as designed: the changed `test.ts` needed
@@ -477,3 +473,121 @@ with lazy block surrounding` — confirmed via debug instrumentation that
     unaffected either way. `npm run tsc:check` passed with no errors. An
     incidental `core/test/.ocircuit-test/sessions/sessions.json` test-run
     diff was reverted before finalizing, keeping the change atomic.
+
+- `extensions/cli/*` family (RELIABILITY-003 round 10) — 5 of 6
+  candidate files fully or mostly resolved; 1 file's single stub test
+  deferred (moved to the deferred table above).
+  - `extensions/cli/src/util/fileWatcher.test.ts` — re-enabled both
+    `it.skip` cases ("should detect when new files are created",
+    "should detect when files are deleted"). Root cause: both tests
+    wrote/deleted the watched file immediately after calling
+    `startWatching()`, before the 50ms `isInitializing` suppression
+    window (plus `fs.watch` setup time) elapsed — every other test in
+    the same file already waits ~600ms after `startWatching()` before
+    triggering a change, for exactly this reason. Applied the same wait
+    pattern. Validation: file 8/8 passing, repeated 3x consistent; full
+    cli vitest suite 1696/1723 passing (baseline for this round), zero
+    failures; `npm run typecheck` clean.
+  - `extensions/cli/src/tools/preprocess.test.ts` — re-enabled the
+    `describe.skip` wrapper; 2 of 3 previously-skipped scenarios fixed,
+    1 deferred. `listFilesTool.preprocess` now validates (via real
+    `fs.existsSync`/`fs.statSync`) that the resolved `dirpath` exists
+    and is a directory before returning a preview, and returns the
+    resolved absolute path in `args.dirpath` rather than the raw input —
+    updated the "directory arg present" test to mock
+    `fs.existsSync`/`fs.statSync` and assert against the resolved path.
+    `writeFileTool`'s diff-preview test was missing a
+    `mockCreateTwoFilesPatch.mockReturnValue(...)` setup — added it.
+    Deferred (re-skipped with `TODO`): "should show current directory
+    when no directory arg" — `listFilesTool`'s `dirpath` is now a
+    required schema field and `preprocess` unconditionally calls
+    `path.normalize(args.dirpath)`, so omitting `dirpath` throws a
+    `TypeError`; this is an intentional current API contract (schema
+    requires the argument), not a bug, so re-enabling this exact
+    scenario would mean adding an undocumented fallback contradicting
+    the tool's own schema. Validation: file 14/15 passing (1 documented
+    defer); full cli vitest suite 1710/1723 passing, zero failures;
+    `npm run typecheck` clean.
+  - `extensions/cli/src/util/prompt.test.ts` — re-enabled "should handle
+    SIGINT (Ctrl+C) by exiting process". Root cause: `question()`'s
+    returned promise never rejects on SIGINT (the SIGINT handler calls
+    `process.exit(0)` as a side effect; in real usage that genuinely
+    terminates the process, so the promise's fate is irrelevant) — the
+    stale test asserted the promise itself rejects, which cannot happen
+    under test (`process.exit` is necessarily mocked to avoid killing
+    the test runner), so the promise hung forever and the test timed
+    out. Rewrote the test to assert the actual, observable contract:
+    the SIGINT handler is registered via `rl.on("SIGINT", ...)`, and
+    invoking it closes the readline interface and calls
+    `process.exit(0)`. No production code changed. Validation: file
+    11/11 passing, repeated 3x consistent; full cli vitest suite
+    1711/1723 passing, zero failures; `npm run typecheck` clean.
+  - `extensions/cli/src/e2e/headless-simple.test.ts` — re-enabled all 3
+    `it.skip` cases ("should output response and exit with -p flag",
+    "should handle streaming responses in headless mode", "should work
+    with minimal config"), previously skipped with the comment
+    "requires mocking the LLM which doesn't work in subprocess". The
+    codebase already has a working, deterministic solution for exactly
+    this scenario (`test-helpers/mock-llm-server.ts`, already used by
+    `headless-dynamic-responses.test.ts`): a local HTTP server started
+    in the test process, referenced via an `apiBase` field in the
+    generated config, so the CLI subprocess talks to a real local
+    socket instead of a real provider — no external infrastructure
+    required. Applied that established pattern to all 3 tests.
+    Validation: file 8/8 passing (via `npm run test:e2e`), repeated 3x
+    consistent; full e2e suite 64/65 passing (1 pre-existing, unrelated
+    environmental failure in `headless-anthropic-api-key.test.ts` — a
+    real network call to `api.anthropic.com` fails on TLS cert
+    verification in this sandbox; confirmed present on unmodified HEAD
+    via `git stash`, unaffected by this change); `npm run typecheck`
+    clean.
+  - `extensions/cli/src/stream/streamChatResponse.test.ts` — re-enabled
+    both `describe.skip` blocks (`preprocessStreamedToolCalls`,
+    `executeStreamedToolCalls`), all 6 tests now passing. Root causes
+    (the file predates a services-DI refactor):
+    `getAllAvailableTools()` (called internally by
+    `preprocessStreamedToolCalls`) reads the `MODEL` service from the
+    real `serviceContainer`, which was never initialized in these
+    tests, causing "No factory registered for service ..." errors
+    regardless of the tests' own mocks; `checkToolPermission` is
+    imported by `streamChatResponse.helpers.ts` directly from
+    `../permissions/permissionChecker.js`, not via the
+    `../permissions/index.js` facade the tests were spying on, so that
+    spy never intercepted the real call, and the real (also
+    uninitialized) service-backed permissions state was used instead;
+    `executeToolCall` is now invoked with a second
+    `{ parallelToolCallCount }` argument the assertions didn't account
+    for; and the "permission denied" test asserted a cascading
+    "Cancelled due to previous tool rejection" message for a second
+    denied call, but the current implementation evaluates every call's
+    permission independently (no such cascade exists), so both calls
+    are now denied on their own merits. Fix: bootstrap real services via
+    `initializeServices()` (matching the established pattern in
+    `streamChatResponse.modeSwitch.test.ts`), set real
+    `TOOL_PERMISSIONS` service state via `serviceContainer.set(...)`
+    instead of mocking the wrong module export, and update the two
+    stale assertions to match current, evidenced production behavior.
+    No production code changed. Validation: file 14/14 passing, repeated
+    3x consistent; full cli vitest suite 1717/1723 passing, zero
+    failures; `npm run typecheck` clean.
+  - `extensions/cli/src/commands/serve.test.ts` — the single skipped
+    test ("should have /exit endpoint that returns success response")
+    was a placeholder stub (`expect(true).toBe(true)`) with its own
+    comment admitting "this test is complex and requires proper module
+    mocking setup". Investigated: the `/exit` route is defined inline
+    inside `serve()`'s closure with no extractable factory, and
+    `serve()` itself requires initializing ~6 service modules (config,
+    model, tool permissions, agent file, chat history, storage sync)
+    before reaching `app.listen` — confirmed by the adjacent, already
+    passing "--org flag" test in the same file, which only partially
+    mocks 2 of those services and wraps its `serve()` call in a
+    try/catch expressly because full initialization isn't mocked.
+    Reaching a live, request-testable `/exit` endpoint would require a
+    genuinely broad test-infrastructure buildout, not a deterministic
+    fixture fix — deferred (moved to the deferred table above) rather
+    than force-fixed or silently left uninvestigated.
+  - Commits: `14cc9dbcf` (fileWatcher), `66ea2d788` (preprocess),
+    `f0d9b477b` (prompt SIGINT), `6cf45999d` (headless-simple),
+    `220badb62` (streamChatResponse) — all pushed to `origin/main`, all
+    independently passed the Ubuntu1 pre-push gate (242s, 265s, 238s,
+    261s, 240s canonical build times respectively).
