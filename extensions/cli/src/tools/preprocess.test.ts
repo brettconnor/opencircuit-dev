@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 
 import * as diff from "diff";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -12,6 +13,7 @@ vi.mock("fs", async () => {
     default: actualFs,
     existsSync: vi.fn(),
     readFileSync: vi.fn(),
+    statSync: vi.fn(),
   };
 });
 
@@ -24,6 +26,7 @@ vi.mock("diff", () => ({
 // Get mocked functions using vi.mocked
 const mockExistsSync = vi.mocked(fs.existsSync);
 const mockReadFileSync = vi.mocked(fs.readFileSync);
+const mockStatSync = vi.mocked(fs.statSync);
 const mockCreateTwoFilesPatch = vi.mocked(diff.createTwoFilesPatch);
 
 import { fetchTool } from "./fetch.js";
@@ -34,7 +37,7 @@ import { searchCodeTool } from "./searchCode.js";
 import { viewDiffTool } from "./viewDiff.js";
 import { writeFileTool } from "./writeFile.js";
 
-describe.skip("Tool preprocess functions", () => {
+describe("Tool preprocess functions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // The mock functions will be configured in each test as needed
@@ -74,11 +77,20 @@ describe.skip("Tool preprocess functions", () => {
 
   describe("listFilesTool.preprocess", () => {
     it("should return preview with directory path when directory arg present", async () => {
+      // listFilesTool.preprocess now validates that the resolved path exists
+      // and is a directory before returning a preview (see listFiles.ts).
+      mockExistsSync.mockReturnValue(true);
+      mockStatSync.mockReturnValue({
+        isDirectory: () => true,
+      } as fs.Stats);
+
       const args = { dirpath: "some/path" };
       const result = await listFilesTool.preprocess!(args);
 
+      const resolvedDirPath = path.resolve(process.cwd(), "some/path");
+
       expect(result).toEqual({
-        args,
+        args: { dirpath: resolvedDirPath },
         preview: [
           {
             type: "text",
@@ -88,7 +100,19 @@ describe.skip("Tool preprocess functions", () => {
       });
     });
 
-    it("should show current directory when no directory arg", async () => {
+    // TODO(RELIABILITY-003 extensions/cli round, deferred): listFilesTool's
+    // `dirpath` parameter is now a required schema field (see
+    // listFiles.ts `parameters.required`), and `preprocess` calls
+    // `path.normalize(args.dirpath)` unconditionally, which throws a
+    // TypeError when `dirpath` is omitted. The "default to current
+    // directory when no arg is given" behavior this test exercises no
+    // longer exists in the current tool contract — this is an intentional
+    // API change (schema now enforces the argument), not a regression, so
+    // re-enabling this exact scenario would require reintroducing an
+    // undocumented fallback that contradicts the tool's own schema. Left
+    // skipped pending a product decision on whether omitted `dirpath`
+    // should resolve to cwd.
+    it.skip("should show current directory when no directory arg", async () => {
       const args = {};
       const result = await listFilesTool.preprocess!(args);
 
@@ -224,6 +248,7 @@ describe.skip("Tool preprocess functions", () => {
       // Setup mocks for this test
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue("old content");
+      mockCreateTwoFilesPatch.mockReturnValue("mock diff content");
 
       const args = { filepath: "path/to/file.txt", content: "new content" };
       const result = await writeFileTool.preprocess!(args);
