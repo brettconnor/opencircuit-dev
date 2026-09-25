@@ -7,6 +7,7 @@ import { Command } from "commander";
 
 import { chat } from "./commands/chat.js";
 import { checks } from "./commands/checks.js";
+import { initTemplatesCommand } from "./commands/initTemplates.js";
 import { listSessionsCommand } from "./commands/ls.js";
 import { review } from "./commands/review.js";
 import { serve } from "./commands/serve.js";
@@ -305,6 +306,13 @@ program
     await listSessionsCommand({
       format: options.json ? "json" : undefined,
     });
+  });
+
+program
+  .command("init")
+  .description("Install packaged provider templates locally")
+  .action(async () => {
+    await initTemplatesCommand();
   });
 
 // Serve subcommand
