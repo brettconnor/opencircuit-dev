@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Publish this repository's release-artifacts/ into a checkout of the public
 # opencircuit-dev/opencircuit repository: sync the tarball + checksum pair,
-# verify every tarball has a matching checksum, refresh the versions table in
-# that repository's README.md, and (optionally) commit + push the result.
+# verify every tarball has a matching checksum, mirror the newest tarball and
+# checksum to the destination repository's root as a "latest" convenience
+# download, refresh the versions table in that repository's README.md, and
+# (optionally) commit + push the result.
 #
 # Intended to run from a CI job that has already:
 #   1. Built extensions/cli/release-artifacts/v<version>/... in this checkout
@@ -81,6 +83,29 @@ if [ "$missing" -ne 0 ]; then
   exit 1
 fi
 
+# Determine the newest version directory and mirror its tarball + checksum to
+# the repository root as a convenience "latest" download that does not
+# require browsing into release-artifacts/<version>/.
+latest_dir="$(find "$DEST_ARTIFACTS" -mindepth 1 -maxdepth 1 -type d | sort -rV | head -n1)"
+if [ -z "$latest_dir" ]; then
+  echo "error: no version directories found under $DEST_ARTIFACTS" >&2
+  exit 1
+fi
+latest_version="$(basename "$latest_dir")"
+latest_tgz="$(find "$latest_dir" -maxdepth 1 -name '*.tgz' | head -n1)"
+if [ -z "$latest_tgz" ]; then
+  echo "error: no .tgz found in $latest_dir" >&2
+  exit 1
+fi
+
+# Remove any stale top-level tarball/checksum from a previous version before
+# copying the current latest one into place.
+find "$DEST_REPO" -maxdepth 1 -name 'opencircuit-cli-*.tgz' -delete
+find "$DEST_REPO" -maxdepth 1 -name 'opencircuit-cli-*.tgz.sha256' -delete
+cp "$latest_tgz" "$DEST_REPO/"
+cp "$latest_tgz.sha256" "$DEST_REPO/"
+echo "Mirrored latest ($latest_version) artifact to repository root: $(basename "$latest_tgz")"
+
 # Rebuild the versions table between the README markers.
 README="$DEST_REPO/README.md"
 VERSIONS_TABLE=$(
@@ -119,9 +144,8 @@ echo "Updated $README versions table."
 
 if [ "$DO_COMMIT" -eq 1 ]; then
   cd "$DEST_REPO"
-  git add release-artifacts README.md
+  git add -A release-artifacts README.md '*.tgz' '*.tgz.sha256'
   if ! git diff --cached --quiet; then
-    latest_version="$(find "$DEST_ARTIFACTS" -mindepth 1 -maxdepth 1 -type d | sort -rV | head -n1 | xargs -I{} basename {})"
     git commit -m "Publish release artifacts ${latest_version:-update}"
     echo "Committed release artifact publish."
   else
