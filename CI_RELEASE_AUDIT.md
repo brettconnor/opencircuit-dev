@@ -29,7 +29,8 @@ Release artifacts are generated and uploaded from the release workflow; they
 are not committed to `opencircuit-dev`. `stable-release.yml` builds the
 `.tgz`/`.sha256` pair and pushes it to the public
 `opencircuit-dev/opencircuit` repository via
-`scripts/sync-release-artifacts.sh`, gated by the `PUBLIC_RELEASE_REPO_TOKEN`
+`scripts/publish-release-artifacts.sh` (in this repository), gated by the
+`PUBLIC_RELEASE_REPO_TOKEN`
 secret. Checksum verification remains mandatory for the packaged user install
 path.
 

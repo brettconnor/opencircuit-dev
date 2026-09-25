@@ -443,8 +443,8 @@ Stable releases triggered via the `Stable Release` GitHub Actions workflow
 publish the resulting tarball and checksum to the public
 [`opencircuit-dev/opencircuit`](https://github.com/opencircuit-dev/opencircuit)
 repository automatically, using
-[`scripts/sync-release-artifacts.sh`](https://github.com/opencircuit-dev/opencircuit/blob/main/scripts/sync-release-artifacts.sh)
-from that repository. The manual command above is only needed for local
+[`scripts/publish-release-artifacts.sh`](https://github.com/opencircuit-dev/opencircuit-dev/blob/main/scripts/publish-release-artifacts.sh)
+from this repository. The manual command above is only needed for local
 testing or an out-of-band re-publish.
 
 ## 9. Troubleshooting

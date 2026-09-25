@@ -105,7 +105,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          ./scripts/sync-release-artifacts.sh --source "$GITHUB_WORKSPACE" --push
+          "$GITHUB_WORKSPACE/scripts/publish-release-artifacts.sh" \
+            --source "$GITHUB_WORKSPACE" \
+            --dest "$PWD" \
+            --push
 
       - name: Publish Blueprints to Runloop
         env:
