@@ -438,6 +438,15 @@ release-artifacts/v1.0.0/opencircuit-cli-1.0.0.tgz.sha256
 
 The staging directory is ignored by Git and is not required for normal users.
 
+Stable releases triggered via the `Stable Release` GitHub Actions workflow
+(`.github/workflows/stable-release.yml`) run this same packaging step and then
+publish the resulting tarball and checksum to the public
+[`opencircuit-dev/opencircuit`](https://github.com/opencircuit-dev/opencircuit)
+repository automatically, using
+[`scripts/publish-release-artifacts.sh`](https://github.com/opencircuit-dev/opencircuit-dev/blob/main/scripts/publish-release-artifacts.sh)
+from this repository. The manual command above is only needed for local
+testing or an out-of-band re-publish.
+
 ## 9. Troubleshooting
 
 ### `oc: command not found`
