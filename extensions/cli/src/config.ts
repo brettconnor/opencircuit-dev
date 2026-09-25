@@ -93,7 +93,7 @@ export function getApiClient(
   return new DefaultApi(
     new Configuration({
       basePath: env.apiBase.replace(/\/$/, ""),
-      accessToken: accessToken ?? undefined,
+      accessToken: accessToken ?? process.env.OCIRCUIT_API_KEY ?? undefined,
     }),
   );
 }

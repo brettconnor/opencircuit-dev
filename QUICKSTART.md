@@ -215,9 +215,20 @@ echo "Review the current working tree" | oc -p
 
 ## 7. Use your own model provider
 
-The hosted Open Circuit API is currently disabled by default. For local or
-direct provider use, choose exactly one provider for the active configuration and
-use only the matching environment variable.
+For the hosted Open Circuit API, use `OCIRCUIT_API_KEY`. The default endpoint
+is `https://api.ocircuit.dev/`; set `OCIRCUIT_API_BASE` only when using a
+different compatible endpoint. The CLI accepts these values from the
+application-scoped `~/.ocircuit/.env` file or from the process environment.
+
+```bash
+mkdir -p ~/.ocircuit
+chmod 700 ~/.ocircuit
+printf '%s\n' 'OCIRCUIT_API_KEY=replace-with-your-hosted-api-key' > ~/.ocircuit/.env
+chmod 600 ~/.ocircuit/.env
+```
+
+For direct provider use, choose exactly one provider for the active
+configuration and use only the matching environment variable.
 
 Use a persistent secret file in `~/.ocircuit/.env` instead of copying keys into
 multiple files or into YAML. A single-provider setup looks like this:
@@ -248,8 +259,9 @@ export OPENAI_API_KEY="replace-with-your-key"
 ```
 
 That is useful for quick testing, but the persistent `~/.ocircuit/.env` file is
-preferred for normal usage. Avoid editing `~/.bashrc` with long-lived provider
-keys because they are harder to audit and easier to leak across shells.
+preferred for normal usage. Avoid editing `~/.bashrc` or `~/.zshrc` with
+long-lived keys: those files are shell startup programs, not application
+secret stores, and their values are inherited by every child process.
 
 Never commit:
 
