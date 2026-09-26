@@ -13,6 +13,7 @@ import { services } from "../services/index.js";
 import { telemetryService } from "../telemetry/telemetryService.js";
 import { applyChatCompletionToolOverrides } from "../tools/applyToolOverrides.js";
 import { ToolCall } from "../tools/index.js";
+import { getChatCompletionToolName } from "../util/chatCompletionTool.js";
 import {
   isContextLengthError,
   withExponentialBackoff,
@@ -478,7 +479,7 @@ export async function streamChatResponse(
 
     logger.debug("Tools prepared", {
       toolCount: tools.length,
-      toolNames: tools.map((t) => t.function.name),
+      toolNames: tools.map(getChatCompletionToolName),
     });
 
     // Get response from LLM

@@ -3,6 +3,7 @@ import type { ChatHistoryItem } from "core/index.js";
 import { getAdjustedTokenCountFromModel } from "core/llm/getAdjustedTokenCount.js";
 import { encode } from "gpt-tokenizer";
 import type { ChatCompletionTool } from "openai/resources/chat/completions.mjs";
+import { isFunctionChatCompletionTool } from "./chatCompletionTool.js";
 
 import { logger } from "./logger.js";
 
@@ -248,6 +249,10 @@ function countParameterFieldTokens(
  * @returns Token count for this tool
  */
 function countSingleToolTokens(tool: ChatCompletionTool): number {
+  if (!isFunctionChatCompletionTool(tool)) {
+    return 0;
+  }
+
   let tokens = encode(tool.function.name).length;
 
   if (tool.function.description) {
