@@ -66,7 +66,8 @@ echo "  from: $SRC_ARTIFACTS"
 echo "  to:   $DEST_ARTIFACTS"
 
 mkdir -p "$DEST_ARTIFACTS"
-rsync -a --delete \
+# Preserve previously published versions; each run adds or refreshes the current version.
+rsync -a \
   --exclude ".DS_Store" \
   "$SRC_ARTIFACTS/" "$DEST_ARTIFACTS/"
 
