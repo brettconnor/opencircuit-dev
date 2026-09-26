@@ -23,13 +23,11 @@ This document specifies the behavior of the CLI's configuration loading system, 
 **When CLI is invoked, config source is determined in this order:**
 
 1. **CLI `--config` Flag** (highest priority)
-
    - File path (starts with `.`, `/`, `~`): Loads local YAML file
    - Assistant slug (`owner/package`): Fetches from Open Circuit platform
    - Overrides any saved preferences
 
 2. **Saved Config URI** (if no `--config` flag)
-
    - Retrieved from authentication config
    - Converts `file://` URIs back to file paths
    - Converts `slug://` URIs back to assistant slugs
@@ -37,7 +35,7 @@ This document specifies the behavior of the CLI's configuration loading system, 
 3. **Default Resolution** (if no flag and no saved URI)
    - **Authenticated**: First user assistant from `listAssistants()`
    - **config.yaml**: The saved config file at `~/.ocircuit/config.yaml`
-   - **Unauthenticated**: Falls back to `continuedev/default-cli-config`
+   - **Unauthenticated**: Falls back to `opencircuit-dev/default-cli-config`
 
 ## Authentication State Interactions
 
@@ -61,7 +59,7 @@ This document specifies the behavior of the CLI's configuration loading system, 
 **Available Options:**
 
 - Local YAML files only
-- Default assistant (`continuedev/default-cli-config`)
+- Default assistant (`opencircuit-dev/default-cli-config`)
 
 **Behavior:**
 
@@ -121,7 +119,7 @@ This document specifies the behavior of the CLI's configuration loading system, 
 **No User Assistants:**
 
 - Authenticated user has no personal assistants
-- **Result**: Falls back to `continuedev/default-cli-config`
+- **Result**: Falls back to `opencircuit-dev/default-cli-config`
 
 **Default Agent Unavailable:**
 

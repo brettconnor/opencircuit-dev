@@ -44,6 +44,9 @@ runs:
         while IFS= read -r file; do
           [[ -z "$file" ]] && continue
           case "$file" in
+            packages/sdk/**|.github/workflows/release-sdk.yml)
+              cli_core=true
+              ;;
             core/**|packages/**)
               cli_core=true
               vsix=true
