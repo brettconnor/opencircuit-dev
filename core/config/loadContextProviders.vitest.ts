@@ -15,45 +15,47 @@ vi.mock("../context/providers", () => ({
 
 // Mock all provider classes
 vi.mock("../context/providers/CurrentFileContextProvider", () => ({
-  default: vi.fn().mockImplementation(function (options) {
-    return { description: { title: "current-file" }, options };
-  }),
+  default: vi.fn().mockImplementation((options) => ({
+    description: { title: "current-file" },
+    options,
+  })),
 }));
 
 vi.mock("../context/providers/DiffContextProvider", () => ({
-  default: vi.fn().mockImplementation(function (options) {
-    return { description: { title: "diff" }, options };
-  }),
+  default: vi.fn().mockImplementation((options) => ({
+    description: { title: "diff" },
+    options,
+  })),
 }));
 
 vi.mock("../context/providers/FileContextProvider", () => ({
-  default: vi.fn().mockImplementation(function (options) {
-    return { description: { title: "file" }, options };
-  }),
+  default: vi.fn().mockImplementation((options) => ({
+    description: { title: "file" },
+    options,
+  })),
 }));
 
 vi.mock("../context/providers/ProblemsContextProvider", () => {
-  const MockProblemsContextProvider = vi
-    .fn()
-    .mockImplementation(function (options) {
-      return { description: { title: "problems" }, options };
-    });
+  const MockProblemsContextProvider = vi.fn().mockImplementation((options) => ({
+    description: { title: "problems" },
+    options,
+  }));
   (MockProblemsContextProvider as any).description = { title: "problems" };
   return { default: MockProblemsContextProvider };
 });
 
 vi.mock("../context/providers/RulesContextProvider", () => ({
-  default: vi.fn().mockImplementation(function (options) {
-    return { description: { title: "rules" }, options };
-  }),
+  default: vi.fn().mockImplementation((options) => ({
+    description: { title: "rules" },
+    options,
+  })),
 }));
 
 vi.mock("../context/providers/TerminalContextProvider", () => {
-  const MockTerminalContextProvider = vi
-    .fn()
-    .mockImplementation(function (options) {
-      return { description: { title: "terminal" }, options };
-    });
+  const MockTerminalContextProvider = vi.fn().mockImplementation((options) => ({
+    description: { title: "terminal" },
+    options,
+  }));
   (MockTerminalContextProvider as any).description = { title: "terminal" };
   return { default: MockTerminalContextProvider };
 });
@@ -144,9 +146,10 @@ describe("loadConfigContextProviders", () => {
 
 describe("with valid config", () => {
   it("should load providers from config with correct parameters", () => {
-    const mockProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "custom-provider" }, options };
-    }) as any;
+    const mockProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "custom-provider" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockProvider);
 
@@ -188,13 +191,15 @@ describe("with valid config", () => {
   });
 
   it("should handle multiple providers in config", () => {
-    const mockProvider1 = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "provider-1" }, options };
-    }) as any;
+    const mockProvider1 = vi.fn().mockImplementation((options) => ({
+      description: { title: "provider-1" },
+      options,
+    })) as any;
 
-    const mockProvider2 = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "provider-2" }, options };
-    }) as any;
+    const mockProvider2 = vi.fn().mockImplementation((options) => ({
+      description: { title: "provider-2" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName
       .mockReturnValueOnce(mockProvider1)
@@ -230,9 +235,10 @@ describe("with valid config", () => {
   });
 
   it("should handle config with empty params", () => {
-    const mockProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "no-params-provider" }, options };
-    }) as any;
+    const mockProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "no-params-provider" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockProvider);
 
@@ -253,9 +259,10 @@ describe("with valid config", () => {
   });
 
   it("should handle config without params property", () => {
-    const mockProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "provider-without-params" }, options };
-    }) as any;
+    const mockProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "provider-without-params" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockProvider);
 
@@ -336,9 +343,10 @@ describe("error handling", () => {
   });
 
   it("should handle mix of valid and invalid providers", () => {
-    const mockValidProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "valid-provider" }, options };
-    }) as any;
+    const mockValidProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "valid-provider" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName
       .mockReturnValueOnce(mockValidProvider)
@@ -408,9 +416,10 @@ describe("default provider merging", () => {
   });
 
   it("should add default providers not present in config", () => {
-    const mockCustomProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "custom-only" }, options };
-    }) as any;
+    const mockCustomProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "custom-only" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockCustomProvider);
 
@@ -443,9 +452,10 @@ describe("default provider merging", () => {
   });
 
   it("should preserve order with configured providers first", () => {
-    const mockProvider = vi.fn().mockImplementation(function (options) {
-      return { description: { title: "custom-provider" }, options };
-    }) as any;
+    const mockProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "custom-provider" },
+      options,
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockProvider);
 
@@ -478,7 +488,7 @@ describe("default provider merging", () => {
 
 describe("edge cases", () => {
   it("should handle provider constructor throwing error", () => {
-    const mockProvider = vi.fn().mockImplementation(function () {
+    const mockProvider = vi.fn().mockImplementation(() => {
       throw new Error("Provider construction failed");
     }) as any;
 
@@ -520,13 +530,11 @@ describe("edge cases", () => {
 
   it("should handle provider with same title as default but different implementation", () => {
     // Mock a provider with same title as a default
-    const mockFileProvider = vi.fn().mockImplementation(function (options) {
-      return {
-        description: { title: "file" }, // Same title as FileContextProvider
-        options,
-        customProperty: "custom-implementation",
-      };
-    }) as any;
+    const mockFileProvider = vi.fn().mockImplementation((options) => ({
+      description: { title: "file" }, // Same title as FileContextProvider
+      options,
+      customProperty: "custom-implementation",
+    })) as any;
 
     mockedContextProviderClassFromName.mockReturnValue(mockFileProvider);
 
