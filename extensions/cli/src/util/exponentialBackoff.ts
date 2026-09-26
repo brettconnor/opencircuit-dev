@@ -1,5 +1,3 @@
-import { BaseLlmApi } from "@opencircuit/openai-adapters";
-
 import { error, warn } from "../logging.js";
 
 import { formatError } from "./formatError.js";

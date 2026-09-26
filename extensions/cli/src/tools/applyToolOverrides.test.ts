@@ -1,8 +1,9 @@
 import type { ChatCompletionTool } from "openai/resources.mjs";
 import { describe, expect, it } from "vitest";
 
-import { applyChatCompletionToolOverrides } from "./applyToolOverrides.js";
 import { isFunctionChatCompletionTool } from "../util/chatCompletionTool.js";
+
+import { applyChatCompletionToolOverrides } from "./applyToolOverrides.js";
 
 describe("applyChatCompletionToolOverrides", () => {
   const functionTool = (tool: ChatCompletionTool) => {

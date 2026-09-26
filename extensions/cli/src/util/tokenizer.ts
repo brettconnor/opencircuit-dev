@@ -3,8 +3,8 @@ import type { ChatHistoryItem } from "core/index.js";
 import { getAdjustedTokenCountFromModel } from "core/llm/getAdjustedTokenCount.js";
 import { encode } from "gpt-tokenizer";
 import type { ChatCompletionTool } from "openai/resources/chat/completions.mjs";
-import { isFunctionChatCompletionTool } from "./chatCompletionTool.js";
 
+import { isFunctionChatCompletionTool } from "./chatCompletionTool.js";
 import { logger } from "./logger.js";
 
 const DEFAULT_MAX_TOKENS_RATIO = 0.35;

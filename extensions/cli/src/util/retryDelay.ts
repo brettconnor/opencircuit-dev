@@ -13,7 +13,9 @@ function getHeaderValue(headers: unknown, name: string): string | undefined {
     const entry = Object.entries(headers).find(
       ([key]) => key.toLowerCase() === name.toLowerCase(),
     );
-    return entry?.[1] == null ? undefined : String(entry[1]);
+    return entry?.[1] === null || entry?.[1] === undefined
+      ? undefined
+      : String(entry[1]);
   }
 
   return undefined;

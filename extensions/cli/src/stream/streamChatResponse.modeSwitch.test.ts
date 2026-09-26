@@ -6,9 +6,9 @@ import {
   serviceContainer,
   services,
 } from "../services/index.js";
+import { isFunctionChatCompletionTool } from "../util/chatCompletionTool.js";
 
 import { getRequestTools } from "./handleToolCalls.js";
-import { isFunctionChatCompletionTool } from "../util/chatCompletionTool.js";
 
 describe("streamChatResponse - Mode Switch During Streaming", () => {
   const toolPermissionService = services.toolPermissions;

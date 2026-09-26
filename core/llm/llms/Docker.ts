@@ -114,6 +114,20 @@ class Docker extends OpenAI implements ModelInstaller {
 
       let stdout = "";
       let stderr = "";
+      let settled = false;
+
+      const resolveOnce = (value: { stdout: string; stderr: string }) => {
+        if (!settled) {
+          settled = true;
+          resolve(value);
+        }
+      };
+      const rejectOnce = (error: Error) => {
+        if (!settled) {
+          settled = true;
+          reject(error);
+        }
+      };
 
       proc.stdout.on("data", (data) => {
         stdout += data.toString();
@@ -123,11 +137,15 @@ class Docker extends OpenAI implements ModelInstaller {
         stderr += data.toString();
       });
 
+      proc.on("error", (error) => {
+        rejectOnce(error);
+      });
+
       proc.on("close", (code) => {
         if (code === 0) {
-          resolve({ stdout, stderr });
+          resolveOnce({ stdout, stderr });
         } else {
-          reject(
+          rejectOnce(
             new Error(`Docker command failed with code ${code}: ${stderr}`),
           );
         }
@@ -136,7 +154,7 @@ class Docker extends OpenAI implements ModelInstaller {
       if (signal) {
         signal.addEventListener("abort", () => {
           proc.kill();
-          reject(new Error("Docker command was aborted"));
+          rejectOnce(new Error("Docker command was aborted"));
         });
       }
     });
