@@ -63,6 +63,10 @@ try {
         __dirname,
         "../../packages/openai-adapters/dist/index.js",
       ),
+      "@opencircuit/sdk": resolve(
+        __dirname,
+        "../../packages/sdk/dist/index.js",
+      ),
       core: resolve(__dirname, "../../core"),
       "@opencircuit/fetch": resolve(
         __dirname,
