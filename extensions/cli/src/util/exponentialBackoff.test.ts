@@ -356,16 +356,16 @@ describe("exponentialBackoff utilities", () => {
 
 describe("getRetryAfterDelay", () => {
   it("preserves Retry-After seconds from the provider", () => {
-    expect(
-      getRetryAfterDelay({ headers: { "Retry-After": "15.5" } }),
-    ).toBe(15500);
+    expect(getRetryAfterDelay({ headers: { "Retry-After": "15.5" } })).toBe(
+      15500,
+    );
   });
 
   it("parses millisecond guidance in provider error messages", () => {
     expect(
-      getRetryAfterDelay(
-        { message: "Please retry after 15168.2 milliseconds." },
-      ),
+      getRetryAfterDelay({
+        message: "Please retry after 15168.2 milliseconds.",
+      }),
     ).toBe(15168.2);
   });
 
@@ -375,8 +375,6 @@ describe("getRetryAfterDelay", () => {
   });
 
   it("returns undefined when no retry guidance is present", () => {
-    expect(getRetryAfterDelay({ message: "rate limited" })).toBe(
-      undefined,
-    );
+    expect(getRetryAfterDelay({ message: "rate limited" })).toBe(undefined);
   });
 });

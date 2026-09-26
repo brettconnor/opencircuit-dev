@@ -112,9 +112,7 @@ describe("withExponentialBackoff", () => {
       headers: { "retry-after": "0.2" },
     });
     const generatorFactory = vi
-      .fn<
-        (retryAbortSignal: AbortSignal) => Promise<AsyncGenerator<string>>
-      >()
+      .fn<(retryAbortSignal: AbortSignal) => Promise<AsyncGenerator<string>>>()
       .mockRejectedValueOnce(rateLimitError)
       .mockImplementation(async (_retryAbortSignal) =>
         (async function* () {
